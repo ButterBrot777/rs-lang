@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router,Link} from "react-router-dom";
 
-import {singInRequest, getSettingsUser} from '../ServerRequest/ServerRequests'
+import {signInRequest, getSettingsUser} from '../ServerRequest/ServerRequests'
 
-import './ComponentSingInAndSingUp.css'
+import './ComponentSignInAndSignUp.css'
 
-// class SingIn extends Component{
+// class SignIn extends Component{
 //   render(){
 //     return(
 //       <div className="modal">
@@ -20,7 +20,7 @@ import './ComponentSingInAndSingUp.css'
 
 // export default SingIn
 
-class SingIn extends Component {
+class SignIn extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -80,7 +80,7 @@ class SingIn extends Component {
       'password': this.state.password
     }
     console.log( 'Данные на аутентификацию',UserData);
-    singInRequest(UserData)
+    signInRequest(UserData)
       .then(res=>getSettingsUser(res))
       .then(ok=> document.location.href = "/HomePage")
       .catch(err=> alert(err))
@@ -105,9 +105,9 @@ class SingIn extends Component {
   return (
     <div className="modal">
       <div className="modal__container">
-      <Link to='/Registration'><button>Go to Sing Up</button></Link>
+      <Link to='/Registration'><button>Go to Sign Up</button></Link>
        <form className='form-container' onSubmit={this.formSubmit}>
-            <h3> Sing In</h3>
+            <h3> Sign In</h3>
   
            <div className='form-group'>
               <label htmlFor='Email'>Email</label>
@@ -138,4 +138,4 @@ class SingIn extends Component {
   );
   }
 }
-export default SingIn
+export default SignIn
