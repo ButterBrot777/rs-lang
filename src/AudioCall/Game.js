@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import GameWord from "./GameWord";
 import GameWordCompleted from "./GameWordCompleted";
 import style from '../style.css'
-
+const levenshtein = require('js-levenshtein');
 class Game extends React.Component{
     page = 0;
     constructor() {
@@ -24,32 +24,49 @@ class Game extends React.Component{
         fetch('https://afternoon-falls-25894.herokuapp.com/words?page=2&group=0')
             .then(res => res.json())
             .then(data => {
+
                 console.log(data[0])
                 let currentData = data[this.page];
+                let arr = this.generateArray(currentData.wordTranslate)
                 this.setState({
-                    loading:true,
                     obj: currentData,
                     data:data,
-                    array:this.generateArray(currentData.wordTranslate)
                 });
-
-                console.log(this.state)
             })
     }
     //Функция которая будет генерировать похожее слова
     generateArray = (word) => {
-        let arr = [word];
-        this.getSamewords(word).then(
+      let arr = [word];
+      return  this.getSamewords(word).then(
             data => {
-                console.log(data);
-               data[0].meanings.slice(0,4).map((e) => arr.push(e.translation.text))
-            }
-        );
+                this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true})
+                if(this.state.completed === false){
+                    this.sound()
+                    console.log(123)
+                }
 
-        return   this.shuffle(arr);
+            }
+        )
+
 
 
     };
+    parseData = (array,word) => {
+        let result = []
+        array.forEach((e,i) => {
+            e.meanings.forEach((e) => result.push(e.translation.text))
+        })
+        let levenshteinResult = []
+        result.forEach((e) => {
+
+            levenshteinResult.push( {[e]:levenshtein(word,e)} )
+        })
+
+        levenshteinResult = levenshteinResult.sort((a,b) => Object.values(a)[0] - Object.values(b)[0])
+            .filter((e) => Object.values(e)[0] !== 0 && Object.values(e)[0] !== 1).slice(0,4).map((e) => Object.keys(e)[0]);
+        return levenshteinResult;
+
+    }
     sound = () => {
         let sound = new Audio(`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.state.obj.audio}`)
         sound.play()
@@ -57,7 +74,7 @@ class Game extends React.Component{
     };
     getSamewords = (word) => {
         return fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${word}`)
-            .then(res => res.json())
+            .then(res =>  res.json())
     }
 
      shuffle = (array) => {
@@ -70,17 +87,14 @@ class Game extends React.Component{
     };
     nextPage = () => {
         this.page = ++this.page;
-        this.setState({obj:this.state.data[this.page], completed:false,array:this.generateArray(this.state.data[this.page].wordTranslate)})
+        this.setState({obj:this.state.data[this.page], completed:false,loading:false,array:this.generateArray(this.state.data[this.page].wordTranslate)})
         console.log(this.state.data[this.page].word)
 
 
 
     };
     componentDidUpdate(){
-        if(this.state.completed === false){
-            this.sound()
-            console.log(123)
-        }
+
     }
 
 

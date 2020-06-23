@@ -1,7 +1,7 @@
 .word__container{
   display: flex;
   justify-content: space-between;
-  width: 400px;
+  width: 500px;
 }
 .image{
   width: 50px;
