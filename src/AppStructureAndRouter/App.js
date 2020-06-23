@@ -7,8 +7,8 @@ import LogoutBtn from './HeaderBtns/LogoutBtn'
 import LandingPage from './LandingPage/LandingPage'
 import HomePage from './HomePage/HomePage'
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics'
-import SingIn from './SingInPage/SingIn'
-import SingUp from './SingUpPage/SingUp'
+import SignIn from './SignInPage/SignIn'
+import SignUp from './SignUpPage/SignUp'
 
 import Game1 from './Game1/Game1'
 import Game2 from './Game2/Game2'
@@ -32,17 +32,17 @@ constructor(){
  }
 
 render(){
-  const SingInAndSingUpBtns =
+  const SignInAndSignUpBtns =
     <div>
-       <Link to="/Registration"><button>Sing Up</button></Link>
-       <Link to="/Authorization"><button>Sing In</button></Link>
+       <Link to="/Registration"><button>Sign Up</button></Link>
+       <Link to="/Authorization"><button>Sign In</button></Link>
     </div>
   return (
     <Router>
       <div className="landing-page">
       <header className='header'>
       <Link to="/"><h1>nykapi</h1></Link>
-      {this.state.userAuthorized ? <LogoutBtn logOut={this.userLogOut}/> : SingInAndSingUpBtns}
+      {this.state.userAuthorized ? <LogoutBtn logOut={this.userLogOut}/> : SignInAndSignUpBtns}
       </header>
       <Switch>
         <Route exact path="/">
@@ -50,11 +50,11 @@ render(){
         </Route>
         <Route path="/Registration">
           <LandingPage />
-          <SingUp />
+          <SignUp />
         </Route>
         <Route  path="/Authorization">
           <LandingPage />
-          <SingIn />
+          <SignIn />
         </Route>
         <Route path="/HomePage">
           <HomePage />

@@ -2,11 +2,11 @@ import React, {Component} from "react";
 import {BrowserRouter as Router,Link} from "react-router-dom";
 
 
-import {singInRequest, singUpRequest, startSettingsUser, getSettingsUser} from '../ServerRequest/ServerRequests'
+import {signInRequest, signUpRequest, startSettingsUser, getSettingsUser} from '../ServerRequest/ServerRequests'
 
-import './ComponentSingInAndSingUp.css'
+import './ComponentSignInAndSignUp.css'
 
-class SingUp extends Component {
+class SignUp extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -80,8 +80,8 @@ class SingUp extends Component {
         'email': this.state.email,
         'password': this.state.password
       }
-      singUpRequest(UserData)
-        .then(ok => singInRequest(UserData))
+      signUpRequest(UserData)
+        .then(ok => signInRequest(UserData))
         .then(res => startSettingsUser(res))
         .then(res=>getSettingsUser(res))
         .catch(err=> console.log(err))
@@ -113,9 +113,9 @@ class SingUp extends Component {
   return (
     <div className="modal">
       <div className="modal__container">
-      <Link to='/Authorization'><button>Go to Sing In</button></Link>
+      <Link to='/Authorization'><button>Go to Sign In</button></Link>
        <form className='form-container' onSubmit={this.formSubmit}>
-            <h3> Sing Up</h3>
+            <h3> Sign Up</h3>
   
            <div className='form-group'>
               <label htmlFor='Email'>Email</label>
@@ -152,5 +152,5 @@ class SingUp extends Component {
   );
   }
 }
-export default SingUp
+export default SignUp
 

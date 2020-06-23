@@ -1,5 +1,5 @@
 
-async function singInRequest(userData){
+async function signInRequest(userData){
   const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/signin', {
     method: 'POST',
     headers: {
@@ -19,7 +19,7 @@ async function singInRequest(userData){
   }
 }
 
-async function singUpRequest(userData){
+async function signUpRequest(userData){
   const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/users', {
      method: 'POST',
      headers: {
@@ -91,4 +91,4 @@ async function getSettingsUser(obj){
       return content;
 }
 
-export {singInRequest, singUpRequest, startSettingsUser, addSettingsUser, getSettingsUser}
+export {signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser}
