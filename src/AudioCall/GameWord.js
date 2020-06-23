@@ -11,7 +11,7 @@ export default class Word extends React.Component{
         return (
             <div>
             {
-                <p key={this.props.index.toString()} onClick={() => this.choseRight()}>
+                <p key={this.props.index} onClick={() => this.choseRight()}>
                     {`${this.props.index + 1} ${this.props.word}`}
                 </p>
             }

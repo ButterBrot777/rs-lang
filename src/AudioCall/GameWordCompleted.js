@@ -1,6 +1,7 @@
 import React from "react";
 import imgTrue from "../assets/icons8-pastel-100.png";
 import imgFalse from "../assets/icons8-color-100.png";
+
 export default class GameWordCompleted extends React.Component{
     commonWordClassName = 'text_inactiv';
     mainWordClassName = 'right__word';
@@ -30,7 +31,7 @@ class Icon extends React.Component{
     render() {
         let imgPath =  (this.props.answer === true) ? imgTrue:imgFalse;
         return (
-            <img src={imgPath} />
+            <img className='icon' src={imgPath} />
         )
     }
 }

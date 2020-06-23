@@ -7,6 +7,8 @@
 .idea
 package-lock.json
 .gitignore
+npm
+
 # testing
 /coverage
 

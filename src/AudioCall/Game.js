@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import GameWord from "./GameWord";
 import GameWordCompleted from "./GameWordCompleted";
+import Loading from "./Loading";
 import style from '../style.css'
 const levenshtein = require('js-levenshtein');
 class Game extends React.Component{
@@ -93,20 +94,17 @@ class Game extends React.Component{
 
 
     };
-    componentDidUpdate(){
-
+    selectWordWithKeys(event){
+        console.log(123)
     }
-
-
     render() {
         if(this.state.loading === false){
-            return <p>Загрузка</p>
+            return <Loading/>
         }else{
-
             return(
                 <div>
-                    {(this.state.completed) ? <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image}/>:<div  className="sound" onClick={() => this.sound()}>звук</div> }
-                    <div className="word__container">
+                    <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
+                    <div className="word__container" >
                         {this.state.array.map((e,i) =>
                             (this.state.completed === false) ?
                             <GameWord state = {this.state}
@@ -136,12 +134,19 @@ class Game extends React.Component{
 class Image extends React.Component{
     render() {
         return(
-            <div>
-                <img  className = "image" src={`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.path}`}/>
-                <div>
-                    <p> {this.props.word}</p>
-                    <div className="sound" onClick={() => this.props.sound()}>Звук</div>
-                </div>
+            <div >
+                {(this.props.state.completed) ?
+                    <div>
+                        <img  className = "image" src={`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.path}`}/>
+                        <div className='item__container'>
+                            <div className="sound__small" onClick={() => this.props.sound()}/>
+                            <p> {this.props.word}</p>
+                        </div>
+                    </div> :
+                    <div className='item__container'>
+                        <div  className="sound" onClick={() => this.props.sound()}/>
+                    </div>
+                }
             </div>
             )
     }
