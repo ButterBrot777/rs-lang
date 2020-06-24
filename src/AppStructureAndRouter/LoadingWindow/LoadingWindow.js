@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router,Link} from "react-router-dom";
+// import {BrowserRouter as Router,Link} from "react-router-dom";
 
 import './LoadingWindow.css'
 class LoadingWindow extends Component{

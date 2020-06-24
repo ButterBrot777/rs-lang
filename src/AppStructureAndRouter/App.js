@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
+import Fade from 'react-reveal/Fade';
 
 import './App.css'
 
@@ -24,8 +25,10 @@ constructor(){
   this.state={
     userAuthorized: localStorage.getItem('token')
   }
+
   this.userLogOut = this.userLogOut.bind(this)
 }
+
  userLogOut(){
   localStorage.setItem('token', '')
   this.setState({
@@ -42,7 +45,7 @@ render(){
     
   return (
     <Router>
-      <div className="landing-page">
+      <div className="landing-page" tabIndex={0} onKeyDown={(e)=>console.log(e.keyCode)}>
       <header className='header'>
       <Link to="/"><h1>nykapi</h1></Link>
       {this.state.userAuthorized ? <LogoutBtn logOut={this.userLogOut}/> : SignInAndSignUpBtns}
@@ -60,7 +63,7 @@ render(){
           <SignIn />
         </Route>
         <Route path="/HomePage">
-        {this.state.userAuthorized !== '' ? <HomePage /> : <UnauthorizedUserPage />}
+        {this.state.userAuthorized !== '' ? <Fade right ><HomePage /></Fade> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game1">
         {this.state.userAuthorized !== '' ? <Game1 /> : <UnauthorizedUserPage />}
@@ -69,7 +72,7 @@ render(){
         {this.state.userAuthorized !== '' ? <Game2 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game3">
-        {this.state.userAuthorized !== '' ? <Game3 /> : <UnauthorizedUserPage />}
+        {this.state.userAuthorized !== '' ? <Fade top opposite cascade collapse> <Game3 /></Fade> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game4">
         {this.state.userAuthorized !== '' ? <Game4 /> : <UnauthorizedUserPage />}
