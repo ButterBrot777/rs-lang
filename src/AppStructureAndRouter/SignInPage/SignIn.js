@@ -47,6 +47,7 @@ class SignIn extends Component {
   setUserInput(e){
     const name = e.target.name;
     const value = e.target.value;
+  
     this.setState({[name]: value},() => {this.validateField(name, value)});
   }
 //проверка вводимых данных с условием
@@ -101,10 +102,12 @@ class SignIn extends Component {
     <p>4.At least one digit</p>
     <p>5.At least one special character from +-_@$!%*?&#.,;:[]{}</p>
     </div>;
-
+    
   return (
+  
     <div className="modal">
-      <div className="modal__container">
+    
+      <div className="modal__container" >
       <Link to='/Registration'><button>Go to Sign Up</button></Link>
        <form className='form-container' onSubmit={this.formSubmit}>
             <h3> Sign In</h3>
@@ -119,7 +122,7 @@ class SignIn extends Component {
            <div className='form-group '>
               <label htmlFor='Password'>Password</label>
               <input id="password" name='password' type='password'
-               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid':'' : 'solid'} value={this.state.password} placeholder="Password"
+               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid':'' : 'solid'}  value={this.state.password} placeholder="Password"
                onChange={(event)=>this.setUserInput(event)}></input>
            </div>
 

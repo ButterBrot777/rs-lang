@@ -9,6 +9,7 @@ import HomePage from './HomePage/HomePage'
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics'
 import SignIn from './SignInPage/SignIn'
 import SignUp from './SignUpPage/SignUp'
+import UnauthorizedUserPage from './UnauthorizedUserPage/UnauthorizedUserPage'
 
 import Game1 from './Game1/Game1'
 import Game2 from './Game2/Game2'
@@ -37,6 +38,7 @@ render(){
        <Link to="/Registration"><button>Sign Up</button></Link>
        <Link to="/Authorization"><button>Sign In</button></Link>
     </div>
+    
   return (
     <Router>
       <div className="landing-page">
@@ -53,32 +55,32 @@ render(){
           <SignUp />
         </Route>
         <Route  path="/Authorization">
-          <LandingPage />
+        <LandingPage />
           <SignIn />
         </Route>
         <Route path="/HomePage">
-          <HomePage />
+        {this.state.userAuthorized !== '' ? <HomePage /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game1">
-          <Game1 />
+        {this.state.userAuthorized !== '' ? <Game1 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game2">
-          <Game2 />
+        {this.state.userAuthorized !== '' ? <Game2 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game3">
-          <Game3 />
+        {this.state.userAuthorized !== '' ? <Game3 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game4">
-          <Game4 />
+        {this.state.userAuthorized !== '' ? <Game4 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game5">
-          <Game5 />
+        {this.state.userAuthorized !== '' ? <Game5 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Game6">
-          <Game6 />
+        {this.state.userAuthorized !== '' ? <Game6 /> : <UnauthorizedUserPage />}
         </Route>
         <Route path="/Stat">
-          <Statistics />
+        {this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
         </Route>
         </Switch>
 

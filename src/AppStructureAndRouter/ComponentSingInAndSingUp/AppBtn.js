@@ -42,4 +42,3 @@ class AppBtn extends Component{
     )
   }
 }
-export default AppBtn
