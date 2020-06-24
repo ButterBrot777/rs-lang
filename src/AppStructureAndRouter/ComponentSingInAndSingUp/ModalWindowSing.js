@@ -33,5 +33,3 @@ class ModalWindowSing extends Component{
   )
   }
 }
-
-export default ModalWindowSing

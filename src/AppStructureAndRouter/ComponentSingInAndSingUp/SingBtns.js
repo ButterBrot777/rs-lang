@@ -18,4 +18,3 @@ class SingBtns extends Component{
   }
 }
 
-export default SingBtns

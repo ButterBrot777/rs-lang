@@ -1,0 +1,8 @@
+h3{
+  padding: 0;
+  margin: 0;
+}
+.unauthorized-page{
+  height: 60vh;
+  background-color: aquamarine;
+}

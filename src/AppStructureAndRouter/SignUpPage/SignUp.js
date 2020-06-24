@@ -113,7 +113,7 @@ class SignUp extends Component {
   return (
     <div className="modal">
       <div className="modal__container">
-      <Link to='/Authorization'><button>Go to Sign In</button></Link>
+      
        <form className='form-container' onSubmit={this.formSubmit}>
             <h3> Sign Up</h3>
   
@@ -147,6 +147,7 @@ class SignUp extends Component {
              <Link to='/'><button>Close</button></Link>
            </div>
        </form>
+       <Link to='/Authorization'><button>Go to Sign In</button></Link>
        </div>
     </div>
   );
