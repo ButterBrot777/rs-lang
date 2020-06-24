@@ -1,10 +1,11 @@
 import React from 'react';
-import Word from './word';
+import Word from './dictionaryWord';
 import DictionaryHeader from './dictionaryHeader'
 
 class Dictionary extends React.Component {
     constructor(props) {
         super(props);
+        this.updateAllData = this.updateAllData.bind(this);
         this.state = {
             allData: [],
             currentData: [],
@@ -25,22 +26,22 @@ class Dictionary extends React.Component {
             }
         });
         const content = await rawResponse.json();
+        console.log(content)
         this.setState({allData: content, isLoading: false,})
         this.getLearning();
     }
 
     getLearning = () => {
-        const learningWords = this.state.allData.filter(word => word.optional.deleted===false);
+        const learningWords = this.state.allData.filter(word => word.optional.deleted===false && word.optional.hardWord===false);
         console.log(learningWords);
         this.words = 'learning';
         this.setState({currentData: learningWords, isLoading: false,});
     }
 
     getHard = () => {
-        const hardWords = this.state.allData.filter(word => word.difficulty==="hard" && word.optional.deleted===false);
+        const hardWords = this.state.allData.filter(word => word.optional.hardWord===true);
         console.log(hardWords);
         this.words = 'hard';
-        debugger
         this.setState({currentData: hardWords, isLoading: false,});
     }
 
@@ -49,6 +50,12 @@ class Dictionary extends React.Component {
         console.log(deletedWords);
         this.words = 'deleted';
         this.setState({currentData: deletedWords, isLoading: false,});  
+    }
+
+    updateAllData = (word_obj) => {
+        const newAllData = this.state.allData.map(word => word.wordId === word_obj.wordId ? word_obj : word);
+        this.setState({allData: newAllData, isLoading: false,})
+        this.words === "hard" ? this.getHard() : this.getDeleted();
     }
 
     render() {
@@ -64,7 +71,7 @@ class Dictionary extends React.Component {
                 </header>
                 
                 <div className="words-list">
-                    {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={this.words} key={element.wordId} />)}
+                    {currentData.map(element => <Word userId={this.props.userId} token={this.props.token} difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={this.words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div>
                     {this.words === "hard" ? <button className="train-hard-btn">Повторить</button> : ''}
