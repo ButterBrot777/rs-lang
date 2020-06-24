@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router,Link} from "react-router-dom";
 
-
+import LoadingWindow from '../LoadingWindow/LoadingWindow'
 import {signInRequest, signUpRequest, startSettingsUser, getSettingsUser} from '../ServerRequest/ServerRequests'
 
 import './ComponentSignInAndSignUp.css'
@@ -19,15 +19,21 @@ class SignUp extends Component {
       passwordRepeatValid:false,
 
       passwordСondition: false,
-      formValid: false
+      formValid: false,
+      loading: false
     }
 
     this.conditionPassword = this.conditionPassword.bind(this);
     this.setUserInput = this.setUserInput.bind(this);
     this.validateField = this.validateField.bind(this);
     this.formSubmit = this.formSubmit.bind(this);
+    this.callLoading = this.callLoading.bind(this);
   }
-
+  callLoading(){
+    this.setState({
+      loading: !this.state.loading,
+  });
+  }
 // всплывающая информация по паролю
   conditionPassword(){
     this.setState({
@@ -75,6 +81,7 @@ class SignUp extends Component {
 // отправка формы на регистрацию пользователя
   async formSubmit(e){
     e.preventDefault();
+    this.callLoading();
     if(this.state.password  === this.state.passwordRepeat){
       const UserData={
         'email': this.state.email,
@@ -84,7 +91,9 @@ class SignUp extends Component {
         .then(ok => signInRequest(UserData))
         .then(res => startSettingsUser(res))
         .then(res=>getSettingsUser(res))
-        .catch(err=> console.log(err))
+        .catch(err=>{
+          this.callLoading()
+          console.log(err)})
     }else{
       alert('повторно пароль введен не правильно')
     }
@@ -112,8 +121,8 @@ class SignUp extends Component {
 
   return (
     <div className="modal">
+      {this.state.loading ? <LoadingWindow/> : ''}
       <div className="modal__container">
-      
        <form className='form-container' onSubmit={this.formSubmit}>
             <h3> Sign Up</h3>
   

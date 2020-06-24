@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router,Link} from "react-router-dom";
 
+import LoadingWindow from '../LoadingWindow/LoadingWindow'
 import {signInRequest, getSettingsUser} from '../ServerRequest/ServerRequests'
 
 import './ComponentSignInAndSignUp.css'
@@ -29,15 +30,22 @@ class SignIn extends Component {
       emailValid: false,
       passwordValid: false,
       passwordСondition: false,
-      formValid: false
+      formValid: false,
+      loading: false
     }
-
+    
     this.conditionPassword = this.conditionPassword.bind(this);
     this.setUserInput = this.setUserInput.bind(this);
     this.validateField = this.validateField.bind(this);
     this.formSubmit = this.formSubmit.bind(this);
+    this.callLoading = this.callLoading.bind(this);
   }
 // всплывающая информация по паролю
+  callLoading(){
+    this.setState({
+      loading: !this.state.loading,
+  });
+  }
   conditionPassword(){
     this.setState({
       passwordСondition: !this.state.passwordСondition,
@@ -76,6 +84,7 @@ class SignIn extends Component {
 // отправка формы на аутентификацию пользователя
   async formSubmit(e){
     e.preventDefault();
+    this.callLoading();
     const UserData={
       'email': this.state.email,
       'password': this.state.password
@@ -84,7 +93,9 @@ class SignIn extends Component {
     signInRequest(UserData)
       .then(res=>getSettingsUser(res))
       .then(ok=> document.location.href = "/HomePage")
-      .catch(err=> alert(err))
+      .catch(err=>{
+        this.callLoading();
+        alert(err)})
       this.setState({
         password:'',
         passwordValid: false,
@@ -102,11 +113,10 @@ class SignIn extends Component {
     <p>4.At least one digit</p>
     <p>5.At least one special character from +-_@$!%*?&#.,;:[]{}</p>
     </div>;
-    
   return (
-  
-    <div className="modal">
     
+    <div className="modal">
+      {this.state.loading ? <LoadingWindow/> : ''}
       <div className="modal__container" >
       <Link to='/Registration'><button>Go to Sign Up</button></Link>
        <form className='form-container' onSubmit={this.formSubmit}>
