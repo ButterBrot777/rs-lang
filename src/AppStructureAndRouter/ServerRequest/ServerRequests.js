@@ -44,17 +44,19 @@ async function startSettingsUser(obj){
       'Authorization': `Bearer ${obj.token}`,
       'Content-Type': 'application/json',
     },
+    // с 0 не работает
     body: JSON.stringify({
-      "wordsPerDay": 1,
+      "wordsPerDay": 0,
       "optional": {
-        'Level': 1,
+        'Level': 5,
         'Page':1,
         'Word':1,
         'AutoVoice': true,
         'Translate':true,
         'VoiceSentence': true,
-        'PromtImage': false,
-       }
+        'PromtImage': false
+       },
+       "word": ['asda', 'asdasd', 'asdas']
     })
   });
   const content = await rawResponse.json();

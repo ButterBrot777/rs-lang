@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router,Link} from "react-router-dom";
-
+import Fade from 'react-reveal/Fade';
 import './Game1.css'
 class Game1 extends Component{
   constructor(){
@@ -8,10 +8,12 @@ class Game1 extends Component{
   }
   render(){
     return(
+      <Fade bottom opposite>
       <div className="Game1">
       <h1>Game1</h1>
       <Link to="/HomePage"><button>Close Game1</button></Link>
-      </div> 
+      </div>
+      </Fade> 
     )
   }
 }

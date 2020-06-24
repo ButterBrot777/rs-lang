@@ -81,8 +81,8 @@ class SignUp extends Component {
 // отправка формы на регистрацию пользователя
   async formSubmit(e){
     e.preventDefault();
-    this.callLoading();
     if(this.state.password  === this.state.passwordRepeat){
+      this.callLoading();
       const UserData={
         'email': this.state.email,
         'password': this.state.password
@@ -91,8 +91,9 @@ class SignUp extends Component {
         .then(ok => signInRequest(UserData))
         .then(res => startSettingsUser(res))
         .then(res=>getSettingsUser(res))
+        .then(ok=> document.location.href = "/HomePage")
         .catch(err=>{
-          this.callLoading()
+          this.callLoading();
           console.log(err)})
     }else{
       alert('повторно пароль введен не правильно')
