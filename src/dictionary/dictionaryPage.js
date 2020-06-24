@@ -40,6 +40,7 @@ class Dictionary extends React.Component {
         const hardWords = this.state.allData.filter(word => word.difficulty==="hard" && word.optional.deleted===false);
         console.log(hardWords);
         this.words = 'hard';
+        debugger
         this.setState({currentData: hardWords, isLoading: false,});
     }
 
@@ -63,7 +64,10 @@ class Dictionary extends React.Component {
                 </header>
                 
                 <div className="words-list">
-                    {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} key={element.wordId} />)}
+                    {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={this.words} key={element.wordId} />)}
+                </div>
+                <div>
+                    {this.words === "hard" ? <button className="train-hard-btn">Повторить</button> : ''}
                 </div>
             </div>
             
