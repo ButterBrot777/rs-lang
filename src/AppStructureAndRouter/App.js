@@ -17,6 +17,7 @@ import Game3 from './Game3/Game3'
 import Game4 from './Game4/Game4'
 import Game5 from './Game5/Game5'
 import Game6 from './Game6/Game6'
+
 export default class App extends Component {
 constructor(){
   super()
@@ -83,7 +84,6 @@ render(){
         {this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
         </Route>
         </Switch>
-
       <footer className='footer'>
         <h2>footer</h2>
       </footer>    
