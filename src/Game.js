@@ -26,6 +26,7 @@ class Game extends React.Component {
             inputValue: '',
             isGuessed: false,
             isSkipped: false,
+            progressWords: 0,
             settings: {
                 isMeaning: true,
                 isTranslation: true,
@@ -145,7 +146,8 @@ class Game extends React.Component {
             inputValue: ''
         })
         this.setState({
-            isSkipped: true
+            isSkipped: true,
+            progressWords: this.state.progressWords + 1
         });
         this.wordContainerElem.current.classList.remove('hidden');
         setTimeout(() => this.goToNextCard(), 2000)
@@ -241,7 +243,8 @@ class Game extends React.Component {
         });
         if (correctLetters === this.wordContainerElem.current.children.length) {
             this.setState({
-                isGuessed: true
+                isGuessed: true,
+                progressWords: this.state.progressWords + 1
             });
             if (this.state.settings.isSound) {
                 this.playSound().addEventListener('ended', this.goToNextCard);
@@ -260,8 +263,10 @@ class Game extends React.Component {
     }
 
     render() {
-        let translationBlock = (this.state.settings.isTranslation && this.state.isGuessed) 
-        ? this.state.currentData.wordTranslate : '';
+        let translationBlock = (this.state.settings.isTranslation && this.state.isGuessed)
+            ? this.state.currentData.wordTranslate : '';
+        let progressValue = this.state.progressWords / newWords * 100;
+
         return (
             <div className="game-container">
                 <header className="header">
@@ -288,6 +293,11 @@ class Game extends React.Component {
                     <button className="btn" onClick={this.onClickFurther}>дальше</button>
                 </form>
                 <button className="btn" onClick={this.onShowAnswer}>показать ответ</button>
+                <div className="progress-container">
+                    <span>{this.state.progressWords}</span>
+                    <progress className="progress-current" max="100" value={progressValue}></progress>
+                    <span>{newWords}</span>
+                </div>
             </div>
         )
     }
