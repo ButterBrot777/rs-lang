@@ -7,10 +7,6 @@ const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
 class Word extends React.Component {
     constructor(props) {
         super(props);
-        this.difficulty = props.difficulty;
-        this.wordId = props.wordId;
-        this.wordsType = props.words;
-        this.putToLearning = this.putToLearning.bind(this);
         this.state = {
             data: {},
             image: "files/01_0001.jpg",
@@ -20,15 +16,15 @@ class Word extends React.Component {
 
     componentDidMount() {
         this.setState({ isLoading: true });
-        const url = `${WORD_URL}${this.wordId}`;
+        const url = `${WORD_URL}${this.props.wordId}`;
         fetch(url)
             .then(response => response.json())
             .then(data => this.setState({data: data, image: data.image, isLoading: false,}))
     }
 
     putToLearning = async () => {
-        const user_words_update_url = `https://afternoon-falls-25894.herokuapp.com/users/${this.props.userId}/words/${this.wordId}`;
-        const word_obj = {
+        const userWordsUpdateUrl = `https://afternoon-falls-25894.herokuapp.com/users/${this.props.userId}/words/${this.props.wordId}`;
+        const wordObj = {
             "difficulty": "good",
             "optional": {
                 "deleted": false,
@@ -38,7 +34,7 @@ class Word extends React.Component {
                 "repeats": this.props.optional.repeats
             }
         }
-        const rawResponse = await fetch(user_words_update_url, {
+        const rawResponse = await fetch(userWordsUpdateUrl, {
             method: 'PUT',
             withCredentials: true,
             headers: {
@@ -46,7 +42,7 @@ class Word extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(word_obj)
+            body: JSON.stringify(wordObj)
         });
 
         const content = await rawResponse.json();
@@ -56,11 +52,11 @@ class Word extends React.Component {
 
     playAudio = () => {
         this.setState({isLoading: false});
-        const audio_url = `${IMAGE_AUDIO_URL}${this.state.data.audio}`;
+        const audioUrl = `${IMAGE_AUDIO_URL}${this.state.data.audio}`;
         if (this.wordAudio) {
             this.wordAudio.pause();
           }
-        this.wordAudio = new Audio(audio_url);
+        this.wordAudio = new Audio(audioUrl);
         this.wordAudio.load();
         this.wordAudio.play();
     }
@@ -99,7 +95,7 @@ class Word extends React.Component {
                         <p className="next-train">Следующая тренировка: {this.props.optional.nextTrain}</p>
                     </div>
                 </div>
-                {this.wordsType === "hard" || this.wordsType === "deleted" ? <button className="btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
+                {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
             </div>
         )
     }
