@@ -2,6 +2,7 @@ import React, { useState} from "react";
 import GameWord from "./GameWord";
 import GameWordCompleted from "./GameWordCompleted";
 import Loading from "./Loading";
+import Statistic from "./Statistic";
 import style from '../style.css'
 const levenshtein = require('js-levenshtein');
 class Game extends React.Component{
@@ -11,11 +12,16 @@ class Game extends React.Component{
         this.state = {
             loading:false,
             completed:false,
-            array:[]
+            array:[],
+            ShortStatistic:{
+                RightWords:[],
+                FalseWords:[]
+            },
+            GameOver:false,
+            right:false
 
         }
     }
-
     completed = (prop,index) => {
         this.setState({completed:true, indexOfClick:index });
         (prop === true) ? this.setState({right:true}) : this.setState({right:false});
@@ -25,22 +31,52 @@ class Game extends React.Component{
         fetch('https://afternoon-falls-25894.herokuapp.com/words?page=2&group=0')
             .then(res => res.json())
             .then(data => {
-
                 console.log(data[0])
+
                 let currentData = data[this.page];
-                let arr = this.generateArray(currentData.wordTranslate)
+                this.generateArray(currentData.wordTranslate);
                 this.setState({
                     obj: currentData,
                     data:data,
+
                 });
             })
     }
+
+    componentWillUpdate() {
+        if(this.state.right === true && this.state.completed === true){
+            let StatisticArray = this.state.ShortStatistic.RightWords;
+            StatisticArray.push(this.state.obj);
+            this.setState({
+               ShortStatistic:{
+                   ...this.state.ShortStatistic,
+                   RightWords:StatisticArray
+
+               }
+            })
+        }else if(this.state.right === false && this.state.completed === true){
+            let StatisticArray = this.state.ShortStatistic.FalseWords;
+            StatisticArray.push(this.state.obj);
+            this.setState({
+                ShortStatistic:{
+                    ...this.state.ShortStatistic,
+                    FalseWords:StatisticArray
+
+                }
+            })
+        }
+        if(this.page === 19 && this.state.GameOver === false){
+            this.setState({GameOver:true})
+        }
+        console.log(this.state)
+    }
+
     //Функция которая будет генерировать похожее слова
     generateArray = (word) => {
       let arr = [word];
       return  this.getSamewords(word).then(
             data => {
-                this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true})
+                this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true});
                 if(this.state.completed === false){
                     this.sound()
                     console.log(123)
@@ -88,23 +124,41 @@ class Game extends React.Component{
     };
     nextPage = () => {
         this.page = ++this.page;
-        this.setState({obj:this.state.data[this.page], completed:false,loading:false,array:this.generateArray(this.state.data[this.page].wordTranslate)})
-        console.log(this.state.data[this.page].word)
+        this.setState({
+            obj:this.state.data[this.page],
+            completed:false,
+            loading:false,
+            array:this.generateArray(this.state.data[this.page].wordTranslate),
+            right:false
+        });
+        if(this.state.right === false){
+            let StatisticArray = this.state.ShortStatistic.FalseWords;
+            StatisticArray.push(this.state.obj);
+            this.setState({
+                ShortStatistic:{
+                    ...this.state.ShortStatistic,
+                    FalseWords:StatisticArray
 
+                }
+            })
+        }
 
-
+        console.log(this.page)
     };
-    selectWordWithKeys(event){
-        console.log(123)
-    }
+
     render() {
         if(this.state.loading === false){
             return <Loading/>
+        }else if(this.state.GameOver === true){
+            return (
+                <Statistic  statistic = {this.state.ShortStatistic}/>
+            )
         }else{
             return(
-                <div>
+                <div tabIndex={0} onKeyDown={(e)=>console.log(e.keyCode)}>
+                    <div>Закрыть</div>
                     <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
-                    <div className="word__container" >
+                    <div className="word__container" onKeyDownCapture={() => console.log(123)}>
                         {this.state.array.map((e,i) =>
                             (this.state.completed === false) ?
                             <GameWord state = {this.state}
@@ -112,6 +166,7 @@ class Game extends React.Component{
                                       word = {e}
                                       rightWord = {this.state.obj.wordTranslate}
                                       completed = {this.completed}
+                                      id = {this.state.obj.id}
                                       />
                                       :
                                 <GameWordCompleted state = {this.state}
@@ -121,10 +176,11 @@ class Game extends React.Component{
                                           completed = {this.completed}
                                           clicked = {this.state.indexOfClick}
                                           answer = {this.state.right}
+                                          id = {this.state.obj.id}
                                 />
                         )}
                     </div> 
-                    {(this.state.completed === false) ? <button onClick={() => this.nextPage()}>Не знаю</button>:<button onClick={() => this.nextPage()}>готово</button>}
+                    <button onClick={() => this.nextPage()}>{(this.state.completed === false) ? 'Не знаю':'Готово'}</button>
                 </div>
             )
         }
@@ -144,7 +200,7 @@ class Image extends React.Component{
                         </div>
                     </div> :
                     <div className='item__container'>
-                        <div  className="sound" onClick={() => this.props.sound()}/>
+                        <div  className="sound"  onClick={() => this.props.sound()}/>
                     </div>
                 }
             </div>
