@@ -8,8 +8,8 @@ import LogoutBtn from './HeaderBtns/LogoutBtn'
 import LandingPage from './LandingPage/LandingPage'
 import HomePage from './HomePage/HomePage'
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics'
-import SignIn from './SignInPage/SignIn'
-import SignUp from './SignUpPage/SignUp'
+import SignInAndSignUp from './SignInAndSignUp/SignInAndSignUp'
+
 import UnauthorizedUserPage from './UnauthorizedUserPage/UnauthorizedUserPage'
 
 import Game1 from './Game1/Game1'
@@ -56,11 +56,11 @@ render(){
         </Route>
         <Route path="/Registration">
           <LandingPage />
-          <SignUp />
+          <SignInAndSignUp SignFlag={true}/>
         </Route>
         <Route  path="/Authorization">
         <LandingPage />
-          <SignIn />
+          <SignInAndSignUp SignFlag={false}/>
         </Route>
         <Route path="/HomePage">
         {this.state.userAuthorized !== '' ? <Fade right ><HomePage /></Fade> : <UnauthorizedUserPage />}
