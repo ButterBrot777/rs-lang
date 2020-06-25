@@ -1,6 +1,8 @@
 import React from 'react';
 import Word from './dictionaryWord';
-import DictionaryHeader from './dictionaryHeader'
+import DictionaryHeader from './dictionaryHeader';
+import './dictionary.css'
+
 
 class Dictionary extends React.Component {
     constructor(props) {
@@ -59,7 +61,7 @@ class Dictionary extends React.Component {
     }
 
     render() {
-        const { currentData, isLoading } = this.state;
+        const { currentData, audio, isLoading } = this.state;
         if (isLoading) {
             return <p>Loading ...</p>;
         }
@@ -74,8 +76,9 @@ class Dictionary extends React.Component {
                     {currentData.map(element => <Word userId={this.props.userId} token={this.props.token} difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={this.words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div>
-                    {this.words === "hard" ? <button className="train-hard-btn">Повторить</button> : ''}
+                    {this.words === "hard" ? <button className="btn train-hard-btn">Повторить</button> : ''}
                 </div>
+               
             </div>
             
         )       

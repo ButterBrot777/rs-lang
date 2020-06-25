@@ -1,6 +1,8 @@
 import React from 'react';
-const IMAGE_URL = 'https://raw.githubusercontent.com/NastiaKoval/rslang-data/master/';
+import audio_icon from './audio-icon.png';
+const IMAGE_AUDIO_URL = 'https://raw.githubusercontent.com/NastiaKoval/rslang-data/master/';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
+const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
 
 class Word extends React.Component {
     constructor(props) {
@@ -52,23 +54,52 @@ class Word extends React.Component {
         this.props.onWordTypeChange(content);
     }
 
+    playAudio = () => {
+        this.setState({isLoading: false});
+        const audio_url = `${IMAGE_AUDIO_URL}${this.state.data.audio}`;
+        if (this.wordAudio) {
+            this.wordAudio.pause();
+          }
+        this.wordAudio = new Audio(audio_url);
+        this.wordAudio.load();
+        this.wordAudio.play();
+    }
+
+
     render() {
         const { data, image, isLoading } = this.state;
+        if (data.textMeaning &&  data.textExample) {
+            data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
+            data.textExample = data.textExample.replace(BRACKETS_REGEXP, "");
+        }
+       
         if (isLoading) {
           return <p>Loading ...</p>;
         }
         return (
             <div className="dictionary-word-container" >
-                <h3 className="word">{data.word}</h3>
-                <p className="translation">{data.wordTranslate}</p>
-                <p className="meaning">{data.textMeaning}</p>
-                <p className="example">{data.textExample}</p>
-                <p className="transcription">{data.transcription}</p>
-                <img className="image" src={`${IMAGE_URL}${image}`} alt={data.word} />
-                <p className="last-train">{this.props.optional.lastTrain}</p>  
-                <p className="repeats">{this.props.optional.repeats}</p>  
-                <p className="next-train">{this.props.optional.nextTrain}</p>
-                {this.wordsType === "hard" || this.wordsType === "deleted" ? <button className="put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''}  
+                <div className="word-info">
+                    <div className="word-main-info">
+                        <div className="word-text">
+                            <div className="word-audio">
+                                <h3 className="word">{data.word}</h3>
+                                <button className="audio-icon-btn" onClick={this.playAudio}><img className="audio-icon" src={audio_icon} alt="audio icon" /></button>
+                            </div>
+                            <p className="transcription">{data.transcription}</p>
+                            <p className="translation">{data.wordTranslate}</p>
+                            <p className="meaning">{data.textMeaning}</p>
+                            <p className="example">{data.textExample}</p>
+                           
+                        </div>
+                        <img className="image" src={`${IMAGE_AUDIO_URL}${image}`} alt={data.word} />
+                    </div>
+                    <div className="word-learning-info">
+                        <p className="last-train"> Последняя тренировка: {this.props.optional.lastTrain}</p>  
+                        <p className="repeats">Кол-во повторений: {this.props.optional.repeats}</p>  
+                        <p className="next-train">Следующая тренировка: {this.props.optional.nextTrain}</p>
+                    </div>
+                </div>
+                {this.wordsType === "hard" || this.wordsType === "deleted" ? <button className="btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
             </div>
         )
     }
