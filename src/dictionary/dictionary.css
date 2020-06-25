@@ -21,7 +21,7 @@ body {
     z-index: 10;  
 }
 
-.btn {
+.dictionary-btn {
     background-color: rgb(77, 129, 185);
     color: white;
     width: 20vw;
