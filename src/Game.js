@@ -24,6 +24,7 @@ class Game extends React.Component {
             incorrectGuess: [],
             isRecognition: false,
             isStatistics: false,
+            isGameStarted: false,
             page: 1,
             level: 1,
         }
@@ -133,6 +134,12 @@ class Game extends React.Component {
         }
     }
 
+    openGame = () => {
+        this.setState({
+            isGameStarted: true
+        })
+    }
+
     openStats = () => {
         let incorrectGuess = this.filterIncorrectGuess()
         this.setState({
@@ -171,6 +178,13 @@ class Game extends React.Component {
                 )
         return (
             <div className="app">
+                <div onClick={this.openGame} 
+                className={this.state.isGameStarted ? "start-screen hidden" : "start-screen"}>
+                    <h1 className="start-name">speakit</h1>
+                    <p className="start-info">Click on the words to hear them sound.
+                        Click on the button and speak the words into the microphone.</p>
+                    <button className="start-button">start</button>
+                </div>
                 <div className={this.state.isStatistics ? "game hidden" : "game"}>
                     <div className="header">
                         <div>
