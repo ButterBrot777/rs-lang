@@ -85,6 +85,11 @@ class Game extends React.Component {
                 currentObj: correctWord
             }))
         }
+        if (this.state.correctGuess.length === 10) {
+            this.setState({
+                isStatistics: true
+            })
+        }
     }
 
     handleRecognition = () => {
@@ -185,7 +190,7 @@ class Game extends React.Component {
                         Click on the button and speak the words into the microphone.</p>
                     <button className="start-button">start</button>
                 </div>
-                <div className={this.state.isStatistics ? "game hidden" : "game"}>
+                <div className={(this.state.isStatistics) ? "game hidden" : "game"}>
                     <div className="header">
                         <div>
                             <label>Level
@@ -224,17 +229,17 @@ class Game extends React.Component {
                                 this.state.fullData.map(wordObj =>
                                     <Card currentObj={this.state.currentObj} wordObj={wordObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
-                                        onCardClick={this.handleCardClick} />)
+                                         onCardClick={this.handleCardClick} />)
                             }
                         </div>
                         <div className="btns">
-                            <span onClick={this.restartCurrentGame} className="btn btn-restart">Restart</span>
+                            <span onClick={this.restartCurrentGame} className="btn">Restart</span>
                             <span onClick={this.startRecognition} className="btn btn-wide">Speak please</span>
                             <span className="btn btn-results" onClick={this.openStats}>Results</span>
                         </div>
                     </main>
                 </div>
-                <div className={this.state.isStatistics ? "results" : "results hidden"}>
+                <div className={(this.state.isStatistics )? "results" : "results hidden"}>
                     <div className="results-container">
                         <p className="errors">Ошибок
                         <span className="errors-number">{this.state.incorrectGuess.length}</span>
@@ -244,6 +249,7 @@ class Game extends React.Component {
                                 this.state.incorrectGuess.map(wordObj =>
                                     <Card wordObj={wordObj} currentObj={this.state.currentObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
+                                        
                                         playSound={this.playSound} onCardClick={this.handleCardClick}
                                     />
                                 )
@@ -257,14 +263,15 @@ class Game extends React.Component {
                                 this.state.correctGuess.map(wordObj =>
                                     <Card wordObj={wordObj} currentObj={this.state.currentObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
-                                        playSound={this.playSound} onCardClick={this.handleCardClick}
+                                        playSound={this.playSound} 
+                                        onCardClick={this.handleCardClick}
                                     />
                                 )
                             }
                         </div>
                         <div className="results__btns">
                             <button className="btn btn-return" onClick={this.closeStats}>Return</button>
-                            {/* <button className="btn res__btn-restart">New Game</button> */}
+                            <button className="btn btn-new-game">New Game</button>
                         </div>
                     </div>
                 </div>
