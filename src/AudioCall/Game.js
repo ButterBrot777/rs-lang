@@ -22,6 +22,7 @@ class Game extends React.Component{
 
         }
     }
+    //Функцция которая переводит игру в режим выбрнного слова
     completed = (prop,index) => {
         this.setState({completed:true, indexOfClick:index });
         (prop === true) ? this.setState({right:true}) : this.setState({right:false});
@@ -75,19 +76,18 @@ class Game extends React.Component{
     generateArray = (word) => {
       let arr = [word];
       return  this.getSamewords(word).then(
+
             data => {
+                console.log(data)
                 this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true});
                 if(this.state.completed === false){
                     this.sound()
-                    console.log(123)
                 }
-
             }
         )
-
-
-
     };
+
+    //функцияя которая получает данные из апи и находит похожеее
     parseData = (array,word) => {
         let result = []
         array.forEach((e,i) => {
@@ -98,22 +98,25 @@ class Game extends React.Component{
 
             levenshteinResult.push( {[e]:levenshtein(word,e)} )
         })
-
-        levenshteinResult = levenshteinResult.sort((a,b) => Object.values(a)[0] - Object.values(b)[0])
-            .filter((e) => Object.values(e)[0] !== 0 && Object.values(e)[0] !== 1).slice(0,4).map((e) => Object.keys(e)[0]);
+        levenshteinResult = levenshteinResult
+            .sort((a,b) => Object.values(a)[0] - Object.values(b)[0])
+            .filter((e) => Object.values(e)[0] !== 0 && Object.values(e)[0] !== 1)
+            .slice(0,4).map((e) => Object.keys(e)[0]);
         return levenshteinResult;
 
     }
+    //Функция проигрывающая звук
     sound = () => {
         let sound = new Audio(`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.state.obj.audio}`)
         sound.play()
 
     };
+    //функция которая получает объект синонимов
     getSamewords = (word) => {
         return fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${word}`)
             .then(res =>  res.json())
     }
-
+     //Функция которая перемешивает массив
      shuffle = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
@@ -122,6 +125,7 @@ class Game extends React.Component{
         return array
 
     };
+    //Функция которая переходит к следующему слову
     nextPage = () => {
         this.page = ++this.page;
         this.setState({
@@ -131,7 +135,7 @@ class Game extends React.Component{
             array:this.generateArray(this.state.data[this.page].wordTranslate),
             right:false
         });
-        if(this.state.right === false){
+        if(this.state.right === false && this.state.completed === false){
             let StatisticArray = this.state.ShortStatistic.FalseWords;
             StatisticArray.push(this.state.obj);
             this.setState({
@@ -142,8 +146,6 @@ class Game extends React.Component{
                 }
             })
         }
-
-        console.log(this.page)
     };
 
     render() {
@@ -155,7 +157,7 @@ class Game extends React.Component{
             )
         }else{
             return(
-                <div tabIndex={0} onKeyDown={(e)=>console.log(e.keyCode)}>
+                <div className='Main__container' tabIndex={0} onKeyDown={(e)=>console.log(e.keyCode)}>
                     <div>Закрыть</div>
                     <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
                     <div className="word__container" onKeyDownCapture={() => console.log(123)}>
