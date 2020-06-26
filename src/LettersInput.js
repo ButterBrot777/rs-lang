@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 
-class Input extends React.Component {
+class LettersInput extends React.Component {
 
     render() {
         let arr = this.props.word.split('');
@@ -24,4 +24,4 @@ class Input extends React.Component {
     }
 }
 
-export default Input;
+export default LettersInput;

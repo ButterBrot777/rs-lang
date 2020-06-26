@@ -1,17 +1,16 @@
 import React from 'react';
 import Card from './Card';
-import Input from './Input';
-import ButtonsSettings from './ButtonsSettings';
+import LettersInput from './LettersInput';
+import { getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord } from './Requests'
 
 import './index.css';
 
-// get from the back
-let newWords = 20;
-let page = 0;
-let group = 2;
-
-const wordsPerSent = 12; // we can choose
-const baseUrl = 'https://afternoon-falls-25894.herokuapp.com';
+const userId = localStorage.getItem('userId');
+const token = localStorage.getItem('token');
+let user = {
+    userId,
+    token
+}
 const imageAudioUrl = 'https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/';
 const infoTextBtns = 'перевод, пример и значение: как минимум одна из настроек должна быть выбрана.'
 
@@ -26,6 +25,8 @@ class Game extends React.Component {
             inputValue: '',
             isGuessed: false,
             isSkipped: false,
+            isDifficultyChoice: false,
+            wordsPerDay: 1,
             progressWords: 0,
             settings: {
                 isMeaning: true,
@@ -39,21 +40,19 @@ class Game extends React.Component {
         this.inputElem = React.createRef();
         this.wordContainerElem = React.createRef();
         this.infoElem = React.createRef();
+        this.chooseDifficulty = this.chooseDifficulty.bind(this);
     }
 
-    componentDidMount = () => {
-        const url = `${baseUrl}/words?page=${page}&group=${group}
-        &wordsPerExampleSentenceLTE=${wordsPerSent}&wordsPerPage=${newWords}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                let currentData = this.findCurrentData(data, this.state.currentDataIdx);
-                this.setState({
-                    fullData: data,
-                    currentData,
-                    currentWord: currentData.word,
-                })
-            });
+    componentDidMount = async () => {
+        let { wordsPerDay, optional } = await getSettingsUser(user);
+        let fullData = await getNewWords(optional.Page, optional.Level, wordsPerDay)
+        let currentData = this.findCurrentData(fullData, this.state.currentDataIdx);
+        this.setState({
+            fullData,
+            currentData,
+            currentWord: currentData.word,
+            wordsPerDay
+        })
     }
 
     findCurrentData = (data, dataIdx) => {
@@ -236,7 +235,7 @@ class Game extends React.Component {
             } else {
                 letterElem.classList.add('incorrect');
             }
-            return correctLetters;
+            return correctLetters; 
         });
         this.setState({
             inputValue: ''
@@ -247,11 +246,16 @@ class Game extends React.Component {
                 progressWords: this.state.progressWords + 1
             });
             if (this.state.settings.isSound) {
-                this.playSound().addEventListener('ended', this.goToNextCard);
+                this.playSound().addEventListener('ended', () => {
+                    this.setState({
+                        isDifficultyChoice: true
+                    })
+                });
+
             } else {
-                setTimeout(() => {
-                    this.goToNextCard()
-                }, 2000)
+                this.setState({
+                    isDifficultyChoice: true
+                })
             }
         } else {
             this.handleIncorrectAnswer();
@@ -262,41 +266,95 @@ class Game extends React.Component {
         evt.preventDefault();
     }
 
+    addToDeleted() {
+        // getUserWords
+        // if word in userWords - updateUserWord (deleted: true)
+        // else - createUserWords (deleted: true)
+    }
+
+    chooseDifficulty = async (diffLevel) => {
+        let lastTrain = new Date().toLocaleDateString();
+        let newWord = {
+            userId: user.userId,
+            wordId: this.state.currentData.id,
+            word: {
+                "difficulty": diffLevel,
+                "optional": {
+                    "deleted": false,
+                    lastTrain,
+                }
+            }
+        }
+        let word = await getUserWord(this.state.currentData.id, user);
+        if (!word) {
+            createUserWord(newWord)
+        } else {
+            updateUserWord(newWord)
+        }
+        this.setState({
+            isDifficultyChoice: false,
+        })
+        this.goToNextCard();
+    }
+
     render() {
         let translationBlock = (this.state.settings.isTranslation && this.state.isGuessed)
             ? this.state.currentData.wordTranslate : '';
-        let progressValue = this.state.progressWords / newWords * 100;
+        let progressValue = this.state.progressWords / this.state.wordsPerDay * 100;
 
         return (
             <div className="game-container">
                 <header className="header">
                     <div className="incorrect" ref={this.infoElem}></div>
-                    <ButtonsSettings
-                        settings={this.state.settings}
-                        toggleExample={this.toggleExample} toggleMeaning={this.toggleMeaning}
-                        toggleTranslation={this.toggleTranslation} toggleImage={this.toggleImage}
-                        toggleTranscription={this.toggleTranscription} toggleSound={this.toggleSound}
-                    />
+                    <div className="btns-container">
+                        <button className={this.state.settings.isTranslation ? "btn" : "btn opaque"} onClick={this.toggleTranslation}>перевод</button>
+                        <button className={this.state.settings.isMeaning ? "btn" : "btn opaque"} onClick={this.toggleMeaning}>значение</button>
+                        <button className={this.state.settings.isExample ? "btn" : "btn opaque"} onClick={this.toggleExample}>пример</button>
+                        <button className={this.state.settings.isTranscription ? "btn" : "btn opaque"} onClick={this.toggleTranscription}>транскрипция</button>
+                        <button className={this.state.settings.isImage ? "btn" : "btn opaque"} onClick={this.toggleImage}>картинка</button>
+                        <button className={this.state.settings.isSound ? "btn" : "btn opaque"} onClick={this.toggleSound}>звук</button>
+                    </div>
                 </header>
+                {/* {this.state.progressWords === this.state.wordsPerDay ? <div>Ура, на сегодня все!</div> : */}
                 <Card
                     wordData={this.state.currentData}
                     settings={this.state.settings}
                     isGuessed={this.state.isGuessed}
                     isSkipped={this.state.isSkipped}
                 />
-                <form onSubmit={this.handleSubmit}>
-                    <Input
-                        inputRef={this.inputElem} wordContainerRef={this.wordContainerElem} value={this.state.inputValue}
-                        word={this.state.currentWord} handleInputChange={this.handleInputChange}
-                    />
-                    <div>{translationBlock}</div>
-                    <button className="btn" onClick={this.onClickFurther}>дальше</button>
-                </form>
-                <button className="btn" onClick={this.onShowAnswer}>показать ответ</button>
+                {
+                    this.state.isDifficultyChoice ? '' : (
+                        <div>
+                            <form onSubmit={this.handleSubmit}>
+                                <LettersInput
+                                    inputRef={this.inputElem} wordContainerRef={this.wordContainerElem} value={this.state.inputValue}
+                                    word={this.state.currentWord} handleInputChange={this.handleInputChange}
+                                />
+                                <div>{translationBlock}</div>
+                                <button className="btn" onClick={this.onClickFurther}>Дальше</button>
+                            </form>
+                            <button className="btn" onClick={this.onShowAnswer}>Показать ответ</button>
+                        </div>
+                    )
+                }
+                {
+                    this.state.isDifficultyChoice ?
+                        (<div className="btns-container">
+                            <button className="btn" >Снова</button>
+                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'hard')}>Трудно</button>
+                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'good')}>Хорошо</button>
+                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'easy')}>Легко</button>
+                        </div>) : ''
+
+                }
+                <div className="btns-container">
+                    <button className="btn" onClick={this.addToDeleted}>Удалить</button>
+                    <button className="btn" >Сложные</button>
+                </div>
                 <div className="progress-container">
                     <span>{this.state.progressWords}</span>
                     <progress className="progress-current" max="100" value={progressValue}></progress>
-                    <span>{newWords}</span>
+                    <span>{this.state.wordsPerDay}</span>
                 </div>
             </div>
         )
