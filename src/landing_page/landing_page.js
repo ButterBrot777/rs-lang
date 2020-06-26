@@ -73,8 +73,7 @@ class Intro extends React.Component {
                   smart
                 </h3>
                 <p className="text feature__text">
-                Lingvist gets you to learn the things you need to, right when you need to learn them. You make fast progress by skipping material you don’t need to learn or practice.
-                </p>
+                RS-lang allows you to learn words of the exact complexity that you choose yourself.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-2"></div>
@@ -82,8 +81,7 @@ class Intro extends React.Component {
                   dynamic
                 </h3>
                 <p className="text feature__text">
-                Lingvist keeps learning relevant and suitably challenging for every individual learner. The program uses AI to map your knowledge and tailor the course around what you need to learn to progress quickly and effectively.
-                </p>
+                RS-lang monitors your progress, check your mistakes and on the basis of this draws up an individual training program for each user.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-3"></div>
@@ -91,8 +89,7 @@ class Intro extends React.Component {
                   personalized
                 </h3>
                 <p className="text feature__text">
-                With Lingvist, there’s nothing extra to get in the way. What you study is based on what you already know and what you’ll use most, not what someone else says you should learn. Lingvist is designed to get you into a learning flow with no distractions.
-                </p>
+                RS-lang allows you to learn exactly the words that you want to learn. Choose the type of your training based on your current language skills.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-4"></div>
@@ -100,8 +97,7 @@ class Intro extends React.Component {
                   universal
                 </h3>
                 <p className="text feature__text">
-                With Lingvist, there’s nothing extra to get in the way. What you study is based on what you already know and what you’ll use most, not what someone else says you should learn. Lingvist is designed to get you into a learning flow with no distractions.
-                </p>
+                Wherever you are, in any free minute, open RS-lang and start your training! We are available on the Web.</p>
               </article>
             </div>
           </section>
@@ -150,6 +146,7 @@ class Details extends React.Component {
               </article>
             </div>
           </section>
+          <button className="button button_colored button_details">Get started</button>
         </div>
       </div>
     )
@@ -178,7 +175,7 @@ class About extends React.Component {
                   <p className="employee__title">Absolvent RSSchool</p>
                   <a className="employee__contact" href="mailto:vorob.edu@gmail.com">vorob.edu@gmail.com</a>
                 </div>
-                <a href="https://github.com/vorobeychik"><div className="employee__photo employee-1"></div></a>
+                <a href="https://github.com/vorobeychik"><div className="employee__photo employee-2"></div></a>
               </article>
               <article class="employee block-shadowed">
                 <div className="employee__content">
@@ -186,7 +183,7 @@ class About extends React.Component {
                   <p className="employee__title">Absolvent RSSchool</p>
                   <a className="employee__contact" href="mailto:kathyr@gmail.com">kathyr@gmail.com</a>
                 </div>
-                <a href="https://github.com/ilyashihutin"><div className="employee__photo employee-1"></div></a>
+                <a href="https://github.com/ilyashihutin"><div className="employee__photo employee-3"></div></a>
               </article>
               <article class="employee block-shadowed">
                 <div className="employee__content">
@@ -194,7 +191,7 @@ class About extends React.Component {
                   <p className="employee__title">Absolvent RSSchool</p>
                   <a className="employee__contact" href="mailto:anasteziyam@gmail.com">anasteziyam@gmail.com</a>
                 </div>
-                <a href="https://github.com/nastiakoval"><div className="employee__photo employee-1"></div></a>
+                <a href="https://github.com/nastiakoval"><div className="employee__photo employee-4"></div></a>
               </article>
               <article class="employee block-shadowed">
                 <div className="employee__content">
@@ -202,7 +199,7 @@ class About extends React.Component {
                   <p className="employee__title">Absolvent RSSchool</p>
                   <a className="employee__contact" href="mailto:sapranovich.andrey@gmail.com">sapranovich.andrey@gmail.com</a>
                 </div>
-                <a href="https://github.com/sapranovich"><div className="employee__photo employee-1"></div></a>
+                <a href="https://github.com/sapranovich"><div className="employee__photo employee-5"></div></a>
               </article>
               <article class="employee block-shadowed">
                 <div className="employee__content">
@@ -210,7 +207,7 @@ class About extends React.Component {
                   <p className="employee__title">Absolvent RSSchool</p>
                   <a className="employee__contact" href="mailto:korendos@gmail.com">korendos@gmail.com</a>
                 </div>
-                <a href="https://github.com/butterbrot777"><div className="employee__photo employee-1"></div></a>
+                <a href="https://github.com/butterbrot777"><div className="employee__photo employee-6"></div></a>
               </article>
 
             </div>
