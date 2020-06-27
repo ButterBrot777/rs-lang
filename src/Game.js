@@ -13,6 +13,10 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = 'en-US';
 
+function startListening() {
+    recognition.start();
+}
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -45,7 +49,19 @@ class Game extends React.Component {
     }
 
     changeLevel = () => {
-        this.startGame();
+        if (+this.state.level && +this.state.page) {
+            this.startGame();
+            this.setState({
+                currentObj: '',
+                inputValue: '',
+                correctGuess: [],
+                incorrectGuess: [],
+                isRecognition: false,
+                isStatistics: false,
+            })
+        } else {
+            alert('level 1 - 6, page 1 - 30');
+        }
     }
 
     filterIncorrectGuess = () => {
@@ -77,8 +93,12 @@ class Game extends React.Component {
     }
 
     checkGuess = () => {
+        let inputValue = this.state.inputValue;
+        let firstChar = inputValue.charAt(0);
+        let converted = firstChar.toUpperCase() === firstChar ? firstChar.toLowerCase() : firstChar.toUpperCase()
+        let inputValueConverted = converted + inputValue.slice(1);
         let correctWord = this.state.fullData.find(wordObj =>
-            wordObj.word === this.state.inputValue);
+            wordObj.word === inputValue || wordObj.word === inputValueConverted);
         if (correctWord) {
             this.setState(prevState => ({
                 correctGuess: [...prevState.correctGuess, correctWord],
@@ -108,10 +128,10 @@ class Game extends React.Component {
                 isRecognition: true,
                 currentObj: ''
             })
-            recognition.start();
+            startListening();
             this.handleRecognition();
+            recognition.addEventListener('end', startListening);
         }
-        recognition.onend = () => recognition.start();
     }
 
     handleCardClick = (e) => {
@@ -135,7 +155,7 @@ class Game extends React.Component {
                 [name]: value
             })
         } else {
-            alert('max level = 6, max page = 30');
+            alert('level 1 - 6, page 1 - 30');
         }
     }
 
@@ -160,6 +180,8 @@ class Game extends React.Component {
     }
 
     restartCurrentGame = () => {
+        recognition.removeEventListener('end', startListening);
+        recognition.stop();
         this.setState({
             currentObj: '',
             inputValue: '',
@@ -183,8 +205,8 @@ class Game extends React.Component {
                 )
         return (
             <div className="app">
-                <div onClick={this.openGame} 
-                className={this.state.isGameStarted ? "start-screen hidden" : "start-screen"}>
+                <div onClick={this.openGame}
+                    className={this.state.isGameStarted ? "start-screen hidden" : "start-screen"}>
                     <h1 className="start-name">speakit</h1>
                     <p className="start-info">Click on the words to hear them sound.
                         Click on the button and speak the words into the microphone.</p>
@@ -229,7 +251,7 @@ class Game extends React.Component {
                                 this.state.fullData.map(wordObj =>
                                     <Card currentObj={this.state.currentObj} wordObj={wordObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
-                                         onCardClick={this.handleCardClick} />)
+                                        onCardClick={this.handleCardClick} />)
                             }
                         </div>
                         <div className="btns">
@@ -239,7 +261,7 @@ class Game extends React.Component {
                         </div>
                     </main>
                 </div>
-                <div className={(this.state.isStatistics )? "results" : "results hidden"}>
+                <div className={(this.state.isStatistics) ? "results" : "results hidden"}>
                     <div className="results-container">
                         <p className="errors">Ошибок
                         <span className="errors-number">{this.state.incorrectGuess.length}</span>
@@ -249,7 +271,7 @@ class Game extends React.Component {
                                 this.state.incorrectGuess.map(wordObj =>
                                     <Card wordObj={wordObj} currentObj={this.state.currentObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
-                                        
+
                                         playSound={this.playSound} onCardClick={this.handleCardClick}
                                     />
                                 )
@@ -263,7 +285,7 @@ class Game extends React.Component {
                                 this.state.correctGuess.map(wordObj =>
                                     <Card wordObj={wordObj} currentObj={this.state.currentObj}
                                         key={wordObj.id} isStatistics={this.state.isStatistics}
-                                        playSound={this.playSound} 
+                                        playSound={this.playSound}
                                         onCardClick={this.handleCardClick}
                                     />
                                 )
