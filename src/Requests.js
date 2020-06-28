@@ -24,12 +24,12 @@ async function getSettingsUser(obj) {
         },
     });
     const content = await rawResponse.json();
+    console.log(content)
     return content;
 }
 
-async function getNewWords(page, group, wordsPerDay) {
-    const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}
-&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerDay}`;
+async function getNewWords(page, group) {
+    const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}`;
     const rawResponse = await fetch(url);
     const content = await rawResponse.json();
     return content;

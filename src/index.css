@@ -49,6 +49,12 @@ code {
   font-weight: 600;
 }
 
+.btn-colored {
+  background-color: greenyellow;
+  opacity: 0.8;
+  border: 2px solid seagreen;
+}
+
 .sentence__word {
   margin: 0 3px;
 }
@@ -120,9 +126,34 @@ label {
   border: 1px solid navy;
   border-radius: 2px;
 }
+
 .progress-container {
   margin-top: 30px;
 }
+
 .progress-current {
   margin: 0 5px;
+}
+
+.game-end {
+  width: 100vw;
+  height: 100vh;
+  background-color: honeydew;
+  color: navy;
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.info-big {
+  margin: 0;
+}
+
+.info-small {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: grey;
 }

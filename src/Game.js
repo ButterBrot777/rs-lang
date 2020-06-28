@@ -1,9 +1,11 @@
 import React from 'react';
 import Card from './Card';
 import LettersInput from './LettersInput';
-import { getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord } from './Requests'
+import { addSettingsUser, getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord } from './Requests'
 
 import './index.css';
+
+// localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWM2YmY3OThmZmJmMDAxNzQ1ODJmOSIsImlhdCI6MTU5MzM0MDgxMCwiZXhwIjoxNTkzMzU1MjEwfQ.NnDEu97ZOtZSh3lhYwriqiaqkIeNXrEfC78FzoTGnkQ')
 
 const userId = localStorage.getItem('userId');
 const token = localStorage.getItem('token');
@@ -12,8 +14,7 @@ let user = {
     token
 }
 const imageAudioUrl = 'https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/';
-const infoTextBtns = 'перевод, пример и значение: как минимум одна из настроек должна быть выбрана.'
-
+const infoTextBtns = 'перевод, пример и значение: как минимум одна из настроек должна быть выбрана.';
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -26,15 +27,16 @@ class Game extends React.Component {
             isGuessed: false,
             isSkipped: false,
             isDifficultyChoice: false,
-            wordsPerDay: 1,
-            progressWords: 0,
+            wordsLearntPerGame: 0,
+            correctGuesses: 0,
+            correctGuessesStrike: 0,
             settings: {
                 isMeaning: true,
                 isTranslation: true,
                 isImage: false,
                 isTranscription: false,
                 isExample: true,
-                isSound: true,
+                isSound: false,
             }
         }
         this.inputElem = React.createRef();
@@ -44,14 +46,45 @@ class Game extends React.Component {
     }
 
     componentDidMount = async () => {
-        let { wordsPerDay, optional } = await getSettingsUser(user);
-        let fullData = await getNewWords(optional.Page, optional.Level, wordsPerDay)
+        let { wordsPerDay, optional: { level, page, wordsLearntPerPage } } = await getSettingsUser(user);
+        if (page > 29 && level < 6) {
+            level++;
+            page = 0;
+        }
+        let fullDataPerPage = await getNewWords(page, level);
+        let fullData = fullDataPerPage.filter((data, idx) => {
+            
+            if (idx >= wordsLearntPerPage && (idx < (wordsLearntPerPage + wordsPerDay))) {
+                return data;
+            }
+            // return null;
+        })
+        if (fullData.length < wordsPerDay) {
+            let wordsNeeded = wordsPerDay - fullData.length;
+            if (page >= 29 && level < 6) {
+                level++;
+                page = 0;
+            } else {
+                page++;
+                console.log(page)
+            }
+            let extraData = await getNewWords(page, level);
+            extraData.filter((data, idx) => {
+                if (idx < wordsNeeded) {
+                    fullData.push(data);
+                }
+                // return null;
+            })
+        }
         let currentData = this.findCurrentData(fullData, this.state.currentDataIdx);
         this.setState({
             fullData,
             currentData,
             currentWord: currentData.word,
-            wordsPerDay
+            wordsPerDay,
+            level,
+            page,
+            wordsLearntPerPage,
         })
     }
 
@@ -146,10 +179,17 @@ class Game extends React.Component {
         })
         this.setState({
             isSkipped: true,
-            progressWords: this.state.progressWords + 1
+            wordsLearntPerGame: this.state.wordsLearntPerGame + 1,
+            correctGuessesStrike: 0,
         });
         this.wordContainerElem.current.classList.remove('hidden');
-        setTimeout(() => this.goToNextCard(), 2000)
+        setTimeout(() => {
+            if (this.state.wordsLearntPerGame !== this.state.fullData.length) {
+                this.goToNextCard();
+            } else {
+                this.handleSettingsUpdate();
+            }
+        }, 2000)
     }
 
     playSound = () => {
@@ -217,6 +257,9 @@ class Game extends React.Component {
     }
 
     handleIncorrectAnswer = () => {
+        this.setState({
+            correctGuessesStrike: 0,
+        });
         this.wordContainerElem.current.classList.remove('hidden');
         this.inputElem.current.blur();
         this.inputElem.current.addEventListener('focus', () => {
@@ -235,7 +278,7 @@ class Game extends React.Component {
             } else {
                 letterElem.classList.add('incorrect');
             }
-            return correctLetters; 
+            return correctLetters;
         });
         this.setState({
             inputValue: ''
@@ -243,7 +286,9 @@ class Game extends React.Component {
         if (correctLetters === this.wordContainerElem.current.children.length) {
             this.setState({
                 isGuessed: true,
-                progressWords: this.state.progressWords + 1
+                correctGuesses: this.state.correctGuesses + 1,
+                correctGuessesStrike: this.state.correctGuessesStrike + 1,
+                wordsLearntPerGame: this.state.wordsLearntPerGame + 1,
             });
             if (this.state.settings.isSound) {
                 this.playSound().addEventListener('ended', () => {
@@ -272,6 +317,40 @@ class Game extends React.Component {
         // else - createUserWords (deleted: true)
     }
 
+    addToHard() {
+        // getUserWords
+        // if word in userWords - updateUserWord (hardWord: true)
+        // else - createUserWords (hardWord: true)
+    }
+
+    handleSettingsUpdate = () => {
+        let { wordsPerDay, page, level, settings, wordsLearntPerPage, wordsLearntPerGame } = this.state;
+        wordsLearntPerPage = wordsLearntPerPage + wordsLearntPerGame;
+        if (wordsLearntPerPage > 20) {
+            wordsLearntPerPage = wordsLearntPerPage - 20;
+        } else if (wordsLearntPerPage === 20) {
+            wordsLearntPerPage = 0;
+            page++;
+        }
+        let newSettings = {
+            // "wordsPerDay": this.props.wordsPerDay,
+            "wordsPerDay": wordsPerDay,
+            "optional": {
+                //  "maxWordsPerDay": 30,
+                "level": level,
+                "page": page,
+                "wordsLearntPerPage": wordsLearntPerPage,
+                "meaningHint": settings.meaningHint,
+                "translationHint": settings.translationHint,
+                "exampleHint": settings.exampleHint,
+                "soundHint": settings.soundHint,
+                "imageHint": settings.imageHint,
+                "transcriptionHint": settings.transcriptionHint,
+            }
+        };
+        addSettingsUser(token, userId, newSettings);
+    }
+
     chooseDifficulty = async (diffLevel) => {
         let lastTrain = new Date().toLocaleDateString();
         let newWord = {
@@ -294,16 +373,31 @@ class Game extends React.Component {
         this.setState({
             isDifficultyChoice: false,
         })
-        this.goToNextCard();
+        if (this.state.wordsLearntPerGame !== this.state.fullData.length) {
+            this.goToNextCard();
+        } else {
+            this.handleSettingsUpdate();
+        }
     }
 
     render() {
         let translationBlock = (this.state.settings.isTranslation && this.state.isGuessed)
             ? this.state.currentData.wordTranslate : '';
-        let progressValue = this.state.progressWords / this.state.wordsPerDay * 100;
-
+        let progressValue = Math.round(this.state.wordsLearntPerGame / this.state.fullData.length * 100);
+        let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
         return (
             <div className="game-container">
+                {(this.state.wordsLearntPerGame === this.state.fullData.length && !this.state.isDifficultyChoice) ? (
+                    <div className="game-end">
+                        <h1 className="info-big">Ура, на сегодня все!</h1>
+                        <div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div>
+                        <div>Карточек завершено: {this.state.wordsLearntPerGame}</div>
+                        <div>Правильные ответы: {correctGuessesPercent}%</div>
+                        <div>Новые слова: {this.state.wordsPerDay}</div>
+                        <div> Самая длинная серия правильных ответов: {this.state.correctGuessesStrike}</div>
+                        <button className="btn">Go back</button>
+                    </div>
+                ) : ''}
                 <header className="header">
                     <div className="incorrect" ref={this.infoElem}></div>
                     <div className="btns-container">
@@ -315,7 +409,6 @@ class Game extends React.Component {
                         <button className={this.state.settings.isSound ? "btn" : "btn opaque"} onClick={this.toggleSound}>звук</button>
                     </div>
                 </header>
-                {/* {this.state.progressWords === this.state.wordsPerDay ? <div>Ура, на сегодня все!</div> : */}
                 <Card
                     wordData={this.state.currentData}
                     settings={this.state.settings}
@@ -340,21 +433,21 @@ class Game extends React.Component {
                 {
                     this.state.isDifficultyChoice ?
                         (<div className="btns-container">
-                            <button className="btn" >Снова</button>
-                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'hard')}>Трудно</button>
-                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'good')}>Хорошо</button>
-                            <button className="btn" onClick={this.chooseDifficulty.bind(this, 'easy')}>Легко</button>
+                            <button className="btn btn-colored" >Снова</button>
+                            <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'hard')}>Трудно</button>
+                            <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'good')}>Хорошо</button>
+                            <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'easy')}>Легко</button>
                         </div>) : ''
 
                 }
                 <div className="btns-container">
                     <button className="btn" onClick={this.addToDeleted}>Удалить</button>
-                    <button className="btn" >Сложные</button>
+                    <button className="btn" onClick={this.addToHard}>Сложные</button>
                 </div>
                 <div className="progress-container">
-                    <span>{this.state.progressWords}</span>
+                    <span>{this.state.wordsLearntPerGame}</span>
                     <progress className="progress-current" max="100" value={progressValue}></progress>
-                    <span>{this.state.wordsPerDay}</span>
+                    <span>{this.state.fullData.length}</span>
                 </div>
             </div>
         )
