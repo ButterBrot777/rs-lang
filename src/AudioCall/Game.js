@@ -1,12 +1,16 @@
-import React, { useState} from "react";
+import React from "react";
 import GameWord from "./GameWord";
 import GameWordCompleted from "./GameWordCompleted";
 import Loading from "./Loading";
 import Statistic from "./Statistic";
+
 import style from '../style.css'
+
 const levenshtein = require('js-levenshtein');
+
 class Game extends React.Component{
     page = 0;
+    focusIndex = -1;
     constructor() {
         super()
         this.state = {
@@ -18,17 +22,48 @@ class Game extends React.Component{
                 FalseWords:[]
             },
             GameOver:false,
-            right:false
+            right:false,
 
         }
     }
     //Функцция которая переводит игру в режим выбрнного слова
     completed = (prop,index) => {
-        this.setState({completed:true, indexOfClick:index });
-        (prop === true) ? this.setState({right:true}) : this.setState({right:false});
+        console.log(123123123);
+        this.setState({
+            completed:true,
+            indexOfClick:index,
+            right:prop
+        });
+        console.log('staaaaate',this.state)
+
+        document.removeEventListener('keydown',this.onKeyDown);
+
+    };
+    //Функция которая позволяет выбирать слова стрелочками
+    onKeyDown = (event) => {
+        if( this.state.focusIndex === undefined && event.keyCode === 39 ){
+            this.focusIndex = 0
+            this.setState({ focusIndex : this.focusIndex })
+
+        }else if ( this.state.focusIndex === undefined && event.keyCode === 37 ){
+            this.focusIndex = 4;
+            this.setState({ focusIndex : this.focusIndex })
+
+        } else {
+            console.log(event.keyCode)
+            if( event.keyCode === 39 ) { ++this.focusIndex}
+            if( event.keyCode === 37 ) { --this.focusIndex }
+            if( this.focusIndex < 0 ) { this.focusIndex = 4 }
+            if( this.focusIndex > 4 ) { this.focusIndex = 0 }
+             this.setState({focusIndex:this.focusIndex})
+
+        }
+
+
     };
 
     componentDidMount() {
+        document.addEventListener('keydown',this.onKeyDown);
         fetch('https://afternoon-falls-25894.herokuapp.com/words?page=2&group=0')
             .then(res => res.json())
             .then(data => {
@@ -45,38 +80,43 @@ class Game extends React.Component{
     }
 
     componentWillUpdate() {
+        if(this.page === 19 && this.state.GameOver === false){
+            this.setState({GameOver:true})
+        }
         if(this.state.right === true && this.state.completed === true){
             let StatisticArray = this.state.ShortStatistic.RightWords;
             StatisticArray.push(this.state.obj);
+            console.log(1)
             this.setState({
-               ShortStatistic:{
-                   ...this.state.ShortStatistic,
-                   RightWords:StatisticArray
+                choseWithKeys:false,
+                ShortStatistic:{
+                    ...this.state.ShortStatistic,
+                    RightWords:StatisticArray
 
-               }
+                }
             })
         }else if(this.state.right === false && this.state.completed === true){
+            console.log(2)
             let StatisticArray = this.state.ShortStatistic.FalseWords;
             StatisticArray.push(this.state.obj);
             this.setState({
                 ShortStatistic:{
+                    choseWithKeys:false,
                     ...this.state.ShortStatistic,
                     FalseWords:StatisticArray
 
                 }
             })
         }
-        if(this.page === 19 && this.state.GameOver === false){
-            this.setState({GameOver:true})
-        }
         console.log(this.state)
     }
 
+
     //Функция которая будет генерировать похожее слова
     generateArray = (word) => {
+      document.addEventListener('keydown',this.onKeyDown);
       let arr = [word];
       return  this.getSamewords(word).then(
-
             data => {
                 console.log(data)
                 this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true});
@@ -128,12 +168,14 @@ class Game extends React.Component{
     //Функция которая переходит к следующему слову
     nextPage = () => {
         this.page = ++this.page;
+        this.focusIndex = -1;
         this.setState({
             obj:this.state.data[this.page],
             completed:false,
             loading:false,
             array:this.generateArray(this.state.data[this.page].wordTranslate),
-            right:false
+            right:false,
+            focusIndex:undefined,
         });
         if(this.state.right === false && this.state.completed === false){
             let StatisticArray = this.state.ShortStatistic.FalseWords;
@@ -146,6 +188,7 @@ class Game extends React.Component{
                 }
             })
         }
+        console.log(this.state)
     };
 
     render() {
@@ -153,11 +196,11 @@ class Game extends React.Component{
             return <Loading/>
         }else if(this.state.GameOver === true){
             return (
-                <Statistic  statistic = {this.state.ShortStatistic}/>
+                <Statistic needToRemove = {this.onKeyDown} statistic = {this.state.ShortStatistic}/>
             )
         }else{
             return(
-                <div className='Main__container' tabIndex={0} onKeyDown={(e)=>console.log(e.keyCode)}>
+                <div className='Main__container'  onKeyDown={(e)=>console.log(e.keyCode)}>
                     <div>Закрыть</div>
                     <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
                     <div className="word__container" onKeyDownCapture={() => console.log(123)}>
@@ -166,9 +209,9 @@ class Game extends React.Component{
                             <GameWord state = {this.state}
                                       index = {i}
                                       word = {e}
-                                      rightWord = {this.state.obj.wordTranslate}
                                       completed = {this.completed}
-                                      id = {this.state.obj.id}
+                                      choseWordWithEnter = {this.onKeyDown}
+
                                       />
                                       :
                                 <GameWordCompleted state = {this.state}

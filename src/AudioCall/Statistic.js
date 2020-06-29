@@ -1,6 +1,10 @@
 import React from "react";
 export default class Statistic extends React.Component {
 
+    componentDidMount() {
+        document.removeEventListener('keydown',this.props.needToRemove  );
+    }
+
     render() {
         return (
             <div>

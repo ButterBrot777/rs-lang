@@ -38,6 +38,9 @@
   width: 25px;
 }
 
+.word__focused{
+  color: aqua;
+}
 .lds-ring {
   display: inline-block;
   position: relative;
