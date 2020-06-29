@@ -27,7 +27,7 @@ class Card extends React.Component {
 
     render() {
         let exampleBlock;
-        if (this.props.settings.isExample) {
+        if (this.props.hints.exampleHint) {
             if (this.props.isSkipped || this.props.isGuessed) {
                 exampleBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textExample}` }}></div>;;
             } else {
@@ -38,7 +38,7 @@ class Card extends React.Component {
         }
 
         let meaningBlock;
-        if (this.props.settings.isMeaning) {
+        if (this.props.hints.meaningHint) {
             if (this.props.isSkipped || this.props.isGuessed) {
                 meaningBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textMeaning}` }}></div>;
             } else {
@@ -48,20 +48,20 @@ class Card extends React.Component {
             meaningBlock = '';
         }
 
-        let translationBlock = this.props.settings.isTranslation ? this.props.wordData.wordTranslate : '';
+        let translationBlock = this.props.hints.translationHint ? this.props.wordData.wordTranslate : '';
 
-        let transcriptionBlock = this.props.settings.isTranscription ? this.props.wordData.transcription : '';
+        let transcriptionBlock = this.props.hints.transcriptionHint ? this.props.wordData.transcription : '';
 
         let image = `https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.wordData.image}`;
-        let imageBlock = this.props.settings.isImage ? <img src={image} alt=""></img> : '';
+        let imageBlock = this.props.hints.imageHint ? <img src={image} alt=""></img> : '';
 
         return (
             <div className="word-card">
                 <div className="word-card-text">
                     <div>{exampleBlock}</div>
-                    {(this.props.isGuessed && this.props.settings.isExample) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}
+                    {(this.props.isGuessed && this.props.hints.exampleHint) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}
                     <div>{meaningBlock}</div>
-                    {(this.props.isGuessed && this.props.settings.isMeaning) ? <div>{this.props.wordData.textMeaningTranslate}</div> : ''}
+                    {(this.props.isGuessed && this.props.hints.meaningHint) ? <div>{this.props.wordData.textMeaningTranslate}</div> : ''}
                     <div>{translationBlock}</div>
                     <div>{transcriptionBlock}</div>
                 </div>

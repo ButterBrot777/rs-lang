@@ -30,13 +30,19 @@ class Game extends React.Component {
             wordsLearntPerGame: 0,
             correctGuesses: 0,
             correctGuessesStrike: 0,
-            settings: {
-                isMeaning: true,
-                isTranslation: true,
-                isImage: false,
-                isTranscription: false,
-                isExample: true,
-                isSound: false,
+            hints: {
+                meaningHint: true,
+                translationHint: true,
+                imageHint: false,
+                transcriptionHint: false,
+                exampleHint: true,
+                soundHint: false,
+            },
+            buttons: {
+                showAnswer: true,
+                addToDeleted: true,
+                addToHard: true,
+                chooseLevel: true,
             }
         }
         this.inputElem = React.createRef();
@@ -46,14 +52,17 @@ class Game extends React.Component {
     }
 
     componentDidMount = async () => {
-        let { wordsPerDay, optional: { level, page, wordsLearntPerPage } } = await getSettingsUser(user);
+        let { wordsPerDay, optional: { level, page, wordsLearntPerPage, hints } } = await getSettingsUser(user);
+        if (wordsLearntPerPage === 20) {
+            wordsLearntPerPage = 0;
+            page++;
+        }
         if (page > 29 && level < 6) {
             level++;
             page = 0;
         }
         let fullDataPerPage = await getNewWords(page, level);
         let fullData = fullDataPerPage.filter((data, idx) => {
-            
             if (idx >= wordsLearntPerPage && (idx < (wordsLearntPerPage + wordsPerDay))) {
                 return data;
             }
@@ -85,6 +94,14 @@ class Game extends React.Component {
             level,
             page,
             wordsLearntPerPage,
+            hints: {
+                meaningHint: hints.meaningHint,
+                translationHint: hints.translationHint,
+                imageHint: hints.imageHint,
+                transcriptionHint: hints.transcriptionHint,
+                exampleHint: hints.exampleHint,
+                soundHint: hints.soundHint,
+            }
         })
     }
 
@@ -98,14 +115,14 @@ class Game extends React.Component {
         })
     }
 
-    toggleExample = () => {
-        if (!this.state.settings.isExample
-            || (this.state.settings.isExample && this.state.settings.isTranslation)
-            || (this.state.settings.isExample && this.state.settings.isMeaning)) {
+    toggleExampleHint = () => {
+        if (!this.state.hints.exampleHint
+            || (this.state.hints.exampleHint && this.state.hints.translationHint)
+            || (this.state.hints.exampleHint && this.state.hints.meaningHint)) {
             this.setState({
-                settings: {
-                    ...this.state.settings,
-                    isExample: !this.state.settings.isExample
+                hints: {
+                    ...this.state.hints,
+                    exampleHint: !this.state.hints.exampleHint
                 }
             })
         } else {
@@ -114,14 +131,14 @@ class Game extends React.Component {
         }
     }
 
-    toggleMeaning = () => {
-        if (!this.state.settings.isMeaning
-            || (this.state.settings.isMeaning && this.state.settings.isTranslation)
-            || (this.state.settings.isMeaning && this.state.settings.isExample)) {
+    toggleMeaningHint = () => {
+        if (!this.state.hints.meaningHint
+            || (this.state.hints.meaningHint && this.state.hints.translationHint)
+            || (this.state.hints.meaningHint && this.state.hints.exampleHint)) {
             this.setState({
-                settings: {
-                    ...this.state.settings,
-                    isMeaning: !this.state.settings.isMeaning
+                hints: {
+                    ...this.state.hints,
+                    meaningHint: !this.state.hints.meaningHint
                 }
             })
         } else {
@@ -130,14 +147,14 @@ class Game extends React.Component {
         }
     }
 
-    toggleTranslation = () => {
-        if (!this.state.settings.isTranslation
-            || (this.state.settings.isTranslation && this.state.settings.isExample)
-            || (this.state.settings.isTranslation && this.state.settings.isMeaning)) {
+    toggleTranslationHint = () => {
+        if (!this.state.hints.translationHint
+            || (this.state.hints.translationHint && this.state.hints.exampleHint)
+            || (this.state.hints.translationHint && this.state.hints.meaningHint)) {
             this.setState({
-                settings: {
-                    ...this.state.settings,
-                    isTranslation: !this.state.settings.isTranslation
+                hints: {
+                    ...this.state.hints,
+                    translationHint: !this.state.hints.translationHint
                 }
             })
         } else {
@@ -146,29 +163,29 @@ class Game extends React.Component {
         }
     }
 
-    toggleTranscription = () => {
+    toggleTranscriptionHint = () => {
         this.setState({
-            settings: {
-                ...this.state.settings,
-                isTranscription: !this.state.settings.isTranscription
+            hints: {
+                ...this.state.hints,
+                transcriptionHint: !this.state.hints.transcriptionHint
             }
         })
     }
 
-    toggleImage = () => {
+    toggleImageHint = () => {
         this.setState({
-            settings: {
-                ...this.state.settings,
-                isImage: !this.state.settings.isImage
+            hints: {
+                ...this.state.hints,
+                imageHint: !this.state.hints.imageHint
             }
         })
     }
 
-    toggleSound = () => {
+    toggleSoundHint = () => {
         this.setState({
-            settings: {
-                ...this.state.settings,
-                isSound: !this.state.settings.isSound
+            hints: {
+                ...this.state.hints,
+                soundHint: !this.state.hints.soundHint
             }
         })
     }
@@ -187,6 +204,7 @@ class Game extends React.Component {
             if (this.state.wordsLearntPerGame !== this.state.fullData.length) {
                 this.goToNextCard();
             } else {
+                this.updateWordsLearntPerPage();
                 this.handleSettingsUpdate();
             }
         }, 2000)
@@ -203,7 +221,7 @@ class Game extends React.Component {
         let audioExample = new Audio(fullPathExample);
         let audioMeaning = new Audio(fullPathMeaning);
         audioWord.play();
-        if (this.state.settings.isExample && this.state.settings.isMeaning) {
+        if (this.state.hints.exampleHint && this.state.hints.meaningHint) {
             audioWord.onended = function () {
                 audioExample.play();
                 audioExample.onended = function () {
@@ -211,12 +229,12 @@ class Game extends React.Component {
                 }
             }
             return audioMeaning;
-        } else if (this.state.settings.isExample) {
+        } else if (this.state.hints.exampleHint) {
             audioWord.onended = function () {
                 audioExample.play();
             }
             return audioExample;
-        } else if (this.state.settings.isMeaning) {
+        } else if (this.state.hints.meaningHint) {
             audioWord.onended = function () {
                 audioMeaning.play();
             }
@@ -290,7 +308,7 @@ class Game extends React.Component {
                 correctGuessesStrike: this.state.correctGuessesStrike + 1,
                 wordsLearntPerGame: this.state.wordsLearntPerGame + 1,
             });
-            if (this.state.settings.isSound) {
+            if (this.state.hints.soundHint) {
                 this.playSound().addEventListener('ended', () => {
                     this.setState({
                         isDifficultyChoice: true
@@ -323,29 +341,34 @@ class Game extends React.Component {
         // else - createUserWords (hardWord: true)
     }
 
-    handleSettingsUpdate = () => {
-        let { wordsPerDay, page, level, settings, wordsLearntPerPage, wordsLearntPerGame } = this.state;
+    updateWordsLearntPerPage = () => {
+        let { wordsLearntPerPage, wordsLearntPerGame } = this.state;
         wordsLearntPerPage = wordsLearntPerPage + wordsLearntPerGame;
         if (wordsLearntPerPage > 20) {
             wordsLearntPerPage = wordsLearntPerPage - 20;
-        } else if (wordsLearntPerPage === 20) {
-            wordsLearntPerPage = 0;
-            page++;
         }
+        this.setState({
+            wordsLearntPerPage
+        })
+    }
+
+    handleSettingsUpdate = () => {
+        let { wordsPerDay, page, level, hints, wordsLearntPerPage } = this.state;
         let newSettings = {
-            // "wordsPerDay": this.props.wordsPerDay,
             "wordsPerDay": wordsPerDay,
             "optional": {
-                //  "maxWordsPerDay": 30,
+                "maxWordsPerDay": 30,
                 "level": level,
                 "page": page,
                 "wordsLearntPerPage": wordsLearntPerPage,
-                "meaningHint": settings.meaningHint,
-                "translationHint": settings.translationHint,
-                "exampleHint": settings.exampleHint,
-                "soundHint": settings.soundHint,
-                "imageHint": settings.imageHint,
-                "transcriptionHint": settings.transcriptionHint,
+                "hints": {
+                    "meaningHint": hints.meaningHint,
+                    "translationHint": hints.translationHint,
+                    "exampleHint": hints.exampleHint,
+                    "soundHint": hints.soundHint,
+                    "imageHint": hints.imageHint,
+                    "transcriptionHint": hints.transcriptionHint
+                }
             }
         };
         addSettingsUser(token, userId, newSettings);
@@ -376,12 +399,13 @@ class Game extends React.Component {
         if (this.state.wordsLearntPerGame !== this.state.fullData.length) {
             this.goToNextCard();
         } else {
+            this.updateWordsLearntPerPage();
             this.handleSettingsUpdate();
         }
     }
 
     render() {
-        let translationBlock = (this.state.settings.isTranslation && this.state.isGuessed)
+        let translationBlock = (this.state.hints.translationHint && this.state.isGuessed)
             ? this.state.currentData.wordTranslate : '';
         let progressValue = Math.round(this.state.wordsLearntPerGame / this.state.fullData.length * 100);
         let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
@@ -401,17 +425,17 @@ class Game extends React.Component {
                 <header className="header">
                     <div className="incorrect" ref={this.infoElem}></div>
                     <div className="btns-container">
-                        <button className={this.state.settings.isTranslation ? "btn" : "btn opaque"} onClick={this.toggleTranslation}>перевод</button>
-                        <button className={this.state.settings.isMeaning ? "btn" : "btn opaque"} onClick={this.toggleMeaning}>значение</button>
-                        <button className={this.state.settings.isExample ? "btn" : "btn opaque"} onClick={this.toggleExample}>пример</button>
-                        <button className={this.state.settings.isTranscription ? "btn" : "btn opaque"} onClick={this.toggleTranscription}>транскрипция</button>
-                        <button className={this.state.settings.isImage ? "btn" : "btn opaque"} onClick={this.toggleImage}>картинка</button>
-                        <button className={this.state.settings.isSound ? "btn" : "btn opaque"} onClick={this.toggleSound}>звук</button>
+                        <button className={this.state.hints.translationHint ? "btn" : "btn opaque"} onClick={this.toggleTranslationHint}>перевод</button>
+                        <button className={this.state.hints.meaningHint ? "btn" : "btn opaque"} onClick={this.toggleMeaningHint}>значение</button>
+                        <button className={this.state.hints.exampleHint ? "btn" : "btn opaque"} onClick={this.toggleExampleHint}>пример</button>
+                        <button className={this.state.hints.transcriptionHint ? "btn" : "btn opaque"} onClick={this.toggleTranscriptionHint}>транскрипция</button>
+                        <button className={this.state.hints.imageHint ? "btn" : "btn opaque"} onClick={this.toggleImageHint}>картинка</button>
+                        <button className={this.state.hints.soundHint ? "btn" : "btn opaque"} onClick={this.toggleSoundHint}>звук</button>
                     </div>
                 </header>
                 <Card
                     wordData={this.state.currentData}
-                    settings={this.state.settings}
+                    hints={this.state.hints}
                     isGuessed={this.state.isGuessed}
                     isSkipped={this.state.isSkipped}
                 />
