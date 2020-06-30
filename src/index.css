@@ -14,7 +14,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+a {
+  margin: 0;
+}
 /* styles for link */
 a:link {
   color: #ffffff;
@@ -50,6 +52,7 @@ a:hover {
   line-height: 2.2rem;
   border-radius: 4px;
   cursor: pointer;
+  outline: none;
 }
 .button_bordered {
   background: #ffffff;
@@ -73,10 +76,14 @@ a:hover {
   margin: auto;
   display: block;
   margin-top: 7rem;
+  position: absolute;
+  left: 45.5%;
 }
 .button_details {
   margin: auto;
   display: block;
   margin-bottom: 5rem;
   text-transform: uppercase;
+  position: absolute;
+  left: 45.5%;
 }
