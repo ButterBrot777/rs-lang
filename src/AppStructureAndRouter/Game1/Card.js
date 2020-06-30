@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './index.css';
+import './Game1.css';
 
 const regexpBrackets = new RegExp(/<[^>]*>/ig);
 

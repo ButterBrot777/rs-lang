@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './Game1.css';
 
 class LettersInput extends React.Component {
 
@@ -7,7 +7,7 @@ class LettersInput extends React.Component {
         let arr = this.props.word.split('');
         return (
             <div className="input-container">
-                <div ref={this.props.wordContainerRef}  className="opaque hidden" >
+                <div ref={this.props.wordContainerRef} className={this.props.isGuessed || this.props.isSkipped ? "opaque" : "opaque hidden"} >
                     {
                         arr.map((letter, idx) => {
                             return <span key={idx}>{letter}</span>
