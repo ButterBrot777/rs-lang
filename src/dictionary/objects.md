@@ -11,9 +11,10 @@
     "optional": {
       "deleted": false, // or true
       "hardWord": false, // or true
-      "lastTrain": "string",
+      "addingDate": "number", // таймстамп, дата добавления словав
+      "lastTrain": "number", // таймстамп
       "repeats": "number",
-      "nextTrain": "string"
+      "nextTrain": "number" // таймстамп
     }
   }
 ]
@@ -25,7 +26,7 @@
   cosnt filterUserWords = async () => {
     const userWords = await getUserWords(userId, token);
     const currentDate = new Date();
-    const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && +word.nextTrain <= +currentDate);
+    const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.nextTrain <= +currentDate);
     return wordsForGame;
   }
 ```
@@ -70,9 +71,10 @@
     "optional": {
       "deleted": false, // не изменяется
       "hardWord": false, // не изменяется
-      "lastTrain": "string", // записать дату этой игры
+      "addingDate": "number", // не изменяется
+      "lastTrain": "number", // записать дату этой игры
       "repeats": "number", // увеличить на 1
-      "nextTrain": "string" // записать дату следующей тренировки*
+      "nextTrain": "number" // записать дату следующей тренировки*
     }
   }
 ]
@@ -88,6 +90,7 @@
     "optional": {
       "deleted": false, 
       "hardWord": false,
+      "addingDate": "number", // записать дату этой игры
       "lastTrain": "string", // записать дату этой игры
       "repeats": 1,
       "nextTrain": "string" // записать дату следующей тренировки*
@@ -103,7 +106,7 @@
 *список ошибочных слов и их количество
 *список правильных слов и их кол-во
 
-3.1. для обновления долгострочной статистики этого вначале нужно запросить актульную статистику запросом GET на User/Statistic. Придет объект вида:
+3.1. для обновления долгострочной статистики вначале нужно запросить актуальную статистику запросом GET на User/Statistic. Придет объект вида:
 
 ```javascript
 {
