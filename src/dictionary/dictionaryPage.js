@@ -64,7 +64,7 @@ class Dictionary extends React.Component {
                     getHard={this.getHard} getDeleted={this.getDeleted} />
                 </header>
                 
-                <div className="words-list">
+                <div className="dictionary-words-list">
                     {currentData.map(element => <Word userId={this.props.userId} token={this.props.token} difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div>

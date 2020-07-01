@@ -78,21 +78,21 @@ class Word extends React.Component {
                     <div className="word-main-info">
                         <div className="word-text">
                             <div className="word-audio">
-                                <h3 className="word">{data.word}</h3>
+                                <h3 className="dictionary-word">{data.word}</h3>
                                 <button className="audio-icon-btn" onClick={this.playAudio}><img className="audio-icon" src={audio_icon} alt="audio icon" /></button>
                             </div>
-                            <p className="transcription">{data.transcription}</p>
-                            <p className="translation">{data.wordTranslate}</p>
-                            <p className="meaning">{data.textMeaning}</p>
-                            <p className="example">{data.textExample}</p>
+                            <p className="dictionary-transcription">{data.transcription}</p>
+                            <p className="dictionary-translation">{data.wordTranslate}</p>
+                            <p className="dictionary-meaning">{data.textMeaning}</p>
+                            <p className="dictionary-example">{data.textExample}</p>
                            
                         </div>
-                        <img className="image" src={`${IMAGE_AUDIO_URL}${image}`} alt={data.word} />
+                        <img className="dictionary-image" src={`${IMAGE_AUDIO_URL}${image}`} alt={data.word} />
                     </div>
                     <div className="word-learning-info">
-                        <p className="last-train"> Последняя тренировка: {this.props.optional.lastTrain}</p>  
-                        <p className="repeats">Кол-во повторений: {this.props.optional.repeats}</p>  
-                        <p className="next-train">Следующая тренировка: {this.props.optional.nextTrain}</p>
+                        <p className="dictionary-last-train"> Последняя тренировка: {this.props.optional.lastTrain}</p>  
+                        <p className="dictionary-repeats">Кол-во повторений: {this.props.optional.repeats}</p>  
+                        <p className="dictionary-next-train">Следующая тренировка: {this.props.optional.nextTrain}</p>
                     </div>
                 </div>
                 {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
