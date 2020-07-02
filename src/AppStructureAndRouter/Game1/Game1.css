@@ -4,7 +4,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   transition: all 0.3s linear;
 }
 
@@ -13,31 +13,48 @@ code {
 }
 
 .game-container {
+  text-align: center;
+  background-color: rgb(207, 232, 240);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.basic-game-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px auto;
+}
+
+.basic-game-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.basic-game-footer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  background-color: rgb(207, 232, 240);
-  border-radius: 15px;
-  width: 100vw;
-  height: 100vh;
-}
-
-#header {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  margin: 10px auto 20px;
 }
 
 .btns-container {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .checkboxes-container {
   display: flex;
+  margin: 10px 0;
 }
 
 .checkboxes-container span {
@@ -48,7 +65,7 @@ code {
 
 .checkboxes-container span:first-child {
   margin-right: 10px;
-  font-size: 18px;
+  font-size: 1.2rem;
   font-weight: 600;
 }
 
@@ -85,7 +102,7 @@ code {
   background-color: seagreen;
   color: rgb(17, 13, 13);
   transition: all 0.3s linear;
-  margin: 10px 5px 0 10px;
+  margin: 10px 5px;
   font-weight: 600;
 }
 
@@ -95,8 +112,10 @@ code {
   border: 2px solid seagreen;
 }
 
-.sentence__word {
-  margin: 0 3px;
+.btn-further {
+  margin: 20px 5px 10px;
+  padding: 10px;
+  font-size: 1.2rem;
 }
 
 .hidden {
@@ -126,13 +145,17 @@ code {
   left: 0;
 }
 
+.sentence__word {
+  margin: 0 3px;
+}
+
 .word-card {
-  margin: 100px 0 50px;
+  margin-bottom: 30px;
   padding: 20px;
   background-color: whitesmoke;
   display: flex;
   border-radius: 10px;
-  min-height: 150px;
+  min-height: 300px;
 }
 
 .word-card-text {
@@ -168,7 +191,7 @@ label {
 }
 
 .progress-container {
-  margin-top: 30px;
+  margin-bottom: 10px;
 }
 
 .progress-current {
@@ -193,7 +216,7 @@ label {
 }
 
 .info-small {
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 10px;
   color: grey;
 }
