@@ -54,10 +54,10 @@ export default class App extends Component {
 					<div className="wrapper wrapper__header_colored">
 						<div className="header__wrapper wrapper__inner">
 							<header id="header" className="header">
-                <Link to="/">
+								<Link to="/">
 									<h1 className="logo">rs-lang-learn</h1>
-                </Link>
-                {this.state.userAuthorized ? <LogoutBtn logOut={this.userLogOut} /> : SignInAndSignUpBtns}
+								</Link>
+								{this.state.userAuthorized ? <LogoutBtn logOut={this.userLogOut} /> : SignInAndSignUpBtns}
 							</header>
 						</div>
 					</div>
@@ -80,8 +80,8 @@ export default class App extends Component {
 									<HomePage />
 								</Fade>
 							) : (
-								<UnauthorizedUserPage />
-							)}
+									<UnauthorizedUserPage />
+								)}
 						</Route>
 						<Route path="/Game1">
 							{this.state.userAuthorized !== '' ? <Game1 /> : <UnauthorizedUserPage />}
@@ -96,8 +96,8 @@ export default class App extends Component {
 									<Game3 />
 								</Fade>
 							) : (
-								<UnauthorizedUserPage />
-							)}
+									<UnauthorizedUserPage />
+								)}
 						</Route>
 						<Route path="/Game4">
 							{this.state.userAuthorized !== '' ? <Game4 /> : <UnauthorizedUserPage />}
