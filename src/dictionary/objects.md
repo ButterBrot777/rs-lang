@@ -11,9 +11,10 @@
     "optional": {
       "deleted": false, // or true
       "hardWord": false, // or true
-      "addingDate": "number", // таймстамп, дата добавления словав
+      "repeatsStreak": number, // кол-во повторов до изменения сложности
+      "repeatsTotal": number, // общее кол-во повторов
+      "addingDate": "number", // таймстамп, дата добавления слова
       "lastTrain": "number", // таймстамп
-      "repeats": "number",
       "nextTrain": "number" // таймстамп
     }
   }
@@ -26,7 +27,7 @@
   cosnt filterUserWords = async () => {
     const userWords = await getUserWords(userId, token);
     const currentDate = new Date();
-    const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.nextTrain <= +currentDate);
+    const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
     return wordsForGame;
   }
 ```
@@ -38,23 +39,24 @@
 Придет объект вида:
 ```javascript
 {
-  "wordsPerDay": 10,
-  "optional": {
-    "lastWordsGroup": number,
-    "lastWordsPage": number,
-    "lastWord": "string", // id последнего изученного слова
-    "basicGame": {
-      "cardsPerDay": 20,
-      "isTranslation": true,
-      "isMeaning": true,
-      "isExample": true,
-      "isTranscription": true,
-      "isImage": true,
+  "wordsPerDay": 20,
+    "optional": {
+      "maxWordsPerDay": 40,
+      "level": 0,
+      "page": 0,
+      "wordsLearntPerPage": 0,
+      "hints": {
+        "meaningHint": true,
+        "translationHint": true,
+        "exampleHint": true,
+        "soundHint": false,
+        "imageHint": false,
+        "transcriptionHint": false
     }
   }
 }
 ```
-После этого сделать запрос GET на Words, сo свойствами group=lastWordsGroup и page=lastWordsPage. Из массива, который прийдет, взять слова, которые после lastWord.
+После этого сделать запрос GET на Words, сo свойствами group=level и page=page. Из массива, который прийдет, взять слова, которые после уже изученного количества слов на странице (wordsLearntPerPage).
 
 
 
@@ -71,35 +73,52 @@
     "optional": {
       "deleted": false, // не изменяется
       "hardWord": false, // не изменяется
+      "repeatsStreak": number, // увеличить на 1
+      "repeatsTotal": number, // увеличить на 1
       "addingDate": "number", // не изменяется
       "lastTrain": "number", // записать дату этой игры
-      "repeats": "number", // увеличить на 1
       "nextTrain": "number" // записать дату следующей тренировки*
     }
   }
 ]
 ```
-*если правильный ответ, то nextTrain = lastTrain + 1 день (интервал еще уточним). 
+*если правильный ответ, то nextTrain = lastTrain + interval.
+```javascript
+// базовый интервал по сложностям:
+easyInterval = 3 * 86 400 000; // три дня для "difficulty": "easy"
+goodInterval = 2 * 86 400 000; // два дня для "difficulty": "good"
+hardInterval = 86 400 000; // один день для "difficulty": "hard"
+// умножаем на количество повторов (это особенность интервального повторения)
+interval = repeatsStreak * hardInterval (или good, или easy в зависимости от того, какая "difficulty")
+nextTrain = lastTrain + interval;
+```
 *если неправильные ответ, то nextTrain = lastTrain
 
 Если запрос POST, то передеваемый объект такого вида:
 ```javascript
 [
   {
-    "difficulty": "",
+    "difficulty": "string", // записать сложность в зависимотси от ответа*
     "optional": {
       "deleted": false, 
       "hardWord": false,
+      "repeatsStreak": 1,
+      "repeatsTotal": 1,
       "addingDate": "number", // записать дату этой игры
       "lastTrain": "string", // записать дату этой игры
-      "repeats": 1,
       "nextTrain": "string" // записать дату следующей тренировки*
     }
   }
 ]
 ```
-*если правильный ответ, то nextTrain = lastTrain + 1 день (интервал еще уточним). 
-*если неправильные ответ, то nextTrain = lastTrain
+*если правильный ответ, то:
+ "difficulty": "good",
+ nextTrain = lastTrain + goodInterval.
+ goodInterval = 2 * 86 400 000; // два дня для "difficulty": "good"
+
+*если неправильные ответ, то:
+"difficulty": "hard",
+ nextTrain = lastTrain
 
 **3.  По окончанию игры необходимо  вывести уведомление о результе игры и обновить долгосрочную статистику:**
 Уведомление о результате игры состоит из двух списков:
@@ -112,14 +131,7 @@
 {
   "learnedWords": 0,
   "optional": {
-    "basic": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
+    "dateOfReg": "number", // таймстамп, дата регистрации пользователя
     "speakIt": [
       {
         "date": "string",
@@ -178,18 +190,19 @@
 3.4. Если в игре использовались новые слова, необходимо обновить User/Settings запросом PUT, отправив такой объект:
 ```javascript
 {
-  "wordsPerDay": 10,
+  "wordsPerDay": 20,
   "optional": {
-    "lastWordsGroup": number, // изменить в соответствии с тем, с какой группы последнее изученное слово
-    "lastWordsPage": number, // изменить в соответствии с тем, с какой старницы последнее изученное слово
-    "lastWord": "string", // изменить на id последнего изученного слова
-    "basicGame": {
-      "cardsPerDay": 20,
-      "isTranslation": true,
-      "isMeaning": true,
-      "isExample": true,
-      "isTranscription": true,
-      "isImage": true,
+    "maxWordsPerDay": 40,
+    "level": 0, // изменить в соответствии с тем, с какой группы последнее изученное слово
+    "page": 0, // изменить в соответствии с тем, с какой старницы последнее изученное слово
+    "wordsLearntPerPage": 0, // изменить на количество изученных слов со страницы
+    "hints": {
+      "meaningHint": true,
+      "translationHint": true,
+      "exampleHint": true,
+      "soundHint": false,
+      "imageHint": false,
+      "transcriptionHint": false
     }
   }
 }
