@@ -151,6 +151,21 @@ const updateUserWord = async ({ userId, wordId, word }) => {
   console.log('updated', content);
 };
 
+const getAllUserWords = async (user) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/`, {
+    method: 'GET',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${user.token}`,
+      'Accept': 'application/json',
+    }
+  });
+  const content = await rawResponse.json();
+
+  console.log(content);
+  return content;
+};
+
 const loginUser = async user => {
   const rawResponse = await fetch('http://pacific-castle-12388.herokuapp.com/signin', {
     method: 'POST',
@@ -165,4 +180,4 @@ const loginUser = async user => {
   console.log(content);
 };
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}

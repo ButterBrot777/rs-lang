@@ -18,7 +18,7 @@ class Card extends React.Component {
             return arr
                 .map((word, idx) => {
                     if (regexpBrackets.test(word)) {
-                        return <span className="sentence__word colored" key={idx}>[ ... ]</span>
+                        return <span className="sentence__word colored" key={idx}>[...]</span>
                     }
                     return <span className="sentence__word" key={idx}>{word}</span>
                 })
@@ -28,7 +28,7 @@ class Card extends React.Component {
     render() {
         let exampleBlock;
         if (this.props.hints.exampleHint) {
-            if (this.props.isSkipped || this.props.isGuessed) {
+            if (this.props.isSkipped || this.props.isGuessed || this.props.isDifficultyChoice) {
                 exampleBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textExample}` }}></div>;;
             } else {
                 exampleBlock = this.createWordElements(this.props.wordData.textExample);
@@ -39,7 +39,7 @@ class Card extends React.Component {
 
         let meaningBlock;
         if (this.props.hints.meaningHint) {
-            if (this.props.isSkipped || this.props.isGuessed) {
+            if (this.props.isSkipped || this.props.isGuessed || this.props.isDifficultyChoice) {
                 meaningBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textMeaning}` }}></div>;
             } else {
                 meaningBlock = this.createWordElements(this.props.wordData.textMeaning)
@@ -59,9 +59,9 @@ class Card extends React.Component {
             <div className="word-card">
                 <div className="word-card-text">
                     <div>{exampleBlock}</div>
-                    {(this.props.isGuessed && this.props.hints.exampleHint) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}
+                    {(this.props.isGuessed && this.props.hints.exampleHint) || (this.props.isDifficultyChoice && this.props.hints.exampleHint) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}
                     <div>{meaningBlock}</div>
-                    {(this.props.isGuessed && this.props.hints.meaningHint) ? <div>{this.props.wordData.textMeaningTranslate}</div> : ''}
+                    {(this.props.isGuessed && this.props.hints.meaningHint) || (this.props.isDifficultyChoice && this.props.hints.meaningHint) ? <div>{this.props.wordData.textMeaningTranslate}</div> : ''}
                     <div>{translationBlock}</div>
                     <div>{transcriptionBlock}</div>
                 </div>

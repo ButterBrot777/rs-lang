@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import Card from './Card';
 import LettersInput from './LettersInput';
-import { loginUser, addSettingsUser, getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord } from '../ServerRequest/ServerRequests';
+import { addSettingsUser, getSettingsUser, getNewWords, getAllUserWords, getUserWord, createUserWord, updateUserWord } from '../ServerRequest/ServerRequests';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Fade from 'react-reveal/Fade';
 import './Game1.css'
-
-// localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZWM2YmY3OThmZmJmMDAxNzQ1ODJmOSIsImlhdCI6MTU5MzM0MDgxMCwiZXhwIjoxNTkzMzU1MjEwfQ.NnDEu97ZOtZSh3lhYwriqiaqkIeNXrEfC78FzoTGnkQ')
 
 const userId = localStorage.getItem('userId');
 const token = localStorage.getItem('token');
@@ -16,6 +14,10 @@ let user = {
 }
 const imageAudioUrl = 'https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/';
 const infoTextBtns = 'перевод, пример и значение: как минимум одна из настроек должна быть выбрана.';
+const easyInterval = 3;
+const goodInterval = 2;
+const hardInterval = 1;
+
 class Game1 extends Component {
   constructor(props) {
     super(props);
@@ -31,8 +33,8 @@ class Game1 extends Component {
       wordsPerGame: 0,
       correctGuesses: 0,
       incorrectGuesses: 0,
-      correctGuessesStrike: 0,
-      correctGuessesStrikeTemp: 0,
+      correctGuessesStreak: 0,
+      correctGuessesStreakTemp: 0,
       hints: {
         meaningHint: true,
         translationHint: true,
@@ -55,7 +57,6 @@ class Game1 extends Component {
   }
 
   componentDidMount = async () => {
-    // loginUser({ "email": "bokbok123@user.com", "password": "Gfhjkm_123" });
     let { wordsPerDay, optional: { level, page, wordsLearntPerPage, hints, buttons } } = await getSettingsUser(user);
     if (wordsLearntPerPage === 20) {
       wordsLearntPerPage = 0;
@@ -207,53 +208,35 @@ class Game1 extends Component {
   }
 
   onShowAnswer = () => {
-    this.setState({
-      inputValue: ''
-    })
-    let longestStrike;
-    if (this.state.correctGuessesStrike > this.state.correctGuessesStrikeTemp ) {
-      longestStrike = this.state.correctGuessesStrike;
-    } else {
-      longestStrike = this.state.correctGuessesStrikeTemp;
+    if (!this.state.isGuessed && !this.state.isDifficultyChoice) {
+      this.setState({
+        inputValue: ''
+      })
+      let longestStreak;
+      if (this.state.correctGuessesStreak > this.state.correctGuessesStreakTemp) {
+        longestStreak = this.state.correctGuessesStreak;
+      } else {
+        longestStreak = this.state.correctGuessesStreakTemp;
+      }
+      this.setState({
+        isSkipped: true,
+        wordsPerGame: this.state.wordsPerGame + 1,
+        correctGuessesStreakTemp: longestStreak,
+        correctGuessesStreak: 0,
+      });
+      setTimeout(() => {
+        this.continueGame();
+      }, 2000)
     }
-    this.setState({
-      isSkipped: true,
-      wordsPerGame: this.state.wordsPerGame + 1,
-      correctGuessesStrikeTemp: longestStrike,
-      correctGuessesStrike: 0,
-    });
-    setTimeout(() => {
-      this.continueGame();
-    }, 2000)
   }
 
-  playSound = () => {
-    let { audio, audioExample, audioMeaning } = this.state.currentData;
-    let audioWord = new Audio(`${imageAudioUrl}${audio}`);
-    let audioExampleObj = new Audio(`${imageAudioUrl}${audioExample}`);
-    let audioMeaningObj = new Audio(`${imageAudioUrl}${audioMeaning}`);
-    audioWord.play();
-    if (this.state.hints.exampleHint && this.state.hints.meaningHint) {
-      audioWord.onended = function () {
-        audioExampleObj.play();
-        audioExampleObj.onended = function () {
-          audioMeaningObj.play();
-        }
-      }
-      return audioMeaningObj;
-    } else if (this.state.hints.exampleHint) {
-      audioWord.onended = function () {
-        audioExampleObj.play();
-      }
-      return audioExampleObj;
-    } else if (this.state.hints.meaningHint) {
-      audioWord.onended = function () {
-        audioMeaningObj.play();
-      }
-      return audioMeaningObj;
-    } else {
-      return audioWord;
-    }
+  playSound = (url) => {
+    return new Promise((resolve, reject) => {
+      let audio = new Audio(url);
+      audio.play();
+      audio.onended = resolve;
+      audio.onerror = reject;
+    })
   }
 
   onClickFurther = () => {
@@ -286,17 +269,17 @@ class Game1 extends Component {
 
   handleIncorrectAnswer = () => {
     let sameWord = this.state.fullData.filter(wordObj => wordObj === this.state.currentData)
-    let longestStrike;
-    if (this.state.correctGuessesStrike > this.state.correctGuessesStrikeTemp ) {
-      longestStrike = this.state.correctGuessesStrike;
+    let longestStreak;
+    if (this.state.correctGuessesStreak > this.state.correctGuessesStreakTemp) {
+      longestStreak = this.state.correctGuessesStreak;
     } else {
-      longestStrike = this.state.correctGuessesStrikeTemp;
+      longestStreak = this.state.correctGuessesStreakTemp;
     }
     if (sameWord.length < 2) {
       this.setState(prevState => ({
         fullData: [...prevState.fullData, this.state.currentData],
-        correctGuessesStrikeTemp: longestStrike,
-        correctGuessesStrike: 0,
+        correctGuessesStreakTemp: longestStreak,
+        correctGuessesStreak: 0,
         incorrectGuesses: this.state.correctGuesses + 1,
       }));
     }
@@ -306,6 +289,21 @@ class Game1 extends Component {
       this.wordContainerElem.current.classList.add('hidden');
     }, { once: true });
     setTimeout(this.removeLetterColors, 2000)
+  }
+
+  handleStateAfterSound = () => {
+    if (this.state.buttons.chooseDifficulty) {
+      this.setState({
+        isGuessed: false,
+        wordsPerGame: this.state.wordsPerGame + 1,
+        isDifficultyChoice: true,
+      })
+    } else {
+      this.setState({
+        wordsPerGame: this.state.wordsPerGame + 1,
+      })
+      this.continueGame();
+    }
   }
 
   checkIfCorrectGuess = () => {
@@ -327,32 +325,34 @@ class Game1 extends Component {
       this.setState({
         isGuessed: true,
         correctGuesses: this.state.correctGuesses + 1,
-        correctGuessesStrike: this.state.correctGuessesStrike + 1,
+        correctGuessesStreak: this.state.correctGuessesStreak + 1,
       });
       if (this.state.hints.soundHint) {
-        if (this.state.buttons.chooseDifficulty) {
-          this.playSound().addEventListener('ended', () => {
-            this.setState({
-              isDifficultyChoice: true,
-              wordsPerGame: this.state.wordsPerGame + 1,
-            })
-          });
-        } else {
-          this.playSound().addEventListener('ended', () => {
-            this.setState({
-              wordsPerGame: this.state.wordsPerGame + 1,
-            })
-            this.continueGame();
-          });
-        }
+        let { audio, audioExample, audioMeaning } = this.state.currentData;
+        this.playSound(`${imageAudioUrl}${audio}`)
+          .then(result => {
+            if (this.state.hints.exampleHint && this.state.hints.meaningHint) {
+              this.playSound(`${imageAudioUrl}${audioExample}`)
+                .then(res => this.playSound(`${imageAudioUrl}${audioMeaning}`))
+                .then(res => this.handleStateAfterSound())
+            } else if (this.state.hints.meaningHint) {
+              this.playSound(`${imageAudioUrl}${audioMeaning}`)
+                .then(res => this.handleStateAfterSound())
+            } else if (this.state.hints.exampleHint) {
+              this.playSound(`${imageAudioUrl}${audioExample}`)
+                .then(res => this.handleStateAfterSound())
+            } else {
+              this.handleStateAfterSound();
+            }
+          })
       } else {
         this.setState({
           wordsPerGame: this.state.wordsPerGame + 1,
         })
         if (this.state.buttons.chooseDifficulty) {
           this.setState({
+            isGuessed: false,
             isDifficultyChoice: true,
-
           })
         } else {
           setTimeout(() => {
@@ -411,54 +411,103 @@ class Game1 extends Component {
   }
 
   chooseDifficulty = async (diffLevel, isDeleted, isHard) => {
-    let lastTrain = new Date().toLocaleDateString();
-    let word = await getUserWord(this.state.currentData.id, user);
-    if (!word) {
-      let newWord = {
-        userId: user.userId,
-        wordId: this.state.currentData.id,
-        word: {
-          "difficulty": diffLevel,
-          "optional": {
-            "deleted": isDeleted,
-            "hardWord": isHard,
-            lastTrain,
-            "repeats": 1,
-            "nextTrain": "string"
+    if (!this.state.isGuessed || this.state.isSkipped) {
+      let word = await getUserWord(this.state.currentData.id, user);
+      let lastTrain = +new Date();
+      if (!word) {
+        let interval;
+        switch (diffLevel) {
+          case 'hard':
+            interval = hardInterval;
+            break;
+          case 'good':
+            interval = goodInterval;
+            break;
+          case 'easy':
+            interval = easyInterval;
+            break;
+          default:
+            interval = 0;
+            break;
+        }
+        let nextTrain = new Date().setDate(new Date().getDate() + interval);
+        let newWord = {
+          userId: user.userId,
+          wordId: this.state.currentData.id,
+          word: {
+            "difficulty": diffLevel,
+            "optional": {
+              "deleted": isDeleted,
+              "hardWord": isHard,
+              "repeatsStreak": 1,
+              "repeatsTotal": 1,
+              "addingDate": lastTrain,
+              lastTrain,
+              nextTrain
+            }
           }
         }
-      }
-      createUserWord(newWord)
-    } else {
-      let repeats = word.optional.repeats + 1;
-      let newWord = {
-        userId: user.userId,
-        wordId: this.state.currentData.id,
-        word: {
-          "difficulty": diffLevel,
-          "optional": {
-            "deleted": isDeleted,
-            "hardWord": isHard,
-            lastTrain,
-            repeats,
-            "nextTrain": "string"
-          }
+        createUserWord(newWord)
+      } else {
+        if (diffLevel === 'none') {
+          diffLevel = word.difficulty;
         }
-      }
-      updateUserWord(newWord);
-    }
+        let repeatsStreak;
+        if (diffLevel === word.difficulty) {
+          repeatsStreak = word.optional.repeatsTotal + 1;
+        } else {
+          repeatsStreak = 1;
+        }
 
-    if (diffLevel === 'hard' || diffLevel === 'good' || diffLevel === 'easy') {
+        let interval;
+        switch (diffLevel) {
+          case 'hard':
+            interval = repeatsStreak * hardInterval;
+            break;
+          case 'good':
+            interval = repeatsStreak * goodInterval;
+            break;
+          case 'easy':
+            interval = repeatsStreak * easyInterval;
+            break;
+          default:
+            interval = 0;
+            break;
+        }
+
+        let nextTrain = new Date().setDate(new Date().getDate() + interval);
+
+        let newWord = {
+          userId: user.userId,
+          wordId: this.state.currentData.id,
+          word: {
+            "difficulty": diffLevel,
+            "optional": {
+              "deleted": isDeleted,
+              "hardWord": isHard,
+              repeatsStreak,
+              "repeatsTotal": word.optional.repeatsTotal + 1,
+              "addingDate": word.optional.addingDate,
+              lastTrain,
+              nextTrain
+            }
+          }
+        }
+        updateUserWord(newWord);
+      }
+
       this.setState({
         isDifficultyChoice: false,
       })
-    } else {
-      this.setState({
-        wordsPerGame: this.state.wordsPerGame + 1,
 
-      });
+      if (isDeleted || isHard) {
+        this.setState({
+          wordsPerGame: this.state.wordsPerGame + 1,
+        });
+      }
+
+      this.continueGame();
     }
-    this.continueGame();
   }
 
   continueGame = () => {
@@ -468,6 +517,17 @@ class Game1 extends Component {
       this.updateWordsLearntPerPage();
       this.handleSettingsUpdate();
     }
+  }
+
+  filterUserWords = async () => {
+    const userWords = await getAllUserWords(user);
+    // const userWords = await getAggregateUserWords(user);
+
+    const currentDate = new Date();
+    const wordsForGame = userWords.filter(word => word.optional.nextTrain <= +currentDate);
+    // console.log(`?filter=${encodeURIComponent('{"$and":[{"userWord.optional.deleted":false, "userWord.optional.hardWord":false}]}')}`);
+    console.log(wordsForGame)
+    return wordsForGame;
   }
 
   render() {
@@ -485,10 +545,11 @@ class Game1 extends Component {
               <div>Карточек завершено: {this.state.wordsPerGame}</div>
               <div>Правильные ответы: {correctGuessesPercent}%</div>
               <div>Новые слова: {this.state.wordsPerDay}</div>
-              <div> Самая длинная серия правильных ответов: {Math.max(this.state.correctGuessesStrike, this.state.correctGuessesStrikeTemp)}</div>
+              <div> Самая длинная серия правильных ответов: 
+                {Math.max(this.state.correctGuessesStreak, this.state.correctGuessesStreakTemp)}</div>
             </div>
           ) : ''}
-          <header id="header">
+          <header className="basic-game-header">
             <div className="incorrect" ref={this.infoElem}></div>
             <div className="checkboxes-container">
               <span>Показать кнопку: </span>
@@ -526,43 +587,52 @@ class Game1 extends Component {
                 onClick={this.toggleImageHint}>картинка</button>
               <button className={this.state.hints.soundHint ? "btn" : "btn opaque"}
                 onClick={this.toggleSoundHint}>звук</button>
+              <button onClick={this.filterUserWords}>Test</button>
             </div>
           </header>
-          <Card wordData={this.state.currentData} hints={this.state.hints}
-            isGuessed={this.state.isGuessed} isSkipped={this.state.isSkipped} />
-          {this.state.isDifficultyChoice ? '' : (
-            <div>
-              <form onSubmit={this.handleSubmit}>
-                <LettersInput
-                  isSkipped={this.state.isSkipped} isGuessed={this.state.isGuessed}
-                  inputRef={this.inputElem} wordContainerRef={this.wordContainerElem} value={this.state.inputValue}
-                  word={this.state.currentWord} handleInputChange={this.handleInputChange}
-                />
-                <div>{translationBlock}</div>
-                <button className="btn" onClick={this.onClickFurther}>Дальше</button>
-              </form>
-              {this.state.buttons.showAnswer &&
-                <button className="btn" onClick={this.onShowAnswer}>Показать ответ</button>}
+          <main className="basic-game-main">
+            <Card wordData={this.state.currentData} hints={this.state.hints}
+              isGuessed={this.state.isGuessed} isSkipped={this.state.isSkipped}
+              isDifficultyChoice={this.state.isDifficultyChoice} />
+            {this.state.isDifficultyChoice ? '' : (
+              <div>
+                <form onSubmit={this.handleSubmit}>
+                  <LettersInput
+                    isSkipped={this.state.isSkipped} isGuessed={this.state.isGuessed}
+                    inputRef={this.inputElem} wordContainerRef={this.wordContainerElem} value={this.state.inputValue}
+                    word={this.state.currentWord} handleInputChange={this.handleInputChange}
+                  />
+                  <div>{translationBlock}</div>
+                  <button className="btn btn-further" onClick={this.onClickFurther}>Дальше</button>
+                </form>
+
+              </div>
+            )}
+            {(this.state.isDifficultyChoice && this.state.buttons.chooseDifficulty) ?
+              (<div className="btns-container">
+                <button className="btn btn-colored" onClick={this.repeatWord}>Снова</button>
+                <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'hard', false, false)}>Трудно</button>
+                <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'good', false, false)}>Хорошо</button>
+                <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'easy', false, false)}>Легко</button>
+              </div>) : ''}
+          </main>
+          <footer className="basic-game-footer">
+            <div className="progress-container">
+              <span>{this.state.wordsPerGame}</span>
+              <progress className="progress-current" max="100" value={progressValue}></progress>
+              <span>{this.state.fullData.length}</span>
             </div>
-          )}
-          {(this.state.isDifficultyChoice && this.state.buttons.chooseDifficulty) ?
-            (<div className="btns-container">
-              <button className="btn btn-colored" onClick={this.repeatWord}>Снова</button>
-              <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'hard', false, false)}>Трудно</button>
-              <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'good', false, false)}>Хорошо</button>
-              <button className="btn btn-colored" onClick={this.chooseDifficulty.bind(this, 'easy', false, false)}>Легко</button>
-            </div>) : ''}
-          <div className="btns-container">
-            {this.state.buttons.addToDeleted &&
-              <button className="btn" onClick={this.chooseDifficulty.bind(this, '', true, false)}>Удалить</button>}
-            {this.state.buttons.addToHard &&
-              <button className="btn" onClick={this.chooseDifficulty.bind(this, '', false, true)}>Сложные</button>}
-          </div>
-          <div className="progress-container">
-            <span>{this.state.wordsPerGame}</span>
-            <progress className="progress-current" max="100" value={progressValue}></progress>
-            <span>{this.state.fullData.length}</span>
-          </div>
+            <div className="btns-container">
+              {this.state.buttons.showAnswer &&
+                <button className={(this.state.isGuessed || this.state.isDifficultyChoice) ? "btn opaque" : "btn"} onClick={this.onShowAnswer}>Показать ответ</button>}
+              {this.state.buttons.addToDeleted &&
+                <button className={(this.state.isGuessed || this.state.isSkipped) ? "btn opaque" : "btn"} onClick={this.chooseDifficulty.bind(this, 'none', true, false)}>Удалить</button>}
+              {this.state.buttons.addToHard &&
+                <button className={(this.state.isGuessed || this.state.isSkipped) ? "btn opaque" : "btn"} onClick={this.chooseDifficulty.bind(this, 'none', false, true)}>Сложные</button>}
+            </div>
+
+          </footer>
+
         </div>
       </Fade>
     )
