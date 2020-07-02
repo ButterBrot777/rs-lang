@@ -23,7 +23,7 @@ export default class App extends Component {
 constructor(){
   super()
   this.state={
-    userAuthorized: localStorage.getItem('token')
+    userAuthorized: localStorage.getItem('token') || '123'
   }
 
   this.userLogOut = this.userLogOut.bind(this)
