@@ -50,6 +50,8 @@ class Game extends React.Component {
 
     changeLevel = () => {
         if (+this.state.level && +this.state.page) {
+            recognition.removeEventListener('end', startListening);
+            recognition.stop();
             this.startGame();
             this.setState({
                 currentObj: '',
@@ -76,6 +78,15 @@ class Game extends React.Component {
         sound.play();
     }
 
+    // preloadImage = (url) => {
+    //     return new Promise((resolve, reject) => {
+    //         const image = document.createElement('img');
+    //         image.onload = resolve;
+    //         image.onerror = reject;
+    //         image.src = url;
+    //     })
+    // }
+
     showResult = () => {
         let { wordTranslate, image } = this.state.currentObj;
         let src = `${dataUrl}${image}`;
@@ -85,11 +96,12 @@ class Game extends React.Component {
         </div>);
     }
 
-    updateImage = () => {
-        let src = `${dataUrl}${this.state.currentObj.image}`;
+    updateImage = (src) => {
+        // return this.preloadImage(src).then(() => {
         return (<div>
             <img className="image" src={src} alt=""></img>
         </div>)
+        // })
     }
 
     checkGuess = () => {
@@ -196,13 +208,8 @@ class Game extends React.Component {
         const resultBlock = (this.state.currentObj && !this.state.isRecognition)
             ? this.showResult()
             : (this.state.isRecognition && this.state.correctGuess.length > 0)
-                ? this.updateImage()
-                : (
-                    <div>
-                        <img className="image" src={mainImg} alt="main"></img>
-                        <div className="translation"></div>
-                    </div>
-                )
+                ? (this.updateImage(`${dataUrl}${this.state.currentObj.image}`))
+                : this.updateImage(mainImg)
         return (
             <div className="app">
                 <div onClick={this.openGame}
