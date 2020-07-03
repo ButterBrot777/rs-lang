@@ -52,7 +52,7 @@ class Word extends React.Component {
 
     playAudio = () => {
         this.setState({isLoading: false});
-        const audioUrl = `${IMAGE_AUDIO_URL}${this.state.data.audio}`;
+        const audioUrl = `data:audio/mpeg;base64,${this.state.data.audio}`;
         if (this.wordAudio) {
             this.wordAudio.pause();
           }
@@ -64,6 +64,7 @@ class Word extends React.Component {
 
     render() {
         const { data, image, isLoading } = this.state;
+        const imageSrc = `data:image/jpg;base64,${image}`;
         if (data.textMeaning &&  data.textExample) {
             data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
             data.textExample = data.textExample.replace(BRACKETS_REGEXP, "");
@@ -87,7 +88,7 @@ class Word extends React.Component {
                             <p className="dictionary-example">{data.textExample}</p>
                            
                         </div>
-                        <img className="dictionary-image" src={`${IMAGE_AUDIO_URL}${image}`} alt={data.word} />
+                        <img className="dictionary-image" src={imageSrc} alt={data.word} />
                     </div>
                     <div className="word-learning-info">
                         <p className="dictionary-last-train"> Последняя тренировка: {this.props.optional.lastTrain}</p>  
