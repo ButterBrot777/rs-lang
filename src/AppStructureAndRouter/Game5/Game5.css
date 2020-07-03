@@ -3,23 +3,86 @@ h1{
   font-size: 30px;
 }
 .savannah-container{
-  position:absolute;
+  /* position:absolute; */
   top: 0;
   left: 0;
   height: 100vh;
   width: 100vw;
   background-color: grey;
 }
+.savannah-start-btn{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.savannah-game_control-btns button,
+.savannah-start-btn button{
+  padding: 20px 50px;
+  border:solid 1px white;
+  margin: 0px 20px 0px 20px;
+}
+
 .savannah-loading{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.start-btn{
+.savannah-game{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.savannah-game_content{
+  position: relative;
+  height: 70vh;
+  border:solid 1px black;
+  text-align: center;
+  overflow: hidden;
+}
+.savannah-game_content-item{
+  font-size: 20px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  animation-name: savannah-game_content-item;
+  -webkit-animation-name: savannah-game_content-item; 
+  animation-duration: 2s; 
+}
+@keyframes savannah-game_content-item{
+  0% {
+      top: 0%;
+    }       
+  100% {
+      top: 100%;
+    }   
+}
+.savannah-game_control-btns{
+border: solid 1px red;
+}
+
+/* .start-btn{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px 40px;
+} */
+
+
+.statistic-content{
+  display: flex;
+  justify-content: space-between;
+}
+.statistic-content-true,
+.statistic-content-false{
+  width: 50%;
+  padding: 10px;
+}
+.Statistic__word{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }

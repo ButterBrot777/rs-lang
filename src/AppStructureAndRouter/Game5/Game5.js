@@ -100,11 +100,13 @@ class Game5 extends Component{
     this.handleLoading = this.handleLoading.bind(this)
     this.handleGame = this.handleGame.bind(this)
     this.requestWords = this.requestWords.bind(this)
+    // this.requestWordsSynonyms = this.requestWordsSynonyms.bind(this)
   }
 
 
   componentDidMount(){
     this.requestWords()
+    // .then(res=>this.requestWordsSynonyms(res)).then(data=> console.log(data))
   }
 
   handleLoading(){
@@ -118,11 +120,29 @@ class Game5 extends Component{
       loading: !this.state.loading
     })
   }
+  // async requestWordsSynonyms(res){
+  //   return Promise.all(
+  //     res.map((word)=> this.qwe(word))
+  //   )
+  // }
+  // qwe =(word)=>{
+  //   return fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${word.word}`)
+  //   .then(res =>  res.json())
+  //   .then(data => {
+  //     // let DATA= [
+  //     //   data[0].meanings[0].translation.text,
+  //     //   data[1].meanings[0].translation.text,
 
-  requestWords(){
-    fetch(`https://afternoon-falls-25894.herokuapp.com/words?page=0&group=3`)
+  //     // ]
+  //     return data
+  //     // console.log(data)
+  //   })
+  // }
+ async requestWords(){
+    return fetch(`https://afternoon-falls-25894.herokuapp.com/words?page=0&group=3`)
          .then(res=>res.json())
          .then(data=>{
+          //  return data
            this.setState({
              words: data,
            })
