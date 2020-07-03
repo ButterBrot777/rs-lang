@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import Buttons from './Buttons'
 import Statistic from './Statistic'
 class Game extends Component{
-  timer = 5
+  timer = 1
   trueAnswer = []
   falseAnswer = []
   constructor(props){
@@ -23,8 +23,8 @@ class Game extends Component{
     this.timerRaund()
   }
   nextWord(word){
-    this.timer = 5
-    // console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
+    this.timer = 1
+    console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
     
     if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
       this.trueAnswer.push(this.state.wordsToLearn[this.state.word])
@@ -33,15 +33,16 @@ class Game extends Component{
     }
     this.state.word === this.state.wordsToLearn.length-1 ? this.setState({ end:!this.state.end}) : this.setState({ word: this.state.word+1})
   }
+ 
   timerRaund(){
     let timer = setInterval(()=>{
       console.log(this.timer)
-      if(this.timer === 0 & this.state.word === this.state.wordsToLearn.length-1 || this.state.word === this.state.wordsToLearn.length-1 & this.state.end){
+      if(this.timer === 0 & this.state.word === this.state.wordsToLearn.length || this.state.word === this.state.wordsToLearn.length-1 & this.state.end){
         this.setState({
           statistic: !this.state.statistic
         })
         clearInterval(timer)
-      }else if(this.timer === 0 & this.state.word < this.state.wordsToLearn.length-1){
+      }else if(this.timer === 0 & this.state.word < this.state.wordsToLearn.length){
         this.nextWord()
       }else {
         this.timer = this.timer-1
@@ -65,12 +66,12 @@ class Game extends Component{
       return(
         <div className='savannah-game'>
           <div className='savannah-game_content'>
-            <div className='savannah-game_content-item'>
+            <div className='savannah-game_content-item' key ={this.state.wordsToLearn[this.state.word].word}>
                {this.state.wordsToLearn[this.state.word].word}
             </div>
           </div>
           <div className='savannah-game_control-btns'>
-            <Buttons words={this.shuffleWordsBtns()} nextWord={this.nextWord} />
+            {this.state.end ? '' :<Buttons words={this.shuffleWordsBtns()} nextWord={this.nextWord} />}
           </div>
         {console.log(this.state)}   
         </div>
