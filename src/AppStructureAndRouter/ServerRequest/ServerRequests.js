@@ -46,7 +46,7 @@ async function startSettingsUser(obj){
     },
     // с 0 не работает
     body: JSON.stringify({
-      "wordsPerDay": 0,
+      "wordsPerDay": 1,
       "optional": {
         'Level': 5,
         'Page':1,
@@ -55,8 +55,7 @@ async function startSettingsUser(obj){
         'Translate':true,
         'VoiceSentence': true,
         'PromtImage': false
-       },
-       "word": ['asda', 'asdasd', 'asdas']
+       }
     })
   });
   const content = await rawResponse.json();

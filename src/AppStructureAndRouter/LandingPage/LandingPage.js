@@ -146,7 +146,7 @@ class About extends React.Component {
           <section id="about-us" className="about-us">
             <h2 className="title about-us__title">Who we are</h2>
             <div className="layout-3-column">
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Yuliya Kogol</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -154,7 +154,7 @@ class About extends React.Component {
                 </div>
                 <a href="https://github.com/22-22"><div className="employee__photo employee-1"></div></a>
               </article>
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Kirill Vorobeychik</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -162,7 +162,7 @@ class About extends React.Component {
                 </div>
                 <a href="https://github.com/vorobeychik"><div className="employee__photo employee-2"></div></a>
               </article>
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Ilya Shihutin</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -170,7 +170,7 @@ class About extends React.Component {
                 </div>
                 <a href="https://github.com/ilyashihutin"><div className="employee__photo employee-3"></div></a>
               </article>
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Nastya Koval</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -178,7 +178,7 @@ class About extends React.Component {
                 </div>
                 <a href="https://github.com/nastiakoval"><div className="employee__photo employee-4"></div></a>
               </article>
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Andrey Sapranovich</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -186,7 +186,7 @@ class About extends React.Component {
                 </div>
                 <a href="https://github.com/sapranovich"><div className="employee__photo employee-5"></div></a>
               </article>
-              <article class="employee block-shadowed">
+              <article className="employee block-shadowed">
                 <div className="employee__content">
                   <h5 className="employee__name">Pavel Karenda</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
@@ -209,7 +209,7 @@ class Footer extends React.Component {
       <div className="wrapper wrapper__footer_colored">
         <div className="footer__wrapper wrapper__inner">
           <section id="footer" className="footer">
-            <div class="footer__copywriter">
+            <div className="footer__copywriter">
               <p>
                 © Copyright 2020
               </p>
