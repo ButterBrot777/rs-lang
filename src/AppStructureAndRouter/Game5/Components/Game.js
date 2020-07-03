@@ -4,25 +4,33 @@ import Buttons from './Buttons'
 import Statistic from './Statistic'
 class Game extends Component{
   timer = 5
+  trueAnswer = []
+  falseAnswer = []
   constructor(props){
     super(props)
     this.state={
       end:false,
       statistic: false,
       wordsToLearn: this.props.words,
-      word: 0,
-      trueAnswer:[],
-      falseAnswer: []
+      word: 0
     }
     this.shuffleWordsBtns = this.shuffleWordsBtns.bind(this)
     this.timerRaund = this.timerRaund.bind(this)
     this.nextWord = this.nextWord.bind(this)
+
   }
   componentDidMount(){
     this.timerRaund()
   }
-  nextWord(){
+  nextWord(word){
     this.timer = 5
+    // console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
+    
+    if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
+      this.trueAnswer.push(this.state.wordsToLearn[this.state.word])
+    }else{
+      this.falseAnswer.push(this.state.wordsToLearn[this.state.word])
+    }
     this.state.word === this.state.wordsToLearn.length-1 ? this.setState({ end:!this.state.end}) : this.setState({ word: this.state.word+1})
   }
   timerRaund(){
@@ -40,7 +48,7 @@ class Game extends Component{
       }   
     }, 1000)
   }
-
+  
   shuffleWordsBtns(){
     let array = ['123', 'dasd', 'asdas', 'asdasd', this.state.wordsToLearn[this.state.word].wordTranslate]
       for (let i = array.length - 1; i > 0; i--) {
@@ -52,7 +60,7 @@ class Game extends Component{
 
   render(){
     if(this.state.statistic){
-      return <Statistic />
+      return <Statistic  true={this.trueAnswer} false={this.falseAnswer}/>
     }else{
       return(
         <div className='savannah-game'>
@@ -62,7 +70,7 @@ class Game extends Component{
             </div>
           </div>
           <div className='savannah-game_control-btns'>
-            <Buttons words={this.shuffleWordsBtns()} nextWord={this.nextWord}/>
+            <Buttons words={this.shuffleWordsBtns()} nextWord={this.nextWord} />
           </div>
         {console.log(this.state)}   
         </div>

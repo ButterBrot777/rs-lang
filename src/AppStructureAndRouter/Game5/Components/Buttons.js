@@ -22,16 +22,16 @@ class Buttons extends Component{
   //     .then(res =>  res.json())
   //     .then(data=> console.log(data))
   // }
- 
+
   render(){
     return(
       <div>
         {console.log(this.props.words)}
-        <button onClick={this.props.nextWord}>{this.props.words[0]}</button>
-        <button onClick={this.props.nextWord}>{this.props.words[1]}</button>
-        <button onClick={this.props.nextWord}>{this.props.words[2]}</button>
-        <button onClick={this.props.nextWord}>{this.props.words[3]}</button>
-        <button onClick={this.props.nextWord}>{this.props.words[4]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[0])}>{this.props.words[0]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[1])}>{this.props.words[1]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[2])}>{this.props.words[2]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[3])}>{this.props.words[3]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[4])}>{this.props.words[4]}</button>
       </div>
     )
   }
