@@ -96,6 +96,7 @@ class Game5 extends Component{
       loading: false,
       statistic: false
     }
+
     this.handleLoading = this.handleLoading.bind(this)
     this.handleGame = this.handleGame.bind(this)
     this.requestWords = this.requestWords.bind(this)
@@ -105,7 +106,6 @@ class Game5 extends Component{
   componentDidMount(){
     this.requestWords()
   }
-
 
   handleLoading(){
     this.setState({
@@ -139,7 +139,7 @@ class Game5 extends Component{
     }else if(this.state.loading){
       return(
         <div className="savannah-container">
-          <Loading timer={5}  handleGame={this.handleGame}/>
+          <Loading timer={3}  handleGame={this.handleGame}/>
         </div>
       )
     }else if(this.state.statistic){

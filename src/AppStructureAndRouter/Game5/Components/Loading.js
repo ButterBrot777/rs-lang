@@ -5,7 +5,7 @@ class Loading extends Component{
   constructor(props){
     super(props)
     this.state={
-      timeLeft: 5
+      timeLeft: this.props.timer
     }
     this.startTimer = this.startTimer.bind(this)
   }
