@@ -1,6 +1,6 @@
 import React from 'react';
 import audio_icon from './audio-icon.png';
-import { updateUserWord } from '../ServerRequest/ServerRequests';
+import { updateUserWord, getSettingsUser } from '../ServerRequest/ServerRequests';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
 
@@ -17,7 +17,7 @@ class Word extends React.Component {
         this.state = {
             data: {},
             image: "files/01_0001.jpg",
-            isLoading: false,
+            isLoading: false
         }
     }
 
@@ -28,6 +28,8 @@ class Word extends React.Component {
             .then(response => response.json())
             .then(data => this.setState({data: data, image: data.image, isLoading: false,}))
     }
+
+
 
     putToLearning = async () => {
         const wordObj = {
@@ -89,13 +91,12 @@ class Word extends React.Component {
                                 <h3 className="dictionary-word">{data.word}</h3>
                                 <button className="audio-icon-btn" onClick={this.playAudio}><img className="audio-icon" src={audio_icon} alt="audio icon" /></button>
                             </div>
-                            <p className="dictionary-transcription">{data.transcription}</p>
+                            {this.props.transcriptionInfo ? <p className="dictionary-transcription">{data.transcription}</p> : ''}
                             <p className="dictionary-translation">{data.wordTranslate}</p>
-                            <p className="dictionary-meaning">{data.textMeaning}</p>
-                            <p className="dictionary-example">{data.textExample}</p>
-                           
+                            {this.props.meaningInfo ? <p className="dictionary-meaning">{data.textMeaning}</p> : ''}
+                            {this.props.exampleInfo ? <p className="dictionary-example">{data.textExample}</p> : ''} 
                         </div>
-                        <img className="dictionary-image" src={imageSrc} alt={data.word} />
+                        {this.props.imageInfo ? <img className="dictionary-image" src={imageSrc} alt={data.word} /> : ''}
                     </div>
                     <div className="word-learning-info">
                         <p className="dictionary-last-train"> Последняя тренировка: {lastTrainDate}</p>  

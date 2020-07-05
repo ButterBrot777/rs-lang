@@ -1,7 +1,7 @@
 import React from 'react';
 import Word from './dictionaryWord';
 import DictionaryHeader from './dictionaryHeader';
-import { getAllUserWords } from '../ServerRequest/ServerRequests';
+import { getAllUserWords, getSettingsUser } from '../ServerRequest/ServerRequests';
 import './dictionary.css'
 
 const userId = localStorage.getItem('userId');
@@ -17,15 +17,31 @@ class Dictionary extends React.Component {
             allData: [],
             currentData: [],
             words: '',
+            meaningInfo: true,
+            exampleInfo: true, 
+            transcriptionInfo: true,
+            imageInfo: true,
             isLoading: false,
         }
     }
 
     componentDidMount = async () => {
         this.setState({ isLoading: true });
+        this.getUserSettings();
         const content = await getAllUserWords(user);
-        this.setState({allData: content, isLoading: false,})
+        this.setState({allData: content, isLoading: false,});
         this.getLearning();
+    }
+
+    getUserSettings = async () => {
+        const content = await getSettingsUser(user);
+        const wordInfo = content.optional.hints;
+        this.setState({
+            meaningInfo: wordInfo.meaningHint,
+            exampleInfo: wordInfo.exampleHint, 
+            transcriptionInfo: wordInfo.transcriptionHint,
+            imageInfo: wordInfo.imageHint
+        })
     }
 
     getLearning = () => {
@@ -62,7 +78,7 @@ class Dictionary extends React.Component {
                 </header>
                 
                 <div className="dictionary-words-list">
-                    {currentData.map(element => <Word userId={user.userId} token={user.token} difficulty={element.difficulty} optional={element.optional} lastTrainDate={new Date(element.optional.lastTrain)} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
+                    {currentData.map(element => <Word userId={user.userId} token={user.token} difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div>
                     {words === "hard" ? <button className="dictionary-btn train-hard-btn">Повторить</button> : ''}
