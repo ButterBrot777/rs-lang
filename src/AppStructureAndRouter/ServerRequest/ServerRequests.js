@@ -100,6 +100,8 @@ async function getNewWords(page, group) {
   return content;
 }
 
+
+
 const getUserWord = async (wordId, user) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/${wordId}`, {
       method: 'GET',
@@ -135,7 +137,7 @@ const createUserWord = async ({ userId, wordId, word }) => {
   console.log('created', content);
 };
 
-const updateUserWord = async ({ userId, wordId, word }) => {
+const updateUserWord = async ({ userId, token, wordId, word }) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
@@ -148,6 +150,7 @@ const updateUserWord = async ({ userId, wordId, word }) => {
   });
   const content = await rawResponse.json();
   console.log('updated', content);
+  return content;
 };
 
 const getAllUserWords = async (user) => {

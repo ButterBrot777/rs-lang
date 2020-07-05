@@ -1,9 +1,15 @@
 import React from 'react';
 import Word from './dictionaryWord';
 import DictionaryHeader from './dictionaryHeader';
+import { getAllUserWords } from '../ServerRequest/ServerRequests';
 import './dictionary.css'
 
-
+const userId = localStorage.getItem('userId');
+const token = localStorage.getItem('token');
+let user = {
+  userId,
+  token
+};
 class Dictionary extends React.Component {
     constructor(props) {
         super(props);
@@ -17,16 +23,7 @@ class Dictionary extends React.Component {
 
     componentDidMount = async () => {
         this.setState({ isLoading: true });
-        const userWordsUrl = `https://afternoon-falls-25894.herokuapp.com/users/${this.props.userId}/words`;
-        const rawResponse = await fetch(userWordsUrl, {
-            method: 'GET',
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${this.props.token}`,
-                'Accept': 'application/json',
-            }
-        });
-        const content = await rawResponse.json();
+        const content = await getAllUserWords(user);
         this.setState({allData: content, isLoading: false,})
         this.getLearning();
     }
@@ -65,7 +62,7 @@ class Dictionary extends React.Component {
                 </header>
                 
                 <div className="dictionary-words-list">
-                    {currentData.map(element => <Word userId={this.props.userId} token={this.props.token} difficulty={element.difficulty} optional={element.optional} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
+                    {currentData.map(element => <Word userId={user.userId} token={user.token} difficulty={element.difficulty} optional={element.optional} lastTrainDate={new Date(element.optional.lastTrain)} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div>
                     {words === "hard" ? <button className="dictionary-btn train-hard-btn">Повторить</button> : ''}

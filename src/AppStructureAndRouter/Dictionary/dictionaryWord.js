@@ -1,8 +1,15 @@
-import React from './node_modules/react';
+import React from 'react';
 import audio_icon from './audio-icon.png';
-const IMAGE_AUDIO_URL = 'https://raw.githubusercontent.com/NastiaKoval/rslang-data/master/';
+import { updateUserWord } from '../ServerRequest/ServerRequests';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
+
+const userId = localStorage.getItem('userId');
+const token = localStorage.getItem('token');
+let user = {
+  userId,
+  token
+};
 
 class Word extends React.Component {
     constructor(props) {
@@ -23,29 +30,24 @@ class Word extends React.Component {
     }
 
     putToLearning = async () => {
-        const userWordsUpdateUrl = `https://afternoon-falls-25894.herokuapp.com/users/${this.props.userId}/words/${this.props.wordId}`;
         const wordObj = {
             "difficulty": "good",
             "optional": {
                 "deleted": false,
                 "hardWord": false,
+                "repeatsStreak": 1,
+                "repeatsTotal": this.props.optional.repeatsTotal,
                 "lastTrain": this.props.optional.lastTrain,
-                "nextTrain": this.props.optional.nextTrain,
-                "repeats": this.props.optional.repeats
+                "nextTrain": this.props.optional.nextTrain
             }
         }
-        const rawResponse = await fetch(userWordsUpdateUrl, {
-            method: 'PUT',
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${this.props.token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(wordObj)
-        });
-
-        const content = await rawResponse.json();
+        const updatedWord = {
+            userId : user.userId,
+            token: user.token,
+            wordId: this.props.wordId,
+            word: wordObj
+        } 
+        const content = await updateUserWord(updatedWord);
         this.setState({isLoading: false});
         this.props.onWordTypeChange(content);
     }
@@ -61,9 +63,14 @@ class Word extends React.Component {
         this.wordAudio.play();
     }
 
-
+    createDateFromTimestamp = (timestamp) => {
+        const dateObj = new Date(timestamp); 
+        return `${dateObj.getDate()}.${dateObj.getMonth()}.${dateObj.getFullYear()}`;
+    }
     render() {
         const { data, image, isLoading } = this.state;
+        const lastTrainDate = this.createDateFromTimestamp(this.props.optional.lastTrain);
+        const nextTrainDate = this.createDateFromTimestamp(this.props.optional.nextTrain);
         const imageSrc = `data:image/jpg;base64,${image}`;
         if (data.textMeaning &&  data.textExample) {
             data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
@@ -91,9 +98,9 @@ class Word extends React.Component {
                         <img className="dictionary-image" src={imageSrc} alt={data.word} />
                     </div>
                     <div className="word-learning-info">
-                        <p className="dictionary-last-train"> Последняя тренировка: {this.props.optional.lastTrain}</p>  
-                        <p className="dictionary-repeats">Кол-во повторений: {this.props.optional.repeats}</p>  
-                        <p className="dictionary-next-train">Следующая тренировка: {this.props.optional.nextTrain}</p>
+                        <p className="dictionary-last-train"> Последняя тренировка: {lastTrainDate}</p>  
+                        <p className="dictionary-repeats">Кол-во повторений: {this.props.optional.repeatsTotal}</p>  
+                        <p className="dictionary-next-train">Следующая тренировка: {nextTrainDate}</p>
                     </div>
                 </div>
                 {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
