@@ -1,4 +1,4 @@
-import React from 'react';
+import React from './node_modules/react';
 import audio_icon from './audio-icon.png';
 const IMAGE_AUDIO_URL = 'https://raw.githubusercontent.com/NastiaKoval/rslang-data/master/';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
