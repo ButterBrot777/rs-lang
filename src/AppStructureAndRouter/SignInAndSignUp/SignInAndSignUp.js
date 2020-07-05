@@ -161,7 +161,7 @@ class SignInAndSignUp extends Component {
   }
   render(){
     let RepeatPassword =  <div className='form-group '>
-    <label htmlFor='passwordRepeat'>Password-repeat</label>
+    <label htmlFor='passwordRepeat'></label>
     <input id="passwordRepeat" name='passwordRepeat' type='password'
      className={!this.state.passwordRepeatValid ? this.state.passwordRepeat !== '' ? 'liquid':'' : 'solid'} value={this.state.passwordRepeat} placeholder="Password-repeat"
      onChange={(event)=>this.setUserInput(event)}></input>
@@ -172,21 +172,21 @@ class SignInAndSignUp extends Component {
     <div className="modal">
       {this.state.loading ? <LoadingWindow/> : ''}
       <div className="modal__container" >
-      {this.props.SignFlag ? '' : <Link to='/Registration'><button>Go to Sign Up</button></Link>}
+      {this.props.SignFlag ? '' : <Link to='/Registration'><button className="button button_colored">Go to Sign Up</button></Link>}
        <form className='form-container' onSubmit={this.props.SignFlag ? this.formSubmitSignUp : this.formSubmitSignIn}>
        {this.props.SignFlag ? <h3> Sign Up</h3> : <h3> Sign In</h3>}
   
            <div className='form-group'>
-              <label htmlFor='Email'>Email</label>
-              <input id="email" name='email' 
+              <label htmlFor='Email'></label>
+              <input id="email" name='email' required
               className={!this.state.emailValid ? this.state.email !== '' ? 'liquid':'' : 'solid'} value={this.state.email} placeholder="Enter your Email"
               onChange={(event)=>this.setUserInput(event)}></input>
            </div>
 
-           <div className='form-group '>
-              <label htmlFor='Password'>Password</label>
-              <input id="password" name='password' type='password'
-               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid':'' : 'solid'}  value={this.state.password} placeholder="Password"
+           <div className="form-group">
+              <label htmlFor="Password"></label>
+              <input id="password" name="password" type="password" required
+               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid': '' : 'solid'}  value={this.state.password} placeholder="Password"
                onChange={(event)=>this.setUserInput(event)}></input>
            </div>
 
@@ -195,12 +195,12 @@ class SignInAndSignUp extends Component {
            <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
            CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>
 
-           <div className='fomm-btns'>
-             <button disabled={!this.state.formValid}>Submit</button>
-             <Link to='/'><button>Close</button></Link>  
+           <div className='form-btns'>
+             <button className="button button_colored" disabled={!this.state.formValid}>Submit</button>
+             <Link to='/'><button className="button button_bordered">Close</button></Link>  
            </div>
        </form>
-       {this.props.SignFlag ? <Link to='/Authorization'><button>Go to Sign In</button></Link> : ''}
+       {this.props.SignFlag ? <Link to='/Authorization'><button className="button button_colored">Go to Sign In</button></Link> : ''}
        </div>
     </div>
   );
