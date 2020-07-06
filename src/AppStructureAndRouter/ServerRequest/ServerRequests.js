@@ -47,16 +47,21 @@ async function startSettingsUser(obj){
     },
     // с 0 не работает
     body: JSON.stringify({
-      "wordsPerDay": 1,
-      "optional": {
-        'Level': 5,
-        'Page':1,
-        'Word':1,
-        'AutoVoice': true,
-        'Translate':true,
-        'VoiceSentence': true,
-        'PromtImage': false
-       }
+      "wordsPerDay": 20,
+        "optional": {
+          "maxWordsPerDay": 40,
+          "level": 0,
+          "page": 0,
+          "wordsLearntPerPage": 0,
+          "hints": {
+            "meaningHint": true,
+            "translationHint": true,
+            "exampleHint": true,
+            "soundHint": false,
+            "imageHint": false,
+            "transcriptionHint": false
+        }
+      }
     })
   });
   const content = await rawResponse.json();
@@ -64,17 +69,17 @@ async function startSettingsUser(obj){
   return obj;
 }
 
- async function addSettingsUser(token, userId, obj){
+ async function addSettingsUser(obj){
  
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${obj.token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(obj)
+    body: JSON.stringify(obj.data)
   });
   const content = await rawResponse.json();
   console.log(' тут я ', content);
@@ -93,12 +98,43 @@ async function getSettingsUser(obj){
       return content;
 }
 
+const updateStatisticsUser = async (obj) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+    method: 'PUT',
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${obj.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(obj.data)
+  });
+  const content = await rawResponse.json();
+  return content;
+}
+
+const getStatisticsUser = async (obj) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+    method: 'GET',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${obj.token}`,
+      'Accept': 'application/json',
+    },
+  });
+  const content = await rawResponse.json();
+  return content;
+}
+
+
 async function getNewWords(page, group) {
   const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
 }
+
+
 
 const getUserWord = async (wordId, user) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/${wordId}`, {
@@ -120,7 +156,7 @@ const getUserWord = async (wordId, user) => {
     }
 };
 
-const createUserWord = async ({ userId, wordId, word }) => {
+const createUserWord = async ({ userId, token, wordId, word }) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'POST',
     withCredentials: true,
@@ -135,7 +171,7 @@ const createUserWord = async ({ userId, wordId, word }) => {
   console.log('created', content);
 };
 
-const updateUserWord = async ({ userId, wordId, word }) => {
+const updateUserWord = async ({ userId, token, wordId, word }) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
@@ -148,6 +184,7 @@ const updateUserWord = async ({ userId, wordId, word }) => {
   });
   const content = await rawResponse.json();
   console.log('updated', content);
+  return content;
 };
 
 const getAllUserWords = async (user) => {
@@ -179,4 +216,4 @@ const loginUser = async user => {
   console.log(content);
 };
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}

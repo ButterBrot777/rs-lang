@@ -8,6 +8,7 @@ import MyLandingPage from './LandingPage/LandingPage';
 import LogoutBtn from './HeaderBtns/LogoutBtn';
 import HomePage from './HomePage/HomePage';
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics';
+import Dictionary from '../AppStructureAndRouter/Dictionary/dictionaryPage';
 import SignInAndSignUp from './SignInAndSignUp/SignInAndSignUp';
 
 import UnauthorizedUserPage from './UnauthorizedUserPage/UnauthorizedUserPage';
@@ -110,6 +111,9 @@ export default class App extends Component {
 						</Route>
 						<Route path="/Stat">
 							{this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
+						</Route>
+						<Route path="/Dictionary">
+							{this.state.userAuthorized !== '' ? <Dictionary /> : <UnauthorizedUserPage />}
 						</Route>
 					</Switch>
 				</div>
