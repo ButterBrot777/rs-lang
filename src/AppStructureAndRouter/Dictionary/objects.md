@@ -1,6 +1,11 @@
 **1. В начале игры делаете GET запрос на User/Words, чтоб получить изучаемые пользователем слова**
 
-Этот проммис (и все последующие запросы) нужно будет импортировать из файлика с запросами (который пока в разработке).
+Этот промис (и все последующие запросы) нужно будет импортировать из файла ../ServerRequest/ServerRequests.
+
+функция 
+```javascript
+getAllUserWords(user) /// функция принимает как аргумент объект user с полями userId, token (брать из localStorage)
+```
 
 Запрос возвращает массив объектов вида:
 
@@ -25,7 +30,7 @@
 
 ```javascript
   cosnt filterUserWords = async () => {
-    const userWords = await getUserWords(userId, token);
+    const userWords = await getAllUserWords(user);
     const currentDate = new Date();
     const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
     return wordsForGame;
@@ -36,6 +41,12 @@
 Если у вас нет конкретного лимита слов, нужно запросить дополнительный массив новых слов, или дозапрашивать их по ходу игры (зависит от вашей реализации).
 
 Чтобы определить с какого уровня сложности и страницы запрашивать слова, необходимо сделать запрос GET на Users/Settings.
+
+функция 
+```javascript
+getSettingsUser(obj) /// функция принимает как аргумент объект obj с полями userId, token (брать из localStorage)
+```
+
 Придет объект вида:
 ```javascript
 {
@@ -58,6 +69,11 @@
 ```
 После этого сделать запрос GET на Words, сo свойствами group=level и page=page. Из массива, который прийдет, взять слова, которые после уже изученного количества слов на странице (wordsLearntPerPage).
 
+функция 
+```javascript
+getNewWords(page, group) /// функция принимает два аргумента group=level и page=page
+```
+
 
 
 **2. Каждое отыграное слово необходимо обновить:**
@@ -65,10 +81,16 @@
 * запросом PUT на User/Words, если слово было взято из User/Words.
 * запросом POST на User/Words, если слово было новое.
 
-Если запрос PUT, то передеваемый объект такого вида:
+Если запрос PUT, используем функцию:
+
 ```javascript
-[
-  {
+updateUserWord(obj) /// функция принимает как аргумент объект obj
+
+obj = {
+  userId: userId, // брать из localStorage
+  token: token,  // брать из localStorage
+  wordId: wordId, 
+  word: {
     "difficulty": "string", // не изменяется
     "optional": {
       "deleted": false, // не изменяется
@@ -80,7 +102,7 @@
       "nextTrain": "number" // записать дату следующей тренировки*
     }
   }
-]
+}
 ```
 *если правильный ответ, то nextTrain = lastTrain + interval.
 ```javascript
@@ -94,10 +116,16 @@ nextTrain = lastTrain + interval;
 ```
 *если неправильные ответ, то nextTrain = lastTrain
 
-Если запрос POST, то передеваемый объект такого вида:
+
+Если запрос POST, используем функцию:
 ```javascript
-[
-  {
+createUserWord(obj) // функция принимает как аргумент объект obj
+
+obj = {
+  userId: userId, // брать из localStorage
+  token: token,  // брать из localStorage
+  wordId: wordId, 
+  word: {
     "difficulty": "string", // записать сложность в зависимотси от ответа*
     "optional": {
       "deleted": false, 
@@ -109,7 +137,7 @@ nextTrain = lastTrain + interval;
       "nextTrain": "string" // записать дату следующей тренировки*
     }
   }
-]
+}
 ```
 *если правильный ответ, то:
  "difficulty": "good",
@@ -125,71 +153,81 @@ nextTrain = lastTrain + interval;
 *список ошибочных слов и их количество
 *список правильных слов и их кол-во
 
-3.1. для обновления долгострочной статистики вначале нужно запросить актуальную статистику запросом GET на User/Statistic. Придет объект вида:
+3.1. для обновления долгострочной статистики вначале нужно запросить актуальную статистику запросом GET на User/Statistic. 
+
+используем функцию:
+```javascript
+getStatisticsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage)
+```
+Придет объект вида:
 
 ```javascript
 {
   "learnedWords": 0,
   "optional": {
     "dateOfReg": "number", // таймстамп, дата регистрации пользователя
-    "speakIt": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
-    "puzzle": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
-    "savannah": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
-    "sprint": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
-    "audioCall": [
-      {
-        "date": "string",
-        "errors": number,
-        "trues": number,
-      },
-      ...
-    ],
+    "speakIt": {
+      "date": {
+        "errors": 0,
+        "trues": 0
+      }
+    },
+    "puzzle": {
+      "date": {
+        "errors": 0,
+        "trues": 0
+      }
+    },
+    "savannah": {
+      "date": {
+        "errors": 0,
+        "trues": 0
+      }
+    },
+    "sprint": {
+      "date": {
+        "errors": 0,
+        "trues": 0
+      }
+    },
+    "audioCall": {
+      "date": {
+        "errors": 0,
+        "trues": 0
+      }
+    }
   }
 }
 ```
 
-3.2. Запушить в массив optional[название вашей игры] объект с результатом текущей игры вида:
+3.2. Добавить в объект optional[название вашей игры] новое свойство вида:
 ```javascript
-{
-  "date": "string", // дата игры
-  "errors": number, // кол-во ошибок
-  "trues": number, // кол-во правильных ответов
-},
+  optional[название вашей игры][строка с датой игры в виде таймстампа] = {
+        "errors": 0, // кол-во ошибок
+        "trues": 0 // кол-во правильных ответов
+      }
 ```
+пример:
+```javascript
+  optional["speakIt"]["1593550800000"] = {
+        "errors": 5, // кол-во ошибок
+        "trues": 10 // кол-во правильных ответов
+      }
+```
+
 
 3.3. Вернуть обновленную статистику на сервер запросом PUT на User/Statistic 
 
-3.4. Если в игре использовались новые слова, необходимо обновить User/Settings запросом PUT, отправив такой объект:
+используем функцию:
 ```javascript
-{
+getStatisticsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage) и data (обновленные данные для статистики)
+```
+
+3.4. Если в игре использовались новые слова, необходимо обновить User/Settings запросом PUT, используя функцию:
+```javascript
+addSettingsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage) и data (обновленные данные для статистики)
+
+data: {
   "wordsPerDay": 20,
   "optional": {
     "maxWordsPerDay": 40,

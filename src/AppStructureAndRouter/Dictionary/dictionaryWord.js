@@ -1,6 +1,6 @@
 import React from 'react';
 import audio_icon from './audio-icon.png';
-import { updateUserWord, getSettingsUser } from '../ServerRequest/ServerRequests';
+import { updateUserWord } from '../ServerRequest/ServerRequests';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
 
