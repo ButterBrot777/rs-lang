@@ -1,4 +1,5 @@
 const token = localStorage.getItem('token');
+const userId = localStorage.getItem('userId');
 
 async function signInRequest(userData){
   const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/signin', {
@@ -36,16 +37,15 @@ async function signUpRequest(userData){
    }
 }
 
-async function startSettingsUser(obj){
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/settings`, {
+const startSettingsUser = async () => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${obj.token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    // с 0 не работает
     body: JSON.stringify({
       "wordsPerDay": 20,
         "optional": {
@@ -65,60 +65,57 @@ async function startSettingsUser(obj){
     })
   });
   const content = await rawResponse.json();
-  console.log('стартовые настройки',content);
-  return obj;
+  return content;
 }
 
- async function addSettingsUser(obj){
- 
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/settings`, {
+ const addSettingsUser = async (settingsData) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${obj.token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(obj.data)
+    body: JSON.stringify(settingsData)
   });
   const content = await rawResponse.json();
-  console.log(' тут я ', content);
+  return content;
 }
 
-async function getSettingsUser(obj){
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/settings`, {
+const getSettingsUser = async () => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${obj.token}`,
+          'Authorization': `Bearer ${token}`,
           'accept': 'application/json',
         },
       });
       const content = await rawResponse.json();
-      // console.log('Вызов настроек пользователя',content);
       return content;
 }
 
-const updateStatisticsUser = async (obj) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+const updateStatisticsUser = async (statisticsData) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${obj.token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(obj.data)
+    body: JSON.stringify(statisticsData)
   });
   const content = await rawResponse.json();
   return content;
 }
 
-const getStatisticsUser = async (obj) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+const getStatisticsUser = async () => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
     method: 'GET',
     withCredentials: true,
     headers: {
-      'Authorization': `Bearer ${obj.token}`,
+      'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',
     },
   });
@@ -127,21 +124,19 @@ const getStatisticsUser = async (obj) => {
 }
 
 
-async function getNewWords(page, group) {
+const getNewWords = async (page, group) => {
   const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
 }
 
-
-
-const getUserWord = async (wordId, user) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/${wordId}`, {
+const getUserWord = async (wordId) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-          'Authorization': `Bearer ${user.token}`,
+          'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
       }
   });
@@ -156,7 +151,7 @@ const getUserWord = async (wordId, user) => {
     }
 };
 
-const createUserWord = async ({ userId, token, wordId, word }) => {
+const createUserWord = async (wordId, wordData) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'POST',
     withCredentials: true,
@@ -165,13 +160,13 @@ const createUserWord = async ({ userId, token, wordId, word }) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(word)
+    body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
-  console.log('created', content);
+  return content;
 };
 
-const updateUserWord = async ({ userId, token, wordId, word }) => {
+const updateUserWord = async (wordId, wordData) => {
   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
@@ -180,25 +175,22 @@ const updateUserWord = async ({ userId, token, wordId, word }) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(word)
+    body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
-  console.log('updated', content);
   return content;
 };
 
-const getAllUserWords = async (user) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/`, {
+const getAllUserWords = async () => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/`, {
     method: 'GET',
     withCredentials: true,
     headers: {
-      'Authorization': `Bearer ${user.token}`,
+      'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',
     }
   });
   const content = await rawResponse.json();
-
-  console.log(content);
   return content;
 };
 

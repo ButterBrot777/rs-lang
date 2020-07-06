@@ -4,7 +4,7 @@
 
 функция 
 ```javascript
-getAllUserWords(user) /// функция принимает как аргумент объект user с полями userId, token (брать из localStorage)
+getAllUserWords()
 ```
 
 Запрос возвращает массив объектов вида:
@@ -30,7 +30,7 @@ getAllUserWords(user) /// функция принимает как аргуме�
 
 ```javascript
   cosnt filterUserWords = async () => {
-    const userWords = await getAllUserWords(user);
+    const userWords = await getAllUserWords();
     const currentDate = new Date();
     const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
     return wordsForGame;
@@ -44,7 +44,7 @@ getAllUserWords(user) /// функция принимает как аргуме�
 
 функция 
 ```javascript
-getSettingsUser(obj) /// функция принимает как аргумент объект obj с полями userId, token (брать из localStorage)
+getSettingsUser()
 ```
 
 Придет объект вида:
@@ -84,23 +84,18 @@ getNewWords(page, group) /// функция принимает два аргум
 Если запрос PUT, используем функцию:
 
 ```javascript
-updateUserWord(obj) /// функция принимает как аргумент объект obj
+updateUserWord(wordId, wordData) /// функция принимает два аргумента: wordId, wordData
 
-obj = {
-  userId: userId, // брать из localStorage
-  token: token,  // брать из localStorage
-  wordId: wordId, 
-  word: {
-    "difficulty": "string", // не изменяется
-    "optional": {
-      "deleted": false, // не изменяется
-      "hardWord": false, // не изменяется
-      "repeatsStreak": number, // увеличить на 1
-      "repeatsTotal": number, // увеличить на 1
-      "addingDate": "number", // не изменяется
-      "lastTrain": "number", // записать дату этой игры
-      "nextTrain": "number" // записать дату следующей тренировки*
-    }
+wordData = {
+  "difficulty": "string", // не изменяется
+  "optional": {
+    "deleted": false, // не изменяется
+    "hardWord": false, // не изменяется
+    "repeatsStreak": number, // увеличить на 1
+    "repeatsTotal": number, // увеличить на 1
+    "addingDate": "number", // не изменяется
+    "lastTrain": "number", // записать дату этой игры
+    "nextTrain": "number" // записать дату следующей тренировки*
   }
 }
 ```
@@ -119,23 +114,18 @@ nextTrain = lastTrain + interval;
 
 Если запрос POST, используем функцию:
 ```javascript
-createUserWord(obj) // функция принимает как аргумент объект obj
+createUserWord(wordId, wordData) /// функция принимает два аргумента: wordId, wordData
 
-obj = {
-  userId: userId, // брать из localStorage
-  token: token,  // брать из localStorage
-  wordId: wordId, 
-  word: {
-    "difficulty": "string", // записать сложность в зависимотси от ответа*
-    "optional": {
-      "deleted": false, 
-      "hardWord": false,
-      "repeatsStreak": 1,
-      "repeatsTotal": 1,
-      "addingDate": "number", // записать дату этой игры
-      "lastTrain": "string", // записать дату этой игры
-      "nextTrain": "string" // записать дату следующей тренировки*
-    }
+wordData = {
+  "difficulty": "string", // записать сложность в зависимотси от ответа*
+  "optional": {
+    "deleted": false, 
+    "hardWord": false,
+    "repeatsStreak": 1,
+    "repeatsTotal": 1,
+    "addingDate": "number", // записать дату этой игры
+    "lastTrain": "string", // записать дату этой игры
+    "nextTrain": "string" // записать дату следующей тренировки*
   }
 }
 ```
@@ -157,7 +147,7 @@ obj = {
 
 используем функцию:
 ```javascript
-getStatisticsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage)
+getStatisticsUser()
 ```
 Придет объект вида:
 
@@ -220,14 +210,14 @@ getStatisticsUser(obj) // функция принимает как аргуме�
 
 используем функцию:
 ```javascript
-getStatisticsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage) и data (обновленные данные для статистики)
+updateStatisticsUser(statisticsData) // функция принимает statisticsData (обновленные данные для статистики)
 ```
 
 3.4. Если в игре использовались новые слова, необходимо обновить User/Settings запросом PUT, используя функцию:
 ```javascript
-addSettingsUser(obj) // функция принимает как аргумент объект obj c полями userId, token (брать из localStorage) и data (обновленные данные для статистики)
+addSettingsUser(settingsData) // функция принимает как аргумент settingsData (обновленные данные для настроек)
 
-data: {
+settingsData = {
   "wordsPerDay": 20,
   "optional": {
     "maxWordsPerDay": 40,
