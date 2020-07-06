@@ -13,7 +13,7 @@ class Statistic extends Component{
   
   render(){
     return(
-      <div>
+      <div className='statistic-wrapper'>
         <h2>Statistic</h2>
         <div className='statistic-content'>
         <div  className='statistic-content-true'>

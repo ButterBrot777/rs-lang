@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+
+
 class Buttons extends Component{
   constructor(props){
     super(props)
@@ -32,14 +34,13 @@ class Buttons extends Component{
  
   render(){
     return(
-      <div>
-        
+      <div className = 'btns-wrapper'>
         {console.log(this.props.words)}
-        <button onClick={(word) => this.props.nextWord(this.props.words[0])}>{this.props.words[0]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[1])}>{this.props.words[1]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[2])}>{this.props.words[2]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[3])}>{this.props.words[3]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[4])}>{this.props.words[4]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[0])}><span>1</span>{this.props.words[0]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[1])}><span>2</span>{this.props.words[1]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[2])}><span>3</span>{this.props.words[2]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[3])}><span>4</span>{this.props.words[3]}</button>
+        <button onClick={(word) => this.props.nextWord(this.props.words[4])}><span>5</span>{this.props.words[4]}</button>
       </div>
     )
   }

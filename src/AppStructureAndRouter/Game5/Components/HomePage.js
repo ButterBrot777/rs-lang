@@ -4,7 +4,7 @@ class HomePage extends Component{
   render(){
     return(
       <div className='savannah-start-btn'>
-        <button onClick={this.props.handleLoading}>Start</button>
+        <button  onClick={this.props.handleLoading}>Start</button>
       </div>
     )
   }

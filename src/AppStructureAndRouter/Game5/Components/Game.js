@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 
+
+import WordsAll  from '../../AllWords/AllWords' 
 import Buttons from './Buttons'
 import Statistic from './Statistic'
 class Game extends Component{
-  timer = 1
+  timer = 2
   trueAnswer = []
   falseAnswer = []
   constructor(props){
@@ -17,13 +19,14 @@ class Game extends Component{
     this.shuffleWordsBtns = this.shuffleWordsBtns.bind(this)
     this.timerRaund = this.timerRaund.bind(this)
     this.nextWord = this.nextWord.bind(this)
+    this.arrayRandElement = this.arrayRandElement.bind(this)
 
   }
   componentDidMount(){
     this.timerRaund()
   }
   nextWord(word){
-    this.timer = 1
+    this.timer = 2
     console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
     
     if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
@@ -50,8 +53,20 @@ class Game extends Component{
     }, 1000)
   }
   
+  arrayRandElement(arr) {
+    let ArrayNameBtns =[]
+    while (ArrayNameBtns.length !== 4){
+      let random = Math.floor(Math.random() * arr.length);
+      if(this.state.wordsToLearn[this.state.word].wordTranslate !== arr[random])
+      ArrayNameBtns.push(arr[random])
+    }
+    ArrayNameBtns.push(this.state.wordsToLearn[this.state.word].wordTranslate)
+    return ArrayNameBtns
+  }
+
+
   shuffleWordsBtns(){
-    let array = ['123', 'dasd', 'asdas', 'asdasd', this.state.wordsToLearn[this.state.word].wordTranslate]
+    let array = this.arrayRandElement(WordsAll)
       for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];

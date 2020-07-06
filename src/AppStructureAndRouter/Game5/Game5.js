@@ -88,6 +88,7 @@ import Game from './Components/Game'
 import Statistic from './Components/Statistic'
 import HomePage from './Components/HomePage'
 
+import video from  './images/background-video.mp4'
 class Game5 extends Component{
   constructor(){
     super()
@@ -150,31 +151,45 @@ class Game5 extends Component{
   }
 
   render(){
+    
     if(this.state.startGame){
       return(
-        <div className="savannah-container">
+        <div  id="video-bg">
+          <video id="background-video" loop autoPlay>
+              <source src={video} type='video/mp4' />
+            </video>
           <Game  words={this.state.words}/>
         </div>
       )   
     }else if(this.state.loading){
       return(
-        <div className="savannah-container">
+        <div  id="video-bg">
+           <video id="background-video" loop autoPlay>
+              <source src={video} type='video/mp4' />
+            </video>
           <Loading timer={3}  handleGame={this.handleGame}/>
         </div>
       )
     }else if(this.state.statistic){
       return(
-        <div className="savannah-container">
+        <div id="video-bg">
+          <video id="background-video" loop autoPlay>
+              <source src={video} type='video/mp4' />
+          </video>
           <Statistic />
         </div>
       )
     }else {
       return(
-        <div className="savannah-container">
+        <div  id="video-bg">
+            <video id="background-video" loop autoPlay>
+              <source src={video} type='video/mp4' />
+            </video>
           <HomePage handleLoading={this.handleLoading}/>
         </div>
       )
     }
+    
   }
 }
 export default Game5
