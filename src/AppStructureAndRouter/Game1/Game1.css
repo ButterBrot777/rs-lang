@@ -12,6 +12,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.word-current {
+  min-height: 25px;
+}
 .game-container {
   text-align: center;
   background-color: rgb(207, 232, 240);

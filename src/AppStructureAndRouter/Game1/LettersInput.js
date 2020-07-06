@@ -3,20 +3,34 @@ import './Game1.css';
 
 class LettersInput extends React.Component {
 
+    addColor = () => {
+        let inputAttempt = this.props.inputAttempt.split('');
+        let currentWord = this.props.word.split('');
+        setTimeout(this.removeLetterColors, 2000);
+        if (this.props.coloredLetters) {
+            return currentWord.map((letter, idx) => {
+                if (letter === inputAttempt[idx]) {
+                    return <span className="correct" key={idx}>{letter}</span>
+                } else {
+                    return <span className="incorrect" key={idx}>{letter}</span>
+                }
+            })
+        } else {
+            return currentWord.map((letter, idx) => <span key={idx}>{letter}</span>)
+        }
+    }
+
     render() {
-        let arr = this.props.word.split('');
         return (
             <div className="input-container">
-                <div ref={this.props.wordContainerRef} className={this.props.isGuessed || this.props.isSkipped ? "opaque" : "opaque hidden"} >
-                    {
-                        arr.map((letter, idx) => {
-                            return <span key={idx}>{letter}</span>
-                        })
+                <div className="word-current opaque">
+                    {(this.props.isGuessCheck) &&
+                        this.addColor()
                     }
                 </div>
-                <input 
-                type="text" className="word-input" ref={this.props.inputRef} 
-                autoFocus autoComplete="off" value={this.props.value}
+                <input
+                    type="text" className="word-input"
+                    autoFocus autoComplete="off" value={this.props.value}
                     onChange={(e) => this.props.handleInputChange(e.target.value)}
                 ></input>
             </div>
