@@ -8,6 +8,7 @@ class HomePage extends Component{
        <div className = 'home-page'>
          <h2>HomePage</h2>
          <Link to="/Stat">Statist</Link>
+         <Link to="/Dictionary">Dictionary</Link>
          <div className='HomeGame'>Игра Юли</div>
        <div>
        <ul>

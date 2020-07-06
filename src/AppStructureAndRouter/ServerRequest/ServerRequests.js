@@ -1,3 +1,4 @@
+const token = localStorage.getItem('token');
 
 async function signInRequest(userData){
   const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/signin', {
@@ -46,17 +47,21 @@ async function startSettingsUser(obj){
     },
     // с 0 не работает
     body: JSON.stringify({
-      "wordsPerDay": 0,
-      "optional": {
-        'Level': 5,
-        'Page':1,
-        'Word':1,
-        'AutoVoice': true,
-        'Translate':true,
-        'VoiceSentence': true,
-        'PromtImage': false
-       },
-       "word": ['asda', 'asdasd', 'asdas']
+      "wordsPerDay": 20,
+        "optional": {
+          "maxWordsPerDay": 40,
+          "level": 0,
+          "page": 0,
+          "wordsLearntPerPage": 0,
+          "hints": {
+            "meaningHint": true,
+            "translationHint": true,
+            "exampleHint": true,
+            "soundHint": false,
+            "imageHint": false,
+            "transcriptionHint": false
+        }
+      }
     })
   });
   const content = await rawResponse.json();
@@ -64,17 +69,17 @@ async function startSettingsUser(obj){
   return obj;
 }
 
- async function addSettingsUser(token, userId, obj){
+ async function addSettingsUser(obj){
  
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
       'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${obj.token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(obj)
+    body: JSON.stringify(obj.data)
   });
   const content = await rawResponse.json();
   console.log(' тут я ', content);
@@ -89,8 +94,126 @@ async function getSettingsUser(obj){
         },
       });
       const content = await rawResponse.json();
-      console.log('Вызов настроек пользователя',content);
+      // console.log('Вызов настроек пользователя',content);
       return content;
 }
 
-export {signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser}
+const updateStatisticsUser = async (obj) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+    method: 'PUT',
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${obj.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(obj.data)
+  });
+  const content = await rawResponse.json();
+  return content;
+}
+
+const getStatisticsUser = async (obj) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${obj.userId}/statistics`, {
+    method: 'GET',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${obj.token}`,
+      'Accept': 'application/json',
+    },
+  });
+  const content = await rawResponse.json();
+  return content;
+}
+
+
+async function getNewWords(page, group) {
+  const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}`;
+  const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
+
+
+
+const getUserWord = async (wordId, user) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/${wordId}`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Accept': 'application/json',
+      }
+  });
+  if (rawResponse.status === 200) {
+      const content = await rawResponse.json();
+      console.log('get user word', content);
+      return content;
+  } else if (rawResponse.status === 404){
+      return false;
+  } else{ 
+      throw new Error(rawResponse.status);
+    }
+};
+
+const createUserWord = async ({ userId, token, wordId, word }) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+    method: 'POST',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(word)
+  });
+  const content = await rawResponse.json();
+  console.log('created', content);
+};
+
+const updateUserWord = async ({ userId, token, wordId, word }) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+    method: 'PUT',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(word)
+  });
+  const content = await rawResponse.json();
+  console.log('updated', content);
+  return content;
+};
+
+const getAllUserWords = async (user) => {
+  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${user.userId}/words/`, {
+    method: 'GET',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${user.token}`,
+      'Accept': 'application/json',
+    }
+  });
+  const content = await rawResponse.json();
+
+  console.log(content);
+  return content;
+};
+
+const loginUser = async user => {
+  const rawResponse = await fetch('http://pacific-castle-12388.herokuapp.com/signin', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  });
+  const content = await rawResponse.json();
+
+  console.log(content);
+};
+
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
