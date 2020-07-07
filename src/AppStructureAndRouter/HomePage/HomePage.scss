@@ -1,9 +1,4 @@
 .wrapper__home-page {
-  // background-color: LightCyan;
-  // background-image: url('./images/machine-learning-tag-cloud.jpg') rgba(0,0,0,0.5);
-  // background-size: cover; 
-  // background-repeat: no-repeat;
-  // opacity: 0.5;
   position: relative;
   height: 100vh;
 }
@@ -90,7 +85,6 @@
   flex-wrap: wrap;
   padding-left: 3rem;
   width: 40%;
-  // position: relative;
 
   .button-training {
     font-size: 2rem;
@@ -131,13 +125,14 @@
 .settings-inputs {
   display: flex;
   align-items: center;
-  
-    font-size: 2rem;
-  
+  font-size: 2rem;
 
   .word-input_setting {
     max-width: 6rem;
     font-size: 2rem;
+    &:focus {
+      outline: none !important;
+    }
   }
 
   &:last-child {

@@ -27,13 +27,10 @@ export default class StartSettings extends Component {
 	};
 
   inputCheck = (event) => {
-    console.log(event.target.name)
     if(/^\d+$/.test(event.target.value)) {
       if(event.target.name === 'maxWordsPerDay') this.setState({ totalWordsPerDay: +event.target.value })
       if(event.target.name === 'newWordsPerDay') this.setState({ newWordsPerDay: +event.target.value })
-    } else {
-      alert('Please put a number')
-    }
+    } 
   }
 
 	render() {
@@ -45,6 +42,8 @@ export default class StartSettings extends Component {
 						type="text"
 						name="maxWordsPerDay"
 						placeholder="words"
+						autoFocus={true}
+						autoComplete="off"
 						value={this.state.totalWordsPerDay}
 						onChange={(event) => this.inputCheck(event)}
 						className="word-input_setting"
@@ -55,6 +54,7 @@ export default class StartSettings extends Component {
 					<input
 						type="text"
 						name="newWordsPerDay"
+						autoComplete="off"
 						value={this.state.newWordsPerDay}
 						onChange={(event) => this.inputCheck(event)}
 						className="word-input_setting"
