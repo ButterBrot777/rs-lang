@@ -3,6 +3,11 @@
 }
 .wrapper__header_colored {
   background-color: rgb(20,40,60);
+  height: 8rem;
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 1;
 }
 .promo__wrapper {
   color: white;
@@ -34,7 +39,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  // padding: 1rem 0;
 }
 
 .logo {
