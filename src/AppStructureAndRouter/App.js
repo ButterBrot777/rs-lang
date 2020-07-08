@@ -18,7 +18,6 @@ import Game2 from './Game2/Game2';
 import Game3 from './Game3/Game3';
 import Game4 from './Game4/Game4';
 import Game5 from './Game5/Game5';
-import Game6 from './Game6/Game6';
 
 export default class App extends Component {
 	constructor() {
@@ -51,7 +50,7 @@ export default class App extends Component {
 
 		return (
 			<Router>
-				<div className="landing-page" tabIndex={0} onKeyDown={e => console.log(e.keyCode)}>
+				<div className="landing-page" tabIndex={0}>
 					<div className="wrapper wrapper__header_colored">
 						<div className="header__wrapper wrapper__inner">
 							<header id="header" className="header">
@@ -106,9 +105,9 @@ export default class App extends Component {
 						<Route path="/Game5">
 							{this.state.userAuthorized !== '' ? <Game5 /> : <UnauthorizedUserPage />}
 						</Route>
-						<Route path="/Game6">
+						{/* <Route path="/Game6">
 							{this.state.userAuthorized !== '' ? <Game6 /> : <UnauthorizedUserPage />}
-						</Route>
+						</Route> */}
 						<Route path="/Stat">
 							{this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
 						</Route>
