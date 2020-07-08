@@ -1,8 +1,9 @@
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
+const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
 
 async function signInRequest(userData){
-  const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/signin', {
+  const rawResponse = await fetch(`${baseUrl}/signin`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -12,9 +13,8 @@ async function signInRequest(userData){
   });
   if(rawResponse.status === 200){
     const content = await rawResponse.json();
-    localStorage.setItem('token', content.token)
-    localStorage.setItem('userId', content.userId)
-    console.log(content)
+    localStorage.setItem('token', content.token);
+    localStorage.setItem('userId', content.userId);
     return content;
   }else{ 
     throw new Error(rawResponse.status);
@@ -22,7 +22,7 @@ async function signInRequest(userData){
 }
 
 async function signUpRequest(userData){
-  const rawResponse = await fetch('https://afternoon-falls-25894.herokuapp.com/users', {
+  const rawResponse = await fetch(`${baseUrl}/users`, {
      method: 'POST',
      headers: {
        'Accept': 'application/json',
@@ -38,7 +38,7 @@ async function signUpRequest(userData){
 }
 
 const startSettingsUser = async () => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -69,7 +69,7 @@ const startSettingsUser = async () => {
 }
 
  const addSettingsUser = async (settingsData) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -84,7 +84,7 @@ const startSettingsUser = async () => {
 }
 
 const getSettingsUser = async () => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,7 +96,7 @@ const getSettingsUser = async () => {
 }
 
 const updateStatisticsUser = async (statisticsData) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -111,7 +111,7 @@ const updateStatisticsUser = async (statisticsData) => {
 }
 
 const getStatisticsUser = async () => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -125,14 +125,14 @@ const getStatisticsUser = async () => {
 
 
 const getNewWords = async (page, group) => {
-  const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}`;
+  const url = `${baseUrl}/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
 }
 
 const getUserWord = async (wordId) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
@@ -142,7 +142,6 @@ const getUserWord = async (wordId) => {
   });
   if (rawResponse.status === 200) {
       const content = await rawResponse.json();
-      console.log('get user word', content);
       return content;
   } else if (rawResponse.status === 404){
       return false;
@@ -152,7 +151,7 @@ const getUserWord = async (wordId) => {
 };
 
 const createUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     withCredentials: true,
     headers: {
@@ -167,7 +166,7 @@ const createUserWord = async (wordId, wordData) => {
 };
 
 const updateUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -182,7 +181,7 @@ const updateUserWord = async (wordId, wordData) => {
 };
 
 const getAllUserWords = async () => {
-  const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -195,7 +194,7 @@ const getAllUserWords = async () => {
 };
 
 const loginUser = async user => {
-  const rawResponse = await fetch('http://pacific-castle-12388.herokuapp.com/signin', {
+  const rawResponse = await fetch(`${baseUrl}`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -204,8 +203,7 @@ const loginUser = async user => {
     body: JSON.stringify(user)
   });
   const content = await rawResponse.json();
-
-  console.log(content);
+  return content;
 };
 
 export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
