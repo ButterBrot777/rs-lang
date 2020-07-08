@@ -134,6 +134,13 @@ async function getNewWords(page, group) {
   return content;
 }
 
+async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
+  const url = `https://afternoon-falls-25894.herokuapp.com/words?page=${page}&group=${group}&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerPage}`;
+  const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
+
 
 
 const getUserWord = async (wordId, user) => {
@@ -216,4 +223,4 @@ const loginUser = async user => {
   console.log(content);
 };
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams}
