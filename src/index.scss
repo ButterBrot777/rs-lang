@@ -1,6 +1,7 @@
 :root {
   font-size: 10px;
 }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -14,22 +15,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 a {
   margin: 0;
 }
+
 /* styles for link */
 a:link {
   color: #ffffff;
   text-decoration: none;
 }
-a:visited {
-  color: #ffffff;
 
-}
-a:hover {
+// a:visited {
+//   color: #ffffff;
+
+// }
+
+// a:hover {
   /* text-decoration: underline; */
-  color: #f06c64;
-}
+  // color: #f06c64;
+// }
+
 /* a:active {
   color: #f06c64;
 } */
@@ -54,24 +60,45 @@ a:hover {
   cursor: pointer;
   outline: none;
 }
+
 .button_bordered {
   background: #ffffff;
   border: 1px solid #D7D7D7;
   color: #544837;
+
+  &:hover {
+    background: #BCD0E5;
+    border-color: #BCD0E5;
+  }
 }
+
+.button-settings_bordered {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  border: 1px solid #37c155;
+  background: #8be49f;
+  min-width: 15rem;
+  color: white;
+
+  &:hover {
+    background: #64b575;
+    border-color: #279c3f;
+    color: white;
+  }
+}
+
 .button_colored {
   background: #FF9900;
   color: #ffffff;
   border: 1px solid #FF9900;
+
+  &:hover {
+    background: #FF7549;
+    border-color: #FF7549;
+  }
 }
-.button_colored:hover {
-  background: #FF7549;
-  border-color: #FF7549;
-}
-.button_bordered:hover {
-  background: #BCD0E5;
-  border-color: #BCD0E5;
-}
+
 .button_promo {
   margin: auto;
   display: block;
@@ -79,6 +106,7 @@ a:hover {
   position: absolute;
   left: 45.5%;
 }
+
 .button_details {
   margin: auto;
   display: block;

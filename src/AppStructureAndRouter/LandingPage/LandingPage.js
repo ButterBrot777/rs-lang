@@ -1,6 +1,6 @@
 import React from 'react';
 import './normalize.css';
-import './LandingPage.css';
+import './LandingPage.scss';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 
