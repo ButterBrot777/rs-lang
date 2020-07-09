@@ -28,13 +28,13 @@ class Dictionary extends React.Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true });
         this.getUserSettings();
-        const content = await getAllUserWords(user);
+        const content = await getAllUserWords();
         this.setState({allData: content, isLoading: false,});
         this.getLearning();
     }
 
     getUserSettings = async () => {
-        const content = await getSettingsUser(user);
+        const content = await getSettingsUser();
         const wordInfo = content.optional.hints;
         this.setState({
             meaningInfo: wordInfo.meaningHint,

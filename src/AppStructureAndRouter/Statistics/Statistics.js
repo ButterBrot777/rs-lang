@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import StatisticsHeader from './statisticsHeader';
 import GeneralStat from './generalStat';
+import GamesStat from './gamesStat';
 
 import './Statistics.css'
 class Statistics extends Component{
@@ -28,7 +29,7 @@ class Statistics extends Component{
           <StatisticsHeader getGeneralStat={this.getGeneralStat} getGamesStat={this.getGamesStat} />
         </header>
         <div className="statistics-data">
-          {this.state.statType === "general" ? <GeneralStat /> : ''}
+          {this.state.statType === "general" ? <GeneralStat /> : <GamesStat />}
         </div>
         
       </div> 

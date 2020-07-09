@@ -13,6 +13,7 @@ getAllUserWords()
 [
   {
     "difficulty": "string", // 'hard', 'good', 'easy'
+    "id": "5efdfc35d972730017fadaac", // пример значения, это айди внутри User/Words, он вряд ли понадобится
     "optional": {
       "deleted": false, // or true
       "hardWord": false, // or true
@@ -21,7 +22,8 @@ getAllUserWords()
       "addingDate": "number", // таймстамп, дата добавления слова
       "lastTrain": "number", // таймстамп
       "nextTrain": "number" // таймстамп
-    }
+    },
+    "wordId": "5e9f5ee35eb9e72bc21af4a0" // wordId для слова на Words. нужно использовать для того, чтоб достать данные этого слова (картинка, перевод и тд).
   }
 ]
 ```
@@ -35,6 +37,11 @@ getAllUserWords()
     const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
     return wordsForGame;
   }
+```
+
+Чтобы достать данные каждого слова (картинка, перевод и тд) нужно сделать запрос на Words c wordId.
+```javascript
+getWordData(wordId) // передать аргументом wordId, вернет данные слова (картинка, перевод и тд)
 ```
 
 Если ваша игра требует определенное количество слов, проверте длину массива, хватает ли их. Если нет, слова нужно добрать из новых.

@@ -1,6 +1,6 @@
 import React from 'react';
 import audio_icon from './audio-icon.png';
-import { updateUserWord } from '../ServerRequest/ServerRequests';
+import { updateUserWord, getWordData } from '../ServerRequest/ServerRequests';
 const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
 
@@ -21,15 +21,11 @@ class Word extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         this.setState({ isLoading: true });
-        const url = `${WORD_URL}${this.props.wordId}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => this.setState({data: data, image: data.image, isLoading: false,}))
+        const data = await getWordData(this.props.wordId);
+        this.setState({data: data, image: data.image, isLoading: false,})
     }
-
-
 
     putToLearning = async () => {
         const wordObj = {
@@ -43,13 +39,7 @@ class Word extends React.Component {
                 "nextTrain": this.props.optional.nextTrain
             }
         }
-        const updatedWord = {
-            userId : user.userId,
-            token: user.token,
-            wordId: this.props.wordId,
-            word: wordObj
-        } 
-        const content = await updateUserWord(updatedWord);
+        const content = await updateUserWord(this.props.wordId, wordObj);
         this.setState({isLoading: false});
         this.props.onWordTypeChange(content);
     }

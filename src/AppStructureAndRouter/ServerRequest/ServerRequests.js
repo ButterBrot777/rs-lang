@@ -50,9 +50,9 @@ const startSettingsUser = async () => {
       "wordsPerDay": 20,
         "optional": {
           "maxWordsPerDay": 40,
-          "level": 0,
-          "page": 0,
-          "wordsLearntPerPage": 0,
+          "level": 1,
+          "page": 1,
+          "wordsLearntPerPage": 10,
           "hints": {
             "meaningHint": true,
             "translationHint": true,
@@ -127,6 +127,12 @@ const getStatisticsUser = async () => {
 const getNewWords = async (page, group) => {
   const url = `${baseUrl}/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
+
+const getWordData = async (wordId) => {
+  const rawResponse = await fetch(`${baseUrl}/words/${wordId}`);
   const content = await rawResponse.json();
   return content;
 }
@@ -206,4 +212,4 @@ const loginUser = async user => {
   return content;
 };
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getWordData, getUserWord, getAllUserWords, createUserWord, updateUserWord}
