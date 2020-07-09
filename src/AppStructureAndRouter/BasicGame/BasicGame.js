@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import Card from './Card';
 import LettersInput from './LettersInput';
-import { getAggregateUserWords, getWordById, addSettingsUser, getSettingsUser, getNewWords, getUserWord, createUserWord, updateUserWord } from '../ServerRequest/ServerRequests';
+import {
+  getRefreshToken, addSettingsUser, getSettingsUser, getNewWords,
+  getUserWord, createUserWord, updateUserWord, getAllUserWords, getWordById
+} from '../ServerRequest/ServerRequests';
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import Fade from 'react-reveal/Fade';
-import './Game1.css'
+import './BasicGame.css'
 
-const userId = localStorage.getItem('userId');
-const token = localStorage.getItem('token');
-// const tokenRefresh = localStorage.getItem('tokenRefresh');
-
-let user = {
-  userId,
-  token,
-  // tokenRefresh
-}
 const imageAudioUrl = 'https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/';
-const infoTextBtns = 'перевод, пример и значение: как минимум одна из настроек должна быть выбрана.';
+const infoTextBtns = 'Перевод, пример и значение: как минимум одна из настроек должна быть выбрана.';
 const easyInterval = 3;
 const goodInterval = 2;
 const hardInterval = 1;
@@ -37,6 +31,11 @@ class Game1 extends Component {
       isGuessCheck: false,
       isImageLoaded: false,
       coloredLetters: false,
+      maxWordsPerDay: 0,
+      wordsPerDay: 0,
+      level: 0,
+      page: 0,
+      wordsLearntPerPage: 0,
       wordsPerGame: 0,
       correctGuesses: 0,
       incorrectGuesses: 0,
@@ -59,8 +58,31 @@ class Game1 extends Component {
     }
   }
 
-  componentDidMount = async () => {
-    let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } } = await getSettingsUser(user);
+  componentDidMount = () => {
+    let { hardWordsTraining, basicGameWords } = this.props;
+    this.addSettingsToState().then(() => {
+      if (hardWordsTraining) {
+        console.log('hardWordsTraining')
+      } else {
+        if (basicGameWords === 'new') {
+          this.startGameWithNewWords()
+            .then(() => this.addCurrentDataToState());
+        } else if (basicGameWords === 'learned') {
+          this.startGameWithLearntWords(this.state.maxWordsPerDay)
+            .then(() => this.addCurrentDataToState());
+        } else {
+          let wordLimit = this.state.maxWordsPerDay - this.state.wordsPerDay;
+          this.startGameWithNewWords();
+          this.startGameWithLearntWords(wordLimit)
+            .then(() => this.addCurrentDataToState());
+        }
+      }
+    })
+  }
+
+  addSettingsToState = async () => {
+    let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } }
+      = await getSettingsUser();
     if (wordsLearntPerPage === 20) {
       wordsLearntPerPage = 0;
       page++;
@@ -69,6 +91,25 @@ class Game1 extends Component {
       level++;
       page = 0;
     }
+    this.setState({
+      wordsPerDay,
+      level,
+      page,
+      wordsLearntPerPage,
+      maxWordsPerDay,
+      hints: {
+        meaningHint: hints.meaningHint,
+        translationHint: hints.translationHint,
+        imageHint: hints.imageHint,
+        transcriptionHint: hints.transcriptionHint,
+        exampleHint: hints.exampleHint,
+        soundHint: hints.soundHint,
+      }
+    })
+  }
+
+  startGameWithNewWords = async () => {
+    let { page, level, wordsLearntPerPage, wordsPerDay } = this.state;
     let fullDataPerPage = await getNewWords(page, level);
     let fullData = fullDataPerPage.filter((data, idx) => {
       if (idx >= wordsLearntPerPage && (idx < (wordsLearntPerPage + wordsPerDay))) {
@@ -90,36 +131,36 @@ class Game1 extends Component {
         }
       })
     }
-
-    // if combined - getAggregatedWords(???), filterUserWords(maxWordsPerDay - wordsPerDay, userWords)
-    let currentData = this.findCurrentData(fullData, this.state.currentDataIdx);
     this.setState({
-      fullData,
+      fullData: this.state.fullData.concat(fullData)
+    })
+  }
+
+  startGameWithLearntWords = async (maxWordsPerDay) => {
+    const userWords = await getAllUserWords();
+    const wordsForGame = this.filterUserWords(maxWordsPerDay, userWords);
+    const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
+    const fullData = await Promise.all(promises);
+    this.setState({
+      fullData: this.state.fullData.concat(fullData)
+    })
+  }
+
+  addCurrentDataToState = () => {
+    let { fullData, currentDataIdx } = this.state;
+    let currentData = this.findCurrentData(fullData, currentDataIdx);
+    this.setState({
       currentData,
       currentWord: currentData.word,
-      wordsPerDay,
-      level,
-      page,
-      wordsLearntPerPage,
-      maxWordsPerDay,
-      hints: {
-        meaningHint: hints.meaningHint,
-        translationHint: hints.translationHint,
-        imageHint: hints.imageHint,
-        transcriptionHint: hints.transcriptionHint,
-        exampleHint: hints.exampleHint,
-        soundHint: hints.soundHint,
-      }
     })
-
-
   }
 
   filterUserWords = (wordsLimit, userWords) => {
     const currentDate = new Date();
     let wordsForGame = [];
     userWords.filter(word => {
-      if (word.userWord && wordsForGame.length < wordsLimit && word.userWord.optional.nextTrain <= +currentDate) {
+      let { deleted, hardWord, nextTrain } = word.optional;
+      if (!deleted && !hardWord && nextTrain <= +currentDate && wordsForGame.length < wordsLimit) {
         wordsForGame.push(word);
       }
     });
@@ -250,7 +291,6 @@ class Game1 extends Component {
         wordsPerGame: this.state.wordsPerGame + 1,
         correctGuessesStreakTemp: longestStreak,
         correctGuessesStreak: 0,
-        isImageLoaded: false,
       });
       this.updateDifficultyStats('hard', false, false);
       setTimeout(() => {
@@ -289,6 +329,7 @@ class Game1 extends Component {
     let currentDataIdx = this.state.currentDataIdx + 1;
     let currentData = this.findCurrentData(this.state.fullData, currentDataIdx);
     this.setState({
+      isImageLoaded: false,
       isGuessed: false,
       isSkipped: false,
       currentWord: currentData.word,
@@ -342,7 +383,6 @@ class Game1 extends Component {
       this.setState({
         isGuessCheck: false,
         isGuessed: true,
-        // inputValue: '',
         correctGuesses: this.state.correctGuesses + 1,
         correctGuessesStreak: this.state.correctGuessesStreak + 1,
       });
@@ -409,29 +449,32 @@ class Game1 extends Component {
   }
 
   handleSettingsUpdate = () => {
-    let { wordsPerDay, page, level, hints, wordsLearntPerPage } = this.state;
-    let newSettings = {
-      "wordsPerDay": wordsPerDay,
-      "optional": {
-        "maxWordsPerDay": 40,
-        "level": level,
-        "page": page,
-        "wordsLearntPerPage": wordsLearntPerPage,
-        "hints": {
-          "meaningHint": hints.meaningHint,
-          "translationHint": hints.translationHint,
-          "exampleHint": hints.exampleHint,
-          "soundHint": hints.soundHint,
-          "imageHint": hints.imageHint,
-          "transcriptionHint": hints.transcriptionHint
-        },
-      }
-    };
-    addSettingsUser(token, userId, newSettings);
+    let { wordsPerDay, page, level, wordsLearntPerPage, maxWordsPerDay, hints } = this.state;
+    if (wordsPerDay > 0 && maxWordsPerDay > 0) {
+      let newSettings = {
+        "wordsPerDay": wordsPerDay,
+        "optional": {
+          "maxWordsPerDay": maxWordsPerDay,
+          "level": level,
+          "page": page,
+          "wordsLearntPerPage": wordsLearntPerPage,
+          "hints": {
+            "meaningHint": hints.meaningHint,
+            "translationHint": hints.translationHint,
+            "exampleHint": hints.exampleHint,
+            "soundHint": hints.soundHint,
+            "imageHint": hints.imageHint,
+            "transcriptionHint": hints.transcriptionHint
+          },
+        }
+      };
+      addSettingsUser(newSettings);
+    }
   }
 
   updateDifficultyStats = async (diffLevel, isDeleted, isHard) => {
-    let word = await getUserWord(this.state.currentData.id, user);
+    let wordId = this.state.currentData.id;
+    let word = await getUserWord(wordId);
     let lastTrain = +new Date();
     if (!word) {
       let interval;
@@ -451,23 +494,18 @@ class Game1 extends Component {
       }
       let nextTrain = new Date().setDate(new Date().getDate() + interval);
       let newWord = {
-        userId: user.userId,
-        token,
-        wordId: this.state.currentData.id,
-        word: {
-          "difficulty": diffLevel,
-          "optional": {
-            "deleted": isDeleted,
-            "hardWord": isHard,
-            "repeatsStreak": 1,
-            "repeatsTotal": 1,
-            "addingDate": lastTrain,
-            lastTrain,
-            nextTrain
-          }
+        "difficulty": diffLevel,
+        "optional": {
+          "deleted": isDeleted,
+          "hardWord": isHard,
+          "repeatsStreak": 1,
+          "repeatsTotal": 1,
+          "addingDate": lastTrain,
+          lastTrain,
+          nextTrain
         }
       }
-      createUserWord(newWord)
+      createUserWord(wordId, newWord);
     } else {
       if (diffLevel === 'none') {
         diffLevel = word.difficulty;
@@ -495,23 +533,18 @@ class Game1 extends Component {
       }
       let nextTrain = new Date().setDate(new Date().getDate() + interval);
       let newWord = {
-        userId: user.userId,
-        token,
-        wordId: this.state.currentData.id,
-        word: {
-          "difficulty": diffLevel,
-          "optional": {
-            "deleted": isDeleted,
-            "hardWord": isHard,
-            repeatsStreak,
-            "repeatsTotal": word.optional.repeatsTotal + 1,
-            "addingDate": word.optional.addingDate,
-            lastTrain,
-            nextTrain
-          }
+        "difficulty": diffLevel,
+        "optional": {
+          "deleted": isDeleted,
+          "hardWord": isHard,
+          repeatsStreak,
+          "repeatsTotal": word.optional.repeatsTotal + 1,
+          "addingDate": word.optional.addingDate,
+          lastTrain,
+          nextTrain
         }
       }
-      updateUserWord(newWord);
+      updateUserWord(wordId, newWord);
     }
   }
 
@@ -522,7 +555,6 @@ class Game1 extends Component {
     this.updateDifficultyStats(diffLevel, isDeleted, isHard);
     this.setState({
       isDifficultyChoice: false,
-      isImageLoaded: false,
     })
   }
 
@@ -533,11 +565,11 @@ class Game1 extends Component {
 
   addToDictionary = (diffLevel, isDeleted, isHard) => {
     if (!(this.state.isGuessed || this.state.isSkipped)) {
-    this.handleDifficultyChoice(diffLevel, isDeleted, isHard);
-    this.setState({
-      wordsPerGame: this.state.wordsPerGame + 1,
-    }, this.continueGame);
-      }
+      this.handleDifficultyChoice(diffLevel, isDeleted, isHard);
+      this.setState({
+        wordsPerGame: this.state.wordsPerGame + 1,
+      }, this.continueGame);
+    }
   }
 
   continueGame = () => {
@@ -549,8 +581,12 @@ class Game1 extends Component {
     }
   }
 
+  handleRefresh = async () => {
+    await getRefreshToken();
+  }
+
   render() {
-    console.log(this.props.basicGameWords)
+    console.log(this.props)
     let translationBlock = (this.state.hints.translationHint && this.state.isGuessed)
       ? this.state.currentData.wordTranslate : '';
     let progressValue = Math.round(this.state.wordsPerGame / this.state.fullData.length * 100);
@@ -560,6 +596,7 @@ class Game1 extends Component {
         <div className="game-container">
           {(this.state.wordsPerGame === this.state.fullData.length && !this.state.isDifficultyChoice) ? (
             <div className="game-end">
+              <button onClick={this.handleRefresh}>Test</button>
               <h1 className="info-big">Ура, на сегодня все!</h1>
               <div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div>
               <div>Карточек завершено: {this.state.wordsPerGame}</div>
@@ -607,8 +644,6 @@ class Game1 extends Component {
                 onClick={this.toggleImageHint}>картинка</button>
               <button className={this.state.hints.soundHint ? "btn" : "btn opaque"}
                 onClick={this.toggleSoundHint}>звук</button>
-                {/* <button 
-                onClick={getAggregateUserWords.bind(this, user)}>тест</button> */}
             </div>
           </header>
           <main className="basic-game-main">
@@ -619,7 +654,6 @@ class Game1 extends Component {
               <div>
                 <form onSubmit={this.handleSubmit}>
                   <LettersInput isGuessCheck={this.state.isGuessCheck} word={this.state.currentWord}
-                    // isSkipped={this.state.isSkipped} isGuessed={this.state.isGuessed} ?????????
                     inputAttempt={this.state.inputAttempt} value={this.state.inputValue}
                     handleInputChange={this.handleInputChange} coloredLetters={this.state.coloredLetters}
                   />

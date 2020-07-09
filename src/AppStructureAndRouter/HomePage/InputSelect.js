@@ -1,37 +1,81 @@
 import React, { Component } from 'react';
-
+import { getSettingsUser, addSettingsUser } from '../ServerRequest/ServerRequests';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 export default class StartSettings extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: 'combined',
-			totalWordsPerDay: 40,
-			newWordsPerDay: 20,
+			maxWordsPerDay: 0,
+			wordsPerDay: 0,
+			level: 0,
+			
 		};
 	}
 
-	handleChange = event => {
-		this.setState({ value: event.target.value });
-	};
+	componentDidMount = async () => {
+		let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } } = await getSettingsUser();
+		this.setState({
+			maxWordsPerDay,
+			wordsPerDay,
+			level,
+			page,
+			wordsLearntPerPage,
+			hints: {
+				meaningHint: hints.meaningHint,
+				translationHint: hints.translationHint,
+				imageHint: hints.imageHint,
+				transcriptionHint: hints.transcriptionHint,
+				exampleHint: hints.exampleHint,
+				soundHint: hints.soundHint,
+			}
+		})
+	}
+
+	componentDidUpdate = (prevState) => {
+		if (this.state.wordsPerDay !== prevState.wordsPerDay
+			|| this.state.maxWordsPerDay !== prevState.maxWordsPerDay) {
+			this.handleSettingsUpdate();
+		}
+	}
 
 	handleSubmit = event => {
-		alert(
-			'Your choice is: \n' +
-				this.state.value +
-				'\n' +
-				this.state.totalWordsPerDay +
-				'\n' +
-				this.state.newWordsPerDay
-		);
 		event.preventDefault();
 	};
 
-  inputCheck = (event) => {
-    if(/^\d+$/.test(event.target.value)) {
-      if(event.target.name === 'maxWordsPerDay') this.setState({ totalWordsPerDay: +event.target.value })
-      if(event.target.name === 'newWordsPerDay') this.setState({ newWordsPerDay: +event.target.value })
-    } 
-  }
+	inputCheck = (event) => {
+		if (/^\d+$/.test(event.target.value) || event.target.value === '') {
+			const target = event.target;
+			const value = target.name === 'maxWordsPerDay' ? target.value : target.value;
+			const name = target.name;
+			this.setState({
+				[name]: value
+			})
+		}
+	}
+
+	handleSettingsUpdate = () => {
+		let { wordsPerDay, page, level, wordsLearntPerPage, maxWordsPerDay, hints } = this.state;
+		if (wordsPerDay > 0 && maxWordsPerDay > 0) {
+			let newSettings = {
+				"wordsPerDay": wordsPerDay,
+				"optional": {
+					"maxWordsPerDay": maxWordsPerDay,
+					"level": level,
+					"page": page,
+					"wordsLearntPerPage": wordsLearntPerPage,
+					"hints": {
+						"meaningHint": hints.meaningHint,
+						"translationHint": hints.translationHint,
+						"exampleHint": hints.exampleHint,
+						"soundHint": hints.soundHint,
+						"imageHint": hints.imageHint,
+						"transcriptionHint": hints.transcriptionHint
+					},
+				}
+			};
+			addSettingsUser(newSettings);
+		}
+	}
 
 	render() {
 		return (
@@ -44,7 +88,7 @@ export default class StartSettings extends Component {
 						placeholder="words"
 						autoFocus={true}
 						autoComplete="off"
-						value={this.state.totalWordsPerDay}
+						value={this.state.maxWordsPerDay}
 						onChange={(event) => this.inputCheck(event)}
 						className="word-input_setting"
 					></input>
@@ -53,9 +97,9 @@ export default class StartSettings extends Component {
 					new words
 					<input
 						type="text"
-						name="newWordsPerDay"
+						name="wordsPerDay"
 						autoComplete="off"
-						value={this.state.newWordsPerDay}
+						value={this.state.wordsPerDay}
 						onChange={(event) => this.inputCheck(event)}
 						className="word-input_setting"
 					></input>
@@ -63,18 +107,20 @@ export default class StartSettings extends Component {
 
 				<label>
 					words type
-					<select value={this.state.value} onChange={this.handleChange}>
+					<select value={this.props.basicGameWords}
+						onChange={(e) => this.props.handleWordsChoice(e.target.value)}>
 						<option value="new">new</option>
 						<option value="learned">learned</option>
 						<option value="combined">combined</option>
 					</select>
 				</label>
-				<input
-					type="submit"
-					value="Start Training"
-					onClick={this.handleSubmit}
-					className="button button_bordered button-training "
-				/>
+				<Link to="/BasicGame">
+					<input
+						type="button"
+						value="Start Training"
+						className="button button_bordered button-training "
+					/>
+				</Link>
 			</form>
 		);
 	}

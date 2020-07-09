@@ -15,7 +15,8 @@ class HomePage extends Component {
 					<div className="home-page">
 						<div className="start-menu">
 							<h2 className="start-menu__logo">Choose Settings:</h2>
-								<StartSettings />
+								<StartSettings basicGameWords={this.props.basicGameWords}
+										handleWordsChoice={this.props.handleWordsChoice}/>
 						</div>
 						<div className="start-menu">
               <h2 className="user-info__title">User Info:</h2>
@@ -23,7 +24,7 @@ class HomePage extends Component {
 							<Link to="/Stat">
 								<span className="button button-settings_bordered">Statistic</span>
 							</Link>
-							<Link to="/Dictionaty">
+							<Link to="/Dictionary">
 								<span className="button button-settings_bordered">Dictionary</span>
 							</Link>
 						</div>
