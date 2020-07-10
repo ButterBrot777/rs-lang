@@ -3,16 +3,6 @@ import { getSettingsUser, addSettingsUser, getNewWordsWithExtraParams } from '..
 import LettersInput from './LettersInput';
 import './BasicGame.css'
 
-const userId = localStorage.getItem('userId');
-const token = localStorage.getItem('token');
-// const tokenRefresh = localStorage.getItem('tokenRefresh');
-
-let user = {
-    userId,
-    token,
-    // tokenRefresh
-}
-
 class Test extends Component {
     constructor(props) {
         super(props);
@@ -56,15 +46,13 @@ class Test extends Component {
         let newLevel = (correctGuessesPercent < 33) ? 0
             : (correctGuessesPercent > 33 && correctGuessesPercent < 67) ? 1 : 2;
         let newSettings = {
-            token,
-            userId,
-            "data": {
                 "wordsPerDay": wordsPerDay,
                 "optional": {
                     "maxWordsPerDay": optional.maxWordsPerDay,
                     "level": newLevel,
                     "page": optional.page,
                     "wordsLearntPerPage": optional.wordsLearntPerPage,
+                    "lastTrain": optional.lastTrain,
                     "hints": {
                         "meaningHint": hints.meaningHint,
                         "translationHint": hints.translationHint,
@@ -73,7 +61,6 @@ class Test extends Component {
                         "imageHint": hints.imageHint,
                         "transcriptionHint": hints.transcriptionHint
                     },
-                }
             }
         };
         addSettingsUser(newSettings);
