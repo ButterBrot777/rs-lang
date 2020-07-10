@@ -16,6 +16,7 @@ async function signInRequest(userData){
     const content = await rawResponse.json();
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
+    localStorage.setItem('refreshToken', content.refreshToken);
     return content;
   }else{ 
     throw new Error(rawResponse.status);
@@ -39,6 +40,9 @@ async function signUpRequest(userData){
 }
 
 const startSettingsUser = async () => {
+  let date = new Date()
+  date.setDate(date.getDate() - 1);
+  let yesterday = date.toLocaleDateString();
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
@@ -54,6 +58,7 @@ const startSettingsUser = async () => {
           "level": 0,
           "page": 0,
           "wordsLearntPerPage": 0,
+          "lastTrain": yesterday,
           "hints": {
             "meaningHint": true,
             "translationHint": true,
@@ -81,6 +86,8 @@ const startSettingsUser = async () => {
     body: JSON.stringify(settingsData)
   });
   const content = await rawResponse.json();
+  console.log('add sett', content)
+
   return content;
 }
 
@@ -93,7 +100,7 @@ const getSettingsUser = async () => {
         },
       });
       const content = await rawResponse.json();
-      console.log(content)
+      console.log('got sett', content)
       return content;
 }
 
@@ -144,6 +151,8 @@ const getUserWord = async (wordId) => {
   });
   if (rawResponse.status === 200) {
       const content = await rawResponse.json();
+  console.log('got', content)
+
       return content;
   } else if (rawResponse.status === 404){
       return false;
@@ -164,6 +173,8 @@ const createUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
+  console.log('created', content)
+
   return content;
 };
 
@@ -179,6 +190,7 @@ const updateUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
+  console.log('updated', content)
   return content;
 };
 
