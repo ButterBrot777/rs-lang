@@ -29,13 +29,14 @@ class Game1 extends Component {
       isSkipped: false,
       isDifficultyChoice: false,
       isGuessCheck: false,
+      isStats: false,
       isImageLoaded: false,
       coloredLetters: false,
-      maxWordsPerDay: 0,
-      wordsPerDay: 0,
-      level: 0,
-      page: 0,
-      wordsLearntPerPage: 0,
+      // maxWordsPerDay: 0,
+      // wordsPerDay: 0,
+      // level: 0,
+      // page: 0,
+      // wordsLearntPerPage: 0,
       wordsPerGame: 0,
       correctGuesses: 0,
       incorrectGuesses: 0,
@@ -62,7 +63,8 @@ class Game1 extends Component {
     let { hardWordsTraining, basicGameWords } = this.props;
     this.addSettingsToState().then(() => {
       if (hardWordsTraining) {
-        console.log('hardWordsTraining')
+        this.startGameWithLearntWords()
+          .then(() => this.addCurrentDataToState());
       } else {
         if (basicGameWords === 'new') {
           this.startGameWithNewWords()
@@ -83,14 +85,6 @@ class Game1 extends Component {
   addSettingsToState = async () => {
     let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } }
       = await getSettingsUser();
-    if (wordsLearntPerPage === 20) {
-      wordsLearntPerPage = 0;
-      page++;
-    }
-    if (page > 29 && level < 6) {
-      level++;
-      page = 0;
-    }
     this.setState({
       wordsPerDay,
       level,
@@ -109,15 +103,16 @@ class Game1 extends Component {
   }
 
   startGameWithNewWords = async () => {
-    let { page, level, wordsLearntPerPage, wordsPerDay } = this.state;
+    let { page, level, wordsLearntPerPage, wordsPerDay, maxWordsPerDay } = this.state;
+    let wordsLimit = Math.min(wordsPerDay, maxWordsPerDay);
     let fullDataPerPage = await getNewWords(page, level);
     let fullData = fullDataPerPage.filter((data, idx) => {
-      if (idx >= wordsLearntPerPage && (idx < (wordsLearntPerPage + wordsPerDay))) {
+      if (idx >= wordsLearntPerPage && (idx < (wordsLearntPerPage + wordsLimit))) {
         return data;
       }
     })
-    if (fullData.length < wordsPerDay) {
-      let wordsNeeded = wordsPerDay - fullData.length;
+    if (fullData.length < wordsLimit) {
+      let wordsNeeded = wordsLimit - fullData.length;
       if (page >= 29 && level < 6) {
         level++;
         page = 0;
@@ -146,6 +141,7 @@ class Game1 extends Component {
     })
   }
 
+
   addCurrentDataToState = () => {
     let { fullData, currentDataIdx } = this.state;
     let currentData = this.findCurrentData(fullData, currentDataIdx);
@@ -158,12 +154,16 @@ class Game1 extends Component {
   filterUserWords = (wordsLimit, userWords) => {
     const currentDate = new Date();
     let wordsForGame = [];
-    userWords.filter(word => {
-      let { deleted, hardWord, nextTrain } = word.optional;
-      if (!deleted && !hardWord && nextTrain <= +currentDate && wordsForGame.length < wordsLimit) {
-        wordsForGame.push(word);
-      }
-    });
+    if (this.props.hardWordsTraining) {
+      wordsForGame = userWords.filter(word => word.optional.hardWord);
+    } else {
+      userWords.filter(word => {
+        let { deleted, hardWord, nextTrain } = word.optional;
+        if (!deleted && !hardWord && nextTrain <= +currentDate && wordsForGame.length < wordsLimit) {
+          wordsForGame.push(word);
+        }
+      });
+    }
     return wordsForGame;
   }
 
@@ -346,7 +346,7 @@ class Game1 extends Component {
         fullData: [...prevState.fullData, this.state.currentData],
         correctGuessesStreakTemp: longestStreak,
         correctGuessesStreak: 0,
-        incorrectGuesses: this.state.correctGuesses + 1,
+        incorrectGuesses: this.state.incorrectGuesses + 1,
       }));
     }
   }
@@ -438,17 +438,33 @@ class Game1 extends Component {
   }
 
   updateWordsLearntPerPage = () => {
-    let { wordsLearntPerPage, wordsPerDay } = this.state;
-    wordsLearntPerPage = wordsLearntPerPage + wordsPerDay;
-    if (wordsLearntPerPage > 20) {
-      wordsLearntPerPage = wordsLearntPerPage - 20;
+    if (this.props.basicGameWords === 'new' || this.props.basicGameWords === 'combined') {
+      let { wordsLearntPerPage, wordsPerDay, page, level } = this.state;
+      wordsLearntPerPage = wordsLearntPerPage + wordsPerDay;
+      if (wordsLearntPerPage > 20) {
+        wordsLearntPerPage = wordsLearntPerPage - 20;
+        page++;
+      } else if (wordsLearntPerPage === 20) {
+        wordsLearntPerPage = 0;
+        page++;
+      }
+      if (page > 29 && level < 6) {
+        level++;
+        page = 0;
+      }
+      this.setState({
+        wordsLearntPerPage,
+        page,
+        level
+      }, this.handleSettingsUpdate)
+    } else {
+      this.handleSettingsUpdate();
     }
-    this.setState({
-      wordsLearntPerPage
-    })
   }
 
   handleSettingsUpdate = () => {
+    let date = new Date();
+    let today = date.toLocaleDateString();
     let { wordsPerDay, page, level, wordsLearntPerPage, maxWordsPerDay, hints } = this.state;
     if (wordsPerDay > 0 && maxWordsPerDay > 0) {
       let newSettings = {
@@ -458,13 +474,14 @@ class Game1 extends Component {
           "level": level,
           "page": page,
           "wordsLearntPerPage": wordsLearntPerPage,
+          "lastTrain": today,
           "hints": {
             "meaningHint": hints.meaningHint,
             "translationHint": hints.translationHint,
             "exampleHint": hints.exampleHint,
             "soundHint": hints.soundHint,
             "imageHint": hints.imageHint,
-            "transcriptionHint": hints.transcriptionHint
+            "transcriptionHint": hints.transcriptionHint,
           },
         }
       };
@@ -507,6 +524,7 @@ class Game1 extends Component {
       }
       createUserWord(wordId, newWord);
     } else {
+      let hardWordStatus = (word.optional.hardWord) ? true : isHard;
       if (diffLevel === 'none') {
         diffLevel = word.difficulty;
       }
@@ -536,7 +554,7 @@ class Game1 extends Component {
         "difficulty": diffLevel,
         "optional": {
           "deleted": isDeleted,
-          "hardWord": isHard,
+          "hardWord": hardWordStatus,
           repeatsStreak,
           "repeatsTotal": word.optional.repeatsTotal + 1,
           "addingDate": word.optional.addingDate,
@@ -576,36 +594,33 @@ class Game1 extends Component {
     if (this.state.wordsPerGame !== this.state.fullData.length) {
       this.goToNextCard();
     } else {
-      this.updateWordsLearntPerPage();
-      this.handleSettingsUpdate();
+      this.setState({
+        isStats: true
+      })
+      this.updateWordsLearntPerPage()
+      // this.handleSettingsUpdate();
     }
   }
 
-  handleRefresh = async () => {
-    await getRefreshToken();
-  }
-
   render() {
-    console.log(this.props)
     let translationBlock = (this.state.hints.translationHint && this.state.isGuessed)
       ? this.state.currentData.wordTranslate : '';
     let progressValue = Math.round(this.state.wordsPerGame / this.state.fullData.length * 100);
     let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
     return (
       <Fade bottom opposite>
-        <div className="game-container">
-          {(this.state.wordsPerGame === this.state.fullData.length && !this.state.isDifficultyChoice) ? (
+        <div className={this.state.isImageLoaded ? "game-container" : "loading"}>
+          {this.state.isStats && (
             <div className="game-end">
-              <button onClick={this.handleRefresh}>Test</button>
-              <h1 className="info-big">Ура, на сегодня все!</h1>
-              <div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div>
+              {/* <h1 className="info-big">Ура, на сегодня все!</h1>
+              <div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div> */}
               <div>Карточек завершено: {this.state.wordsPerGame}</div>
               <div>Правильные ответы: {correctGuessesPercent}%</div>
-              <div>Новые слова: {this.state.wordsPerDay}</div>
+              <div>Новые слова: {Math.min(this.state.wordsPerDay, this.state.maxWordsPerDay)}</div>
               <div> Самая длинная серия правильных ответов:
                 {Math.max(this.state.correctGuessesStreak, this.state.correctGuessesStreakTemp)}</div>
             </div>
-          ) : ''}
+          )}
           <header className="basic-game-header">
             <div className="incorrect"></div>
             <div className="checkboxes-container">
