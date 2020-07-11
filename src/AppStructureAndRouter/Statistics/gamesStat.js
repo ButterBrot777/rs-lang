@@ -26,13 +26,14 @@ class GamesStat extends React.Component {
         }
         console.log(gamesStatArray)
         this.setState({gamesStat: gamesStatArray, isLoading: false,});
-        this.drawBars('speakIt');
+        this.drawBars('speakIt', "canvas-desk");
+        this.drawBars('speakIt', "canvas-mob");
+
     }
 
-    drawBars(game) {
-        const canvas = this.refs.canvas;
+    drawBars(game, canva) {
+        const canvas = this.refs[canva];
         const ctx = canvas.getContext('2d');
-
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         const gamesPopularity = this.state.gamesStat.map(game => [game.name, Object.keys(game.stat).length]);
         console.log(gamesPopularity);
@@ -44,23 +45,24 @@ class GamesStat extends React.Component {
         gamesPopularity.forEach((item,index) => {
             if (item[0] === game) {
                 ctx.fillStyle = 'rgb(19,40,59)';
-                ctx.fillRect(index*120, 290, relW-5, -item[1]*relH);
+                ctx.fillRect(index*canvas.width/5, canvas.height-10, relW-5, -item[1]*relH);
                 
             } else {
                 ctx.fillStyle = 'rgb(77, 129, 185)'
-                ctx.fillRect(index*120, 290, relW-5, -item[1]*relH)
+                ctx.fillRect(index*canvas.width/5, canvas.height-10, relW-5, -item[1]*relH)
             }
-            ctx.font = "14px sans-serif";
-            
-            if (item[1]%10 === 2 || item[1]%10 === 3 || item[1]%10 === 4) {
-                ctx.fillStyle = 'rgb(255,255,255)';
-                ctx.fillText(`Cыграно ${item[1]} разa`, index*122, 280);
-            } else if (item[1] === 0) {
-                ctx.fillStyle = 'rgb(19,40,59)';
-                ctx.fillText(`Не играли ни разу`, index*122, 280);
-            } else {
-                ctx.fillStyle = 'rgb(255,255,255)';
-                ctx.fillText(`Cыграно ${item[1]} раз`, index*122, 280);
+            if (canva === 'canvas-desk'){
+                ctx.font = "14px sans-serif";
+                if (item[1]%10 === 2 || item[1]%10 === 3 || item[1]%10 === 4) {
+                    ctx.fillStyle = 'rgb(255,255,255)';
+                    ctx.fillText(`Cыграно ${item[1]} разa`, index*(canvas.width/5+2), canvas.height-20);
+                } else if (item[1] === 0) {
+                    ctx.fillStyle = 'rgb(19,40,59)';
+                    ctx.fillText(`Не играли ни разу`, index*(canvas.width/5+2), canvas.height-20);
+                } else {
+                    ctx.fillStyle = 'rgb(255,255,255)';
+                    ctx.fillText(`Cыграно ${item[1]} раз`, index*(canvas.width/5+2), canvas.height-20);
+                }
             }
             
         })
@@ -68,31 +70,39 @@ class GamesStat extends React.Component {
 
     getSpeakItStat = () => {
         this.setState({game: 'speakIt'});
-        this.drawBars('speakIt');
+        this.drawBars('speakIt', "canvas-desk");
+        this.drawBars('speakIt', "canvas-mob");
     }
     getPuzzleStat = () => {
         this.setState({game: 'puzzle'});
-        this.drawBars('puzzle');
+        this.drawBars('puzzle', "canvas-desk");
+        this.drawBars('puzzle', "canvas-mob");
     }
     getSavannahStat = () => {
         this.setState({game: 'savannah'});
-        this.drawBars('savannah');
+        this.drawBars('savannah', "canvas-desk");
+        this.drawBars('savannah', "canvas-mob");
     }
     getSprintStat = () => {
         this.setState({game: 'sprint'});
-        this.drawBars('sprint');
+        this.drawBars('sprint', "canvas-desk");
+        this.drawBars('sprint', "canvas-mob");
     }
     getAudioCallStat = () => {
         this.setState({game: 'audioCall'});
-        this.drawBars('audioCall');
+        this.drawBars('audioCall', "canvas-desk");
+        this.drawBars('audioCall', "canvas-mob");
     }
 
     render() {
         const gamesStat = this.state.gamesStat;
         return (
             <div className="general-stat-container">
-                <div className="games-stat-canvas-container">
-                    <canvas ref="canvas" width={600} height={300}/>
+                <div className="games-stat-canvas-desk-container">
+                    <canvas ref="canvas-desk" width={600} height={300}/>
+                </div>
+                <div className="games-stat-canvas-mob-container">
+                    <canvas ref="canvas-mob" width={300} height={300}/>
                 </div>
                 <div className="stat-game-btns-container">
                     <GameStatBtns statOfGame={this.state.game} getSpeakItStat={this.getSpeakItStat} getPuzzleStat={this.getPuzzleStat} getSavannahStat={this.getSavannahStat} getSprintStat={this.getSprintStat} getAudioCallStat={this.getAudioCallStat}/>

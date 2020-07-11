@@ -13,7 +13,7 @@
 .stat-btn {
   background-color: rgb(77, 129, 185);
   color: white;
-  width: 20vw;
+  width: 200px;
   height: 60px;
   font-size: 24px;
   border: none;
@@ -40,10 +40,14 @@
   margin: 0;
 }
 
-.general-stat-canvas-container{
+.general-stat-canvas-desk-container {
   position: relative;
   width: 600px;
   margin: 0 auto;
+}
+
+.general-stat-canvas-mob-container {
+  display: none;
 }
 
 .general-stat-tooltip {
@@ -75,7 +79,7 @@
   padding: 0;
 }
 
-.games-stat-canvas-container {
+.games-stat-canvas-desk-container {
   position: relative;
   width: 600px;
   margin: 10px auto 0 auto;
@@ -115,4 +119,65 @@
   align-self: center;
   padding-right: 20px;
   border-right: 1px solid rgb(168, 167, 167);
+}
+
+.games-stat-canvas-mob-container {
+  display: none;
+}
+
+@media only screen and (max-width: 620px) {
+  .general-stat-summary {
+    width: 90%;
+  }
+
+  .stat-btn {
+    width: 130px;
+    font-size: 18px;
+  }
+
+  .general-stat-canvas-desk-container {
+    display: none;
+  }
+
+  .general-stat-canvas-mob-container {
+    display: block;
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .games-stat-canvas-mob-container {
+    display: block;
+    position: relative;
+    width: 300px;
+    margin: 10px auto 0 auto;
+  }
+
+  .games-stat-canvas-desk-container {
+    display: none;
+  }
+
+  .stat-game-btns-container {
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .stat-game-btn {
+    width: 55px;
+    height: 30px;
+    font-size: 8px;
+    margin: 0 2px;
+    padding: 0;
+  }
+
+  .stat-speakIt-btn {
+    margin-left: 0px;
+  }
+
+  .game-stat-by-date {
+    display: block;
+    box-sizing: border-box;
+    font-size: 18px;
+    padding-left: 20px;
+  }
 }

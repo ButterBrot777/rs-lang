@@ -37,7 +37,8 @@ class GeneralStat extends React.Component {
         const dateOfReg = this.createDateFromTimestamp(+content.optional.dateOfReg);
         this.setState({userStat: content, dateOfReg: dateOfReg})
         const wordsPerDay = this.getWordsLearntPerDate();
-        this.drawChart(wordsPerDay);
+        this.drawChart(wordsPerDay, 'canvas-desk');
+        this.drawChart(wordsPerDay, 'canvas-mob');
     }
 
     getWordsLearntPerDate = () => {
@@ -65,8 +66,8 @@ class GeneralStat extends React.Component {
         return arrDaysWithWords;
     }
 
-    drawChart = (wordsPerDay) => {
-        const canvas = this.refs.canvas;
+    drawChart = (wordsPerDay, canva) => {
+        const canvas = this.refs[canva];
         const ctx = canvas.getContext('2d');
         
         const maxFromData = Math.max(...wordsPerDay.map(el => el[2]));
@@ -161,12 +162,19 @@ class GeneralStat extends React.Component {
                     <p className="general-stat-words-count">Изучено слов: {this.state.learnedWordsCount}</p>
                     <p className="general-stat-date-of-reg">Дата регистрации пользователя: {this.state.dateOfReg}</p>
                 </div>
-                <div className="general-stat-canvas-container">
+                <div className="general-stat-canvas-desk-container">
                     {this.state.tooltipText.date ? <div className="general-stat-tooltip" style={tooltipStyle}>
                         <p>{this.state.tooltipText.date}</p>
                         <p>{this.state.tooltipText.words}</p>
                     </div> : ''}
-                    <canvas ref="canvas" width={600} height={305}/>
+                    <canvas ref="canvas-desk" width={600} height={305}/>
+                </div>
+                <div className="general-stat-canvas-mob-container">
+                    {this.state.tooltipText.date ? <div className="general-stat-tooltip" style={tooltipStyle}>
+                        <p>{this.state.tooltipText.date}</p>
+                        <p>{this.state.tooltipText.words}</p>
+                    </div> : ''}
+                    <canvas ref="canvas-mob" width={300} height={305}/>
                 </div>
             </div>
         )
