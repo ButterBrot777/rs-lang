@@ -57,7 +57,7 @@ class Word extends React.Component {
 
     createDateFromTimestamp = (timestamp) => {
         const dateObj = new Date(timestamp); 
-        return `${dateObj.getDate()}.${dateObj.getMonth()}.${dateObj.getFullYear()}`;
+        return `${dateObj.getDate() < 10 ? '0' + dateObj.getDate() : dateObj.getDate()}.${dateObj.getMonth()+1 < 10 ? '0' + (dateObj.getMonth()+1) : dateObj.getMonth()+1}.${dateObj.getFullYear()}`;
     }
     render() {
         const { data, image, isLoading } = this.state;

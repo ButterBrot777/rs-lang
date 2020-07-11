@@ -63,6 +63,7 @@ getSettingsUser()
       "level": 0,
       "page": 0,
       "wordsLearntPerPage": 0,
+      "lastTrain": "string", // определяется базовой тренировкой
       "hints": {
         "meaningHint": true,
         "translationHint": true,
@@ -231,6 +232,7 @@ settingsData = {
     "level": 0, // изменить в соответствии с тем, с какой группы последнее изученное слово
     "page": 0, // изменить в соответствии с тем, с какой старницы последнее изученное слово
     "wordsLearntPerPage": 0, // изменить на количество изученных слов со страницы
+    "lastTrain": "string", // не менять!
     "hints": {
       "meaningHint": true,
       "translationHint": true,

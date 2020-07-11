@@ -26,7 +26,7 @@ class Statistics extends Component{
     return(
       <div className="statistics">
         <header className="statistics-header">
-          <StatisticsHeader getGeneralStat={this.getGeneralStat} getGamesStat={this.getGamesStat} />
+          <StatisticsHeader stat={this.state.statType} getGeneralStat={this.getGeneralStat} getGamesStat={this.getGamesStat} />
         </header>
         <div className="statistics-data">
           {this.state.statType === "general" ? <GeneralStat /> : <GamesStat />}

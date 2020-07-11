@@ -23,10 +23,11 @@ class GameStat extends React.Component {
     
 
     render() {
+        //<h3 className="statistics-game-name">{this.props.gameName}</h3>
         const gameStat = this.state.gameStat;
         return (
             <div className="one-game-stat">
-                <h3 className="statistics-game-name">{this.props.gameName}</h3>
+                
                 <div className="statistics-game-list">
                     {gameStat.map(oneDateStat => <GameStatForDate date={oneDateStat.date} results={oneDateStat.results} key={oneDateStat.date} />)}
                 </div>

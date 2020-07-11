@@ -50,9 +50,9 @@ const startSettingsUser = async () => {
       "wordsPerDay": 20,
         "optional": {
           "maxWordsPerDay": 40,
-          "level": 1,
-          "page": 1,
-          "wordsLearntPerPage": 10,
+          "level": 0,
+          "page": 0,
+          "wordsLearntPerPage": 0,
           "hints": {
             "meaningHint": true,
             "translationHint": true,
