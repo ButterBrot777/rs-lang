@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 
+ 
+import {BrowserRouter as Router,Link} from "react-router-dom";
+
 import './Statistic.css'
 class Statistic extends Component{
   constructor(){
@@ -47,16 +50,15 @@ class Statistic extends Component{
                         {
                                 this.props.false.map(wordObj =>
                                     <Card wordObj={wordObj} 
-                                        key={wordObj.id} 
-
-                                       onCardClick={this.handleCardClick}
+                                      key={wordObj.id} 
+                                      onCardClick={this.handleCardClick}
                                     />
                                 )
                             }
                         </div>
                         <div className="results__btns">
-                            <button className="btn btn-return" >Return</button>
-                            <button className="btn btn-new-game">New Game</button>
+                        <Link to='/HomePage'><button>HomePage</button></Link>
+                          <button>New Game</button>
                         </div>
                     </div>
                 </div>

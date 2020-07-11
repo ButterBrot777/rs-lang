@@ -14,7 +14,7 @@
 }
 
 .results-container {
-  height: 100vh;
+  height: 80vh;
   overflow: scroll;
   width: 100%;
   max-width: 780px;
@@ -69,4 +69,26 @@
 
 .success-items {
   margin-bottom: 10px;
+}
+
+:root {
+  --text-color: rgb(251, 201, 126);
+}
+
+.results__btns button{
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 10px;
+  border:solid 2px var(--text-color);
+  outline: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor:pointer;
+}
+
+
+.results__btns button:hover{
+  background-color: var(--text-color);
+  color: black;
 }

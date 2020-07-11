@@ -9,6 +9,7 @@ class Buttons extends Component{
     }
     // this.shuffleWordsBtns = this.shuffleWordsBtns.bind(this)
   // this.getSameWords = this.getSameWords.bind(this)
+  this.lllgggl = this.lllgggl.bind(this)
   }
   componentWillMount(){
     // fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${this.props.word}`)
@@ -24,8 +25,7 @@ class Buttons extends Component{
     //   console.log(data)
     // })
   }
-  componentDidMount(){
-    document.addEventListener('keyup',(event)=>{
+  lllgggl(event){
       let buttons =  document.body.querySelectorAll('.btns-wrapper button')
       buttons.forEach((el)=>{
         if(el.id === event.code){
@@ -38,14 +38,19 @@ class Buttons extends Component{
       // let eventa = new Event("click");
       // dispatchEvent(eventa);
       // console.log(event.code)
-    })
+  }
+  componentDidMount(){
+    document.addEventListener('keyup', this.lllgggl)
     // fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${this.props.word}`)
     // .then(res =>  res.json())
     // .then(data => {   
     //   console.log(data)
     // })
   }
- 
+  componentWillUnmount(){
+    document.removeEventListener('keyup', this.lllgggl)
+  }
+  
   render(){
     return(
       <div className = 'btns-wrapper'>

@@ -25,6 +25,22 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+.savannah-out-btn{
+  position: absolute;
+  right: 5vw;
+  top: 5vh;
+}
+.savannah-out-btn button{
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 10px;
+  border:solid 2px var(--text-color);
+  outline: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor:pointer;
+}
 .game-difficulty{
   padding-top: 20px;
   width: 320px;
@@ -50,11 +66,8 @@
   background: transparent;
   color: var(--text-color);
   cursor:pointer;
-  /* padding: 20px 50px;
-  border:solid 1px white;
-  margin: 0px 20px 0px 20px; */
 }
-
+.savannah-out-btn button:hover,
 .savannah-start-btn button:hover{
   background-color: var(--text-color);
   color: black;

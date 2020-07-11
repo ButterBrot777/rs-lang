@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
 
+import {BrowserRouter as Router,Link} from "react-router-dom";
 class HomePage extends Component{
   render(){
     return(
+      <div>
+
+      <div className = 'savannah-out-btn'>
+        <Link to='/HomePage'><button>HomePage</button></Link> 
+       </div>
+
       <div className='savannah-start-btn'>
         <button  onClick={this.props.handleLoading}>Start</button>
         {/* <br></br> */}
@@ -18,6 +25,7 @@ class HomePage extends Component{
 <label htmlFor="difficulty2">Hard</label>
 </div>
 
+      </div>
       </div>
     )
   }

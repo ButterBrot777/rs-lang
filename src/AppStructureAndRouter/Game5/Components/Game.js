@@ -25,6 +25,11 @@ class Game extends Component{
   componentDidMount(){
     this.timerRaund()
   }
+
+  componentWillUnmount(){
+     
+  }
+
   nextWord(word){
     this.timer = this.props.difficulty
     console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
@@ -42,7 +47,8 @@ class Game extends Component{
       console.log(this.timer)
       if(this.timer === 0 & this.state.word === this.state.wordsToLearn.length || this.state.word === this.state.wordsToLearn.length-1 & this.state.end){
         this.setState({
-          statistic: !this.state.statistic
+          statistic: !this.state.statistic,
+          word:0
         })
         clearInterval(timer)
       }else if(this.timer === 0 & this.state.word < this.state.wordsToLearn.length){
@@ -51,6 +57,7 @@ class Game extends Component{
         this.timer = this.timer-1
       }   
     }, 1000)
+
   }
   
   arrayRandElement(arr) {
