@@ -1,6 +1,6 @@
 import React from 'react';
 import soundIcon from './assets/sound.png';
-import './index.css';
+import './Game1.css';
 class Card extends React.Component {
     render() {
         const { id, audio, transcription, word, wordTranslate } = this.props.wordObj;

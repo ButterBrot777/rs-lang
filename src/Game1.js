@@ -6,7 +6,7 @@ import mainImg from './assets/main.jpg';
 import starImg from './assets/star.png';
 import mic from './assets/mic.png';
 
-import './index.css';
+import './Game1.css';
 
 const dataUrl = 'https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/';
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -310,4 +310,4 @@ class Game extends React.Component {
     }
 }
 
-export default Game;
+export default Game1;
