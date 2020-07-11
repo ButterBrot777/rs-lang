@@ -25,6 +25,20 @@ class Buttons extends Component{
     // })
   }
   componentDidMount(){
+    document.addEventListener('keyup',(event)=>{
+      let buttons =  document.body.querySelectorAll('.btns-wrapper button')
+      buttons.forEach((el)=>{
+        if(el.id === event.code){
+          var evt = document.createEvent("HTMLEvents");
+          evt.initEvent("click", true, false);
+          el.dispatchEvent(evt)
+          console.log(el.id)
+        }
+      })
+      // let eventa = new Event("click");
+      // dispatchEvent(eventa);
+      // console.log(event.code)
+    })
     // fetch(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${this.props.word}`)
     // .then(res =>  res.json())
     // .then(data => {   
@@ -36,11 +50,11 @@ class Buttons extends Component{
     return(
       <div className = 'btns-wrapper'>
         {console.log(this.props.words)}
-        <button onClick={(word) => this.props.nextWord(this.props.words[0])}><span>1</span>{this.props.words[0]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[1])}><span>2</span>{this.props.words[1]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[2])}><span>3</span>{this.props.words[2]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[3])}><span>4</span>{this.props.words[3]}</button>
-        <button onClick={(word) => this.props.nextWord(this.props.words[4])}><span>5</span>{this.props.words[4]}</button>
+        <button id="Digit1" onClick={(word) => this.props.nextWord(this.props.words[0])}><span>1</span>{this.props.words[0]}</button>
+        <button id="Digit2" onClick={(word) => this.props.nextWord(this.props.words[1])}><span>2</span>{this.props.words[1]}</button>
+        <button id="Digit3" onClick={(word) => this.props.nextWord(this.props.words[2])}><span>3</span>{this.props.words[2]}</button>
+        <button id="Digit4" onClick={(word) => this.props.nextWord(this.props.words[3])}><span>4</span>{this.props.words[3]}</button>
+        {/* <button onClick={(word) => this.props.nextWord(this.props.words[4])}><span>5</span>{this.props.words[4]}</button> */}
       </div>
     )
   }

@@ -90,9 +90,10 @@ import HomePage from './Components/HomePage'
 
 import video from  './images/background-video.mp4'
 class Game5 extends Component{
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state={
+      difficultyGameSavannah: '9',
       startGame: false,
       loading: false,
       statistic: false
@@ -102,8 +103,13 @@ class Game5 extends Component{
     this.handleGame = this.handleGame.bind(this)
     this.requestWords = this.requestWords.bind(this)
     // this.requestWordsSynonyms = this.requestWordsSynonyms.bind(this)
+    this.handleDifficultyGameSavannah = this.handleDifficultyGameSavannah.bind(this)
   }
-
+  handleDifficultyGameSavannah(value){
+    this.setState({
+     difficultyGameSavannah:value
+    })
+ }
 
   componentDidMount(){
     this.requestWords()
@@ -140,7 +146,56 @@ class Game5 extends Component{
   //   })
   // }
  async requestWords(){
-    return fetch(`https://afternoon-falls-25894.herokuapp.com/words?page=0&group=3`)
+  
+  
+
+  // const getAggregateUserWords = async () => {
+    // %7B%22%24or%22%3A%5B%7B%22%24and%22%3A%5B%7B%22userWord.optional.deleted%22%3A%22false%22%2C%20%22userWord.optional.hardWord%22%3Afalse%7D%5D%7D%2C%7B%22userWord%22%3Anull%7D%5D%7D
+    // const ourFilter = {"userWord.difficulty":"hard", "userWord.optional.key":"value"};
+
+
+  //   const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${localStorage.getItem('userId')}/aggregatedWords?filter=%7B%22%24or%22%3A%5B%7B%22userWord.optional.deleted%22%3Afalse%2C%20%22userWord.optional.hardWord%22%3Afalse%7D%5D%7D`, {
+  //     method: 'GET',
+  //     withCredentials: true,
+  //     headers: {
+  //       'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  //       'Accept': 'application/json',
+  //     }
+  //   });
+  //   const content = await rawResponse.json();
+  //   const result = content[0].paginatedResults;
+  //   this.setState({
+  //     words: result,
+  //   })
+  //   console.log(result);
+  // };
+  // getAggregateUserWords()
+
+
+
+  // const token = localStorage.getItem('token');
+  // const userId = localStorage.getItem('userId');
+  // const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+
+  // const getAllUserWords = async () => {
+  //   const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/`, {
+  //     method: 'GET',
+  //     withCredentials: true,
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //       'Accept': 'application/json',
+  //     }
+  //   });
+  //   const content = await rawResponse.json();
+  //   console.log(content)
+  //     this.setState({
+  //       words: content,
+  //     })
+  // };
+  // getAllUserWords()
+
+
+    fetch(`https://afternoon-falls-25894.herokuapp.com/words?page=0&group=3`)
          .then(res=>res.json())
          .then(data=>{
           //  return data
@@ -148,6 +203,7 @@ class Game5 extends Component{
              words: data,
            })
           })
+
   }
 
   render(){
@@ -158,7 +214,7 @@ class Game5 extends Component{
           <video id="background-video" loop autoPlay>
               <source src={video} type='video/mp4' />
             </video>
-          <Game  words={this.state.words}/>
+          <Game  difficulty={this.state.difficultyGameSavannah} words={this.state.words}/>
         </div>
       )   
     }else if(this.state.loading){
@@ -185,7 +241,7 @@ class Game5 extends Component{
             <video id="background-video" loop autoPlay>
               <source src={video} type='video/mp4' />
             </video>
-          <HomePage handleLoading={this.handleLoading}/>
+          <HomePage handleLoading={this.handleLoading} handleDifficulty ={this.handleDifficultyGameSavannah} difficulty={this.state.difficultyGameSavannah}/>
         </div>
       )
     }

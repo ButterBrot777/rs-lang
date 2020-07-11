@@ -5,7 +5,7 @@ import WordsAll  from '../../AllWords/AllWords'
 import Buttons from './Buttons'
 import Statistic from './Statistic'
 class Game extends Component{
-  timer = 2
+  timer = this.props.difficulty
   trueAnswer = []
   falseAnswer = []
   constructor(props){
@@ -26,7 +26,7 @@ class Game extends Component{
     this.timerRaund()
   }
   nextWord(word){
-    this.timer = 2
+    this.timer = this.props.difficulty
     console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
     
     if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
@@ -55,7 +55,7 @@ class Game extends Component{
   
   arrayRandElement(arr) {
     let ArrayNameBtns =[]
-    while (ArrayNameBtns.length !== 4){
+    while (ArrayNameBtns.length !== 3){
       let random = Math.floor(Math.random() * arr.length);
       if(this.state.wordsToLearn[this.state.word].wordTranslate !== arr[random])
       ArrayNameBtns.push(arr[random])
@@ -80,8 +80,11 @@ class Game extends Component{
     }else{
       return(
         <div className='savannah-game'>
+{/* onKeyDown={(e) => console.log(e.keyCode)}
+          {console.log(this.props.difficulty)} */}
+          <span>{this.state.word+1}/{this.state.wordsToLearn.length}</span>
           <div className='savannah-game_content'>
-            <div className='savannah-game_content-item' key ={this.state.wordsToLearn[this.state.word].word}>
+            <div className='savannah-game_content-item' key ={this.state.wordsToLearn[this.state.word].word} style={{ animationDuration: (Number(this.props.difficulty)+1.7)+'s'}}>
                {this.state.wordsToLearn[this.state.word].word}
             </div>
           </div>
