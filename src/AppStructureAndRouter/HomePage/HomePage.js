@@ -138,6 +138,9 @@ class HomePage extends Component {
 							<Link to="/Dictionary">
 								<span className="button button-settings_bordered">Dictionary</span>
 							</Link>
+							<Link to="/Test">
+								<span className="button button-settings_bordered">Test</span>
+							</Link>
 						</div>
 						<div className="start-menu">
 							<ul className="mini-games">

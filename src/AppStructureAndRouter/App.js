@@ -9,6 +9,7 @@ import LogoutBtn from './HeaderBtns/LogoutBtn';
 import HomePage from './HomePage/HomePage';
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics';
 import Dictionary from '../AppStructureAndRouter/Dictionary/dictionaryPage';
+import Test from './BasicGame/Test';
 import SignInAndSignUp from './SignInAndSignUp/SignInAndSignUp';
 
 import UnauthorizedUserPage from './UnauthorizedUserPage/UnauthorizedUserPage';
@@ -134,6 +135,9 @@ export default class App extends Component {
 						<Route path="/Dictionary">
 							{this.state.userAuthorized !== '' ? <Dictionary handlehardWordsTraining={this.handlehardWordsTraining} 
 							hardWordsTraining={this.state.hardWordsTraining}/> : <UnauthorizedUserPage />}
+						</Route>
+						<Route path="/Test">
+							{this.state.userAuthorized !== '' ? <Test /> : <UnauthorizedUserPage />}
 						</Route>
 					</Switch>
 				</div>
