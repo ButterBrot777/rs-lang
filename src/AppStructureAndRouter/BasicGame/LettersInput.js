@@ -3,7 +3,7 @@ import './BasicGame.css'
 
 class LettersInput extends React.Component {
 
-    addColor = () => {
+    addCorrectWord = () => {
         let inputAttempt = this.props.inputAttempt.split('');
         let currentWord = this.props.word.split('');
         if (this.props.coloredLetters) {
@@ -22,9 +22,9 @@ class LettersInput extends React.Component {
     render() {
         return (
             <div className="input-container">
-                <div className="word-current opaque">
-                    {(this.props.isGuessCheck) &&
-                        this.addColor()
+                <div className={(this.props.isGuessCheck) ? "word-current opaque" : "word-current opaque hidden"}>
+                    {
+                        this.addCorrectWord()
                     }
                 </div>
                 <input
