@@ -112,9 +112,10 @@ class HomePage extends Component {
 			<div className="wrapper__home-page">
 				{this.state.isModalWindow && (
 					<div className="game-end">
-						<div onClick={this.closeModal}>X</div>
-						<h1 className="info-big">Ура, на сегодня все!</h1>
-						<div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div>
+						<button className="btn" onClick={this.closeModal}>Close</button>
+						<h1 className="info-big">Hurrah, that's it for today!</h1>
+						<div>You have more new cards but you exceeded the limit for 
+						today. You can continue your training but please keep in mind you will have more words to repeat.</div>
 						<Link className="btn" to="/BasicGame">Play More</Link>
 					</div>
 				)}
