@@ -179,9 +179,10 @@ class Test extends Component {
             <div className={this.state.isImageLoaded ? "test__game-container" : "test__game-container hidden"}>
                 {(this.state.isImageLoaded && this.state.wordsPerGame === this.state.fullData.length) ? (
                     <div className="game-end">
-                        <h1>Спасибо за прохождение теста!</h1>
-                        <div className="test__info">Это поможет нам подобрать наиболее подходящие для вас слова!</div>
-                        <div className="test__info">Правильные ответы: {this.state.correctGuessesPercent}%</div>
+                        <h1>Thank you for taking the test!</h1>
+                        <div className="test__info">It will help us find the most suitable words for you!</div>
+                        <div className="test__info">Correct answers: {this.state.correctGuessesPercent}%</div>
+                        <div className="test__info">We recommend to start from level: {this.state.level}</div>
                     </div>
                 ) : ''}
                 <div className="test__word-card">
@@ -193,7 +194,7 @@ class Test extends Component {
                                 inputAttempt={this.state.inputAttempt} value={this.state.inputValue}
                                 handleInputChange={this.handleInputChange} coloredLetters={this.state.coloredLetters}
                             />
-                            <button className="test__btn btn" onClick={this.onClickFurther}>Дальше</button>
+                            <button className="test__btn btn" onClick={this.onClickFurther}>Next</button>
                         </form>
                     </div>
                 </div>
