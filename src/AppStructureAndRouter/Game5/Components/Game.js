@@ -80,8 +80,8 @@ class Game extends Component{
     }else{
       return(
         <div className='savannah-game'>
-{/* onKeyDown={(e) => console.log(e.keyCode)}
-          {console.log(this.props.difficulty)} */}
+ {/* onKeyDown={(e) => console.log(e.keyCode)}
+          {console.log(this.props.difficulty)}  */}
           <span>{this.state.word+1}/{this.state.wordsToLearn.length}</span>
           <div className='savannah-game_content'>
             <div className='savannah-game_content-item' key ={this.state.wordsToLearn[this.state.word].word} style={{ animationDuration: (Number(this.props.difficulty)+1.7)+'s'}}>

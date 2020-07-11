@@ -117,7 +117,6 @@ class SignInAndSignUp extends Component {
     }else{
       this.setState({formValid: this.state.emailValid && this.state.passwordValid});
     }
-    
   }
 // отправка формы на аутентификацию пользователя
   async formSubmitSignIn(e){
@@ -129,7 +128,7 @@ class SignInAndSignUp extends Component {
     }
     console.log( 'Данные на аутентификацию',UserData);
     signInRequest(UserData)
-      .then(res=>getSettingsUser(res))
+      .then(ok=>getSettingsUser())
       .then(ok=> document.location.href = "/HomePage")
       .catch(err=>{
         this.callLoading();
