@@ -49,7 +49,7 @@ class Card extends React.Component {
         let image = `https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.wordData.image}`;
         let imageBlock = this.props.hints.imageHint ? <img onLoad={this.props.handleImgLoading} src={image} alt=""></img> : '';
         return (
-            <div className={this.props.isImageLoaded? "word-card" : "word-card hidden"}>
+            <div className={(this.props.isImageLoaded || !this.props.hints.imageHint ) ? "word-card" : "word-card hidden"}>
                 <div className="word-card-text">
                     <div>{exampleBlock}</div>
                     {(this.props.isGuessed && this.props.hints.exampleHint) || (this.props.isDifficultyChoice && this.props.hints.exampleHint) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}

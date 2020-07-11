@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Card from './Card';
 import LettersInput from './LettersInput';
-import {
-  getRefreshToken, addSettingsUser, getSettingsUser, getNewWords,
+import { addSettingsUser, getSettingsUser, getNewWords,
   getUserWord, createUserWord, updateUserWord, getAllUserWords, getWordById
 } from '../ServerRequest/ServerRequests';
 import { BrowserRouter as Router, Link } from "react-router-dom";
@@ -32,11 +31,6 @@ class Game1 extends Component {
       isStats: false,
       isImageLoaded: false,
       coloredLetters: false,
-      // maxWordsPerDay: 0,
-      // wordsPerDay: 0,
-      // level: 0,
-      // page: 0,
-      // wordsLearntPerPage: 0,
       wordsPerGame: 0,
       correctGuesses: 0,
       incorrectGuesses: 0,
@@ -598,22 +592,19 @@ class Game1 extends Component {
         isStats: true
       })
       this.updateWordsLearntPerPage()
-      // this.handleSettingsUpdate();
     }
   }
 
   render() {
     let translationBlock = (this.state.hints.translationHint && this.state.isGuessed)
       ? this.state.currentData.wordTranslate : '';
-    let progressValue = Math.round(this.state.wordsPerGame / this.state.fullData.length * 100);
+    let progressValue = Math.round(this.state.wordsPerGame / this.state.fullData.length * 100).toString();
     let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
     return (
       <Fade bottom opposite>
-        <div className={this.state.isImageLoaded ? "game-container" : "loading"}>
+        <div className={this.state.isImageLoaded || !this.state.imageHint ? "game-container" : "loading"}>
           {this.state.isStats && (
             <div className="game-end">
-              {/* <h1 className="info-big">Ура, на сегодня все!</h1>
-              <div className="info-small">Есть еще новые карточки, но дневной лимит исчерпан.</div> */}
               <div>Карточек завершено: {this.state.wordsPerGame}</div>
               <div>Правильные ответы: {correctGuessesPercent}%</div>
               <div>Новые слова: {Math.min(this.state.wordsPerDay, this.state.maxWordsPerDay)}</div>
