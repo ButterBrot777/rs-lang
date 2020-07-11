@@ -3,6 +3,15 @@ import { getSettingsUser, addSettingsUser, getNewWordsWithExtraParams } from '..
 import LettersInput from './LettersInput';
 import './BasicGame.css'
 
+const wordsPerLevel = 10;
+const page = 11;
+const ptsForLevel1 = 1;
+const ptsForLevel2 = 2;
+const ptsForLevel3 = 3;
+const ptsForLevel4 = 4;
+const ptsForLevel5 = 5;
+const ptsForLevel6 = 6;
+
 class Test extends Component {
     constructor(props) {
         super(props);
@@ -15,6 +24,7 @@ class Test extends Component {
             inputAttempt: '',
             correctGuesses: 0,
             incorrectGuesses: 0,
+            totalPoints: 0,
             wordsPerGame: 0,
             isGuessCheck: false,
             correctGuessesPercent: 0,
@@ -24,13 +34,13 @@ class Test extends Component {
     }
 
     componentDidMount = async () => {
-        let dataOne = await getNewWordsWithExtraParams(11, 1, 8);
-        let dataTwo = await getNewWordsWithExtraParams(11, 1, 8);
-        let dataThree = await getNewWordsWithExtraParams(11, 1, 3);
-        let dataFour = await getNewWordsWithExtraParams(11, 1, 8);
-        let dataFive = await getNewWordsWithExtraParams(11, 1, 8);
-        let dataSix = await getNewWordsWithExtraParams(11, 1, 8);
-        let fullData = [...dataThree, ...dataOne, ...dataFive, ...dataFour, ...dataSix, ...dataTwo];
+        let dataOne = await getNewWordsWithExtraParams(page, 0, wordsPerLevel);
+        let dataTwo = await getNewWordsWithExtraParams(page, 1, wordsPerLevel);
+        let dataThree = await getNewWordsWithExtraParams(page, 2, wordsPerLevel);
+        let dataFour = await getNewWordsWithExtraParams(page, 3, wordsPerLevel);
+        let dataFive = await getNewWordsWithExtraParams(page, 4, wordsPerLevel);
+        let dataSix = await getNewWordsWithExtraParams(page, 5, wordsPerLevel);
+        let fullData = [...dataOne, ...dataTwo, ...dataThree, ...dataFour, ...dataFive, ...dataSix];
         let currentData = this.findCurrentData(fullData, this.state.currentDataIdx);
         this.setState({
             fullData,
@@ -40,34 +50,36 @@ class Test extends Component {
     }
 
     handleSettingsUpdate = async () => {
-        let { wordsPerDay, optional } = await getSettingsUser(user);
+        let { wordsPerDay, optional } = await getSettingsUser();
         let hints = optional.hints;
         let correctGuessesPercent = this.state.correctGuessesPercent;
         let newLevel = (correctGuessesPercent < 33) ? 0
             : (correctGuessesPercent > 33 && correctGuessesPercent < 67) ? 1 : 2;
         let newSettings = {
-                "wordsPerDay": wordsPerDay,
-                "optional": {
-                    "maxWordsPerDay": optional.maxWordsPerDay,
-                    "level": newLevel,
-                    "page": optional.page,
-                    "wordsLearntPerPage": optional.wordsLearntPerPage,
-                    "lastTrain": optional.lastTrain,
-                    "hints": {
-                        "meaningHint": hints.meaningHint,
-                        "translationHint": hints.translationHint,
-                        "exampleHint": hints.exampleHint,
-                        "soundHint": hints.soundHint,
-                        "imageHint": hints.imageHint,
-                        "transcriptionHint": hints.transcriptionHint
-                    },
+            "wordsPerDay": wordsPerDay,
+            "optional": {
+                "maxWordsPerDay": optional.maxWordsPerDay,
+                "level": newLevel,
+                "page": optional.page,
+                "wordsLearntPerPage": optional.wordsLearntPerPage,
+                "lastTrain": optional.lastTrain,
+                "hints": {
+                    "meaningHint": hints.meaningHint,
+                    "translationHint": hints.translationHint,
+                    "exampleHint": hints.exampleHint,
+                    "soundHint": hints.soundHint,
+                    "imageHint": hints.imageHint,
+                    "transcriptionHint": hints.transcriptionHint
+                },
             }
         };
         addSettingsUser(newSettings);
     }
 
     countCorrectGuessesPercent = () => {
-        let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
+        let maxPoints = wordsPerLevel * (ptsForLevel1 + ptsForLevel2 + ptsForLevel3
+            + ptsForLevel4 + ptsForLevel5 + ptsForLevel6)
+        let correctGuessesPercent = Math.round(this.state.totalPoints / maxPoints * 100);
         this.setState({
             correctGuessesPercent
         })
@@ -85,6 +97,11 @@ class Test extends Component {
     }
 
     checkIfCorrectGuess = () => {
+        let idx = this.state.currentDataIdx;
+        const quotient = (idx >= 0 && idx < 10) ? ptsForLevel1 : (idx >= 10 && idx < 20)
+            ? ptsForLevel2 : (idx >= 20 && idx < 30) ? ptsForLevel3 : (idx >= 30 && idx < 40)
+                ? ptsForLevel4 : (idx >= 40 && idx < 50) ? ptsForLevel5 : ptsForLevel6;
+        let newPoints = 1 * quotient;
         this.setState({
             inputAttempt: this.state.inputValue,
             inputValue: '',
@@ -92,7 +109,8 @@ class Test extends Component {
         if (this.state.currentWord === this.state.inputValue) {
             this.setState({
                 correctGuesses: this.state.correctGuesses + 1,
-                wordsPerGame: this.state.wordsPerGame + 1
+                wordsPerGame: this.state.wordsPerGame + 1,
+                totalPoints: this.state.totalPoints + newPoints
             }, this.continueGame)
         } else {
             this.setState({
