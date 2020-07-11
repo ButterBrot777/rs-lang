@@ -1,5 +1,6 @@
 import React from 'react';
 import { getAllUserWords, getStatisticsUser } from '../ServerRequest/ServerRequests';
+import { createDateFromTimestamp } from './dateConverter';
 const msPerDay = 86400000;
 
 class GeneralStat extends React.Component {
@@ -21,20 +22,14 @@ class GeneralStat extends React.Component {
         const content = await getAllUserWords();
         const learnedWords = content.filter(word => word.optional.deleted===false && word.optional.hardWord===false);
         this.setState({learnedWords: learnedWords, learnedWordsCount: learnedWords.length, isLoading: false,});
-        console.log(learnedWords);
-        this.getRegisterDate();
-        
+        this.getRegisterDate();    
     }
 
-    createDateFromTimestamp = (timestamp) => {
-        const dateObj = new Date(timestamp); 
-        return `${dateObj.getDate() < 10 ? '0' + dateObj.getDate() : dateObj.getDate()}.${dateObj.getMonth()+1 < 10 ? '0' + (dateObj.getMonth()+1) : dateObj.getMonth()+1}.${dateObj.getFullYear()}`;
-    }
+    
 
     getRegisterDate = async () => {
         const content = await getStatisticsUser();
-        console.log(content);
-        const dateOfReg = this.createDateFromTimestamp(+content.optional.dateOfReg);
+        const dateOfReg = createDateFromTimestamp(+content.optional.dateOfReg);
         this.setState({userStat: content, dateOfReg: dateOfReg})
         const wordsPerDay = this.getWordsLearntPerDate();
         this.drawChart(wordsPerDay, 'canvas-desk');
@@ -47,7 +42,7 @@ class GeneralStat extends React.Component {
         const arrDaysWithWords = [];
         let allWordsCount = 0;
         for (let i = relDayOfReg; i <= todayRelDay; i++) {
-            const dateString = this.createDateFromTimestamp(i * msPerDay);
+            const dateString = createDateFromTimestamp(i * msPerDay);
             const arrDateWithWords = [dateString];
             let oneDayWordCount = 0;
             this.state.learnedWords.forEach(word => {
@@ -62,19 +57,16 @@ class GeneralStat extends React.Component {
             arrDateWithWords.push(allWordsCount);
             arrDaysWithWords.push(arrDateWithWords);
         }
-        console.log(arrDaysWithWords);
         return arrDaysWithWords;
     }
 
     drawChart = (wordsPerDay, canva) => {
         const canvas = this.refs[canva];
         const ctx = canvas.getContext('2d');
-        
         const maxFromData = Math.max(...wordsPerDay.map(el => el[2]));
         const max = maxFromData % 10 ? (maxFromData + 10 - maxFromData%10) : maxFromData;
         const relW = (canvas.width-50) / wordsPerDay.length;
         const relH = canvas.height / max;
-        console.log(relH);
         this.drawGrid(ctx, canvas.height, canvas.width, max);
         this.drawChartAxis(ctx, canvas.height, max);
         
@@ -138,7 +130,7 @@ class GeneralStat extends React.Component {
         ctx.moveTo(0, 0);
         for (let y = h; y > 30; y -= 30) {
             ctx.fillStyle = 'rgb(168, 167, 167)'
-            ctx.font = "20px sans-serif";
+            ctx.font = '20px sans-serif';
             ctx.fillText(Math.floor(((h-y)/30)*(max/10)), 0, y);
         }
     }
@@ -159,8 +151,8 @@ class GeneralStat extends React.Component {
         return (
             <div className="general-stat-container">
                 <div className="general-stat-summary">
-                    <p className="general-stat-words-count">Изучено слов: {this.state.learnedWordsCount}</p>
-                    <p className="general-stat-date-of-reg">Дата регистрации пользователя: {this.state.dateOfReg}</p>
+                    <p className="general-stat-words-count">Learned words: {this.state.learnedWordsCount}</p>
+                    <p className="general-stat-date-of-reg">User sign up date: {this.state.dateOfReg}</p>
                 </div>
                 <div className="general-stat-canvas-desk-container">
                     {this.state.tooltipText.date ? <div className="general-stat-tooltip" style={tooltipStyle}>

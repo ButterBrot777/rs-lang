@@ -23,7 +23,7 @@ class HomePage extends Component {
 							<Link to="/Stat">
 								<span className="button button-settings_bordered">Statistic</span>
 							</Link>
-							<Link to="/Dictionaty">
+							<Link to="/Dictionary">
 								<span className="button button-settings_bordered">Dictionary</span>
 							</Link>
 						</div>

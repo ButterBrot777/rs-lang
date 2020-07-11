@@ -1,15 +1,8 @@
 import React from 'react';
 import audio_icon from './audio-icon.png';
 import { updateUserWord, getWordData } from '../ServerRequest/ServerRequests';
-const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
+import { createDateFromTimestamp } from '../Statistics/dateConverter';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
-
-const userId = localStorage.getItem('userId');
-const token = localStorage.getItem('token');
-let user = {
-  userId,
-  token
-};
 
 class Word extends React.Component {
     constructor(props) {
@@ -29,7 +22,7 @@ class Word extends React.Component {
 
     putToLearning = async () => {
         const wordObj = {
-            "difficulty": "good",
+            "difficulty": 'good',
             "optional": {
                 "deleted": false,
                 "hardWord": false,
@@ -55,14 +48,10 @@ class Word extends React.Component {
         this.wordAudio.play();
     }
 
-    createDateFromTimestamp = (timestamp) => {
-        const dateObj = new Date(timestamp); 
-        return `${dateObj.getDate() < 10 ? '0' + dateObj.getDate() : dateObj.getDate()}.${dateObj.getMonth()+1 < 10 ? '0' + (dateObj.getMonth()+1) : dateObj.getMonth()+1}.${dateObj.getFullYear()}`;
-    }
     render() {
         const { data, image, isLoading } = this.state;
-        const lastTrainDate = this.createDateFromTimestamp(this.props.optional.lastTrain);
-        const nextTrainDate = this.createDateFromTimestamp(this.props.optional.nextTrain);
+        const lastTrainDate = createDateFromTimestamp(this.props.optional.lastTrain);
+        const nextTrainDate = createDateFromTimestamp(this.props.optional.nextTrain);
         const imageSrc = `data:image/jpg;base64,${image}`;
         if (data.textMeaning &&  data.textExample) {
             data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
@@ -89,12 +78,14 @@ class Word extends React.Component {
                         {this.props.imageInfo ? <img className="dictionary-image" src={imageSrc} alt={data.word} /> : ''}
                     </div>
                     <div className="word-learning-info">
-                        <p className="dictionary-last-train"> Последняя тренировка: {lastTrainDate}</p>  
-                        <p className="dictionary-repeats">Кол-во повторений: {this.props.optional.repeatsTotal}</p>  
-                        <p className="dictionary-next-train">Следующая тренировка: {nextTrainDate}</p>
+                        <p className="dictionary-last-train"> Last train: {lastTrainDate}</p>  
+                        <p className="dictionary-repeats">Repeats: {this.props.optional.repeatsTotal}</p>  
+                        <p className="dictionary-next-train">Next train: {nextTrainDate}</p>
                     </div>
                 </div>
-                {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
+                <div className="put-to-learning-btn-container">
+                    {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Restore</button> : ''}
+                </div>
             </div>
         )
     }

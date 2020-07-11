@@ -24,7 +24,6 @@ class GamesStat extends React.Component {
                 gamesStatArray.push({name: key, stat: content.optional[key]});
             }
         }
-        console.log(gamesStatArray)
         this.setState({gamesStat: gamesStatArray, isLoading: false,});
         this.drawBars('speakIt', "canvas-desk");
         this.drawBars('speakIt', "canvas-mob");
@@ -36,12 +35,9 @@ class GamesStat extends React.Component {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         const gamesPopularity = this.state.gamesStat.map(game => [game.name, Object.keys(game.stat).length]);
-        console.log(gamesPopularity);
         const max = Math.max(...gamesPopularity.map(el => el[1]));
-        console.log(max);
         const relW = canvas.width /gamesPopularity.length;
         const relH = canvas.height / max;
-        console.log(relH);
         gamesPopularity.forEach((item,index) => {
             if (item[0] === game) {
                 ctx.fillStyle = 'rgb(19,40,59)';
@@ -52,16 +48,16 @@ class GamesStat extends React.Component {
                 ctx.fillRect(index*canvas.width/5, canvas.height-10, relW-5, -item[1]*relH)
             }
             if (canva === 'canvas-desk'){
-                ctx.font = "14px sans-serif";
-                if (item[1]%10 === 2 || item[1]%10 === 3 || item[1]%10 === 4) {
+                ctx.font = '14px sans-serif';
+                if (item[1] === 1) {
                     ctx.fillStyle = 'rgb(255,255,255)';
-                    ctx.fillText(`Cыграно ${item[1]} разa`, index*(canvas.width/5+2), canvas.height-20);
+                    ctx.fillText(`Played ${item[1]} time`, index*(canvas.width/5+2), canvas.height-20);
                 } else if (item[1] === 0) {
                     ctx.fillStyle = 'rgb(19,40,59)';
-                    ctx.fillText(`Не играли ни разу`, index*(canvas.width/5+2), canvas.height-20);
+                    ctx.fillText(`Never played`, index*(canvas.width/5+2), canvas.height-20);
                 } else {
                     ctx.fillStyle = 'rgb(255,255,255)';
-                    ctx.fillText(`Cыграно ${item[1]} раз`, index*(canvas.width/5+2), canvas.height-20);
+                    ctx.fillText(`Played ${item[1]} times`, index*(canvas.width/5+2), canvas.height-20);
                 }
             }
             

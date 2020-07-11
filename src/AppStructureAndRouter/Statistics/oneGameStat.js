@@ -16,14 +16,12 @@ class GameStat extends React.Component {
         for (let key in this.props.gameStat) {
             gameStatArray.push({date: key, results: this.props.gameStat[key]});
         }
-        console.log(gameStatArray)
         this.setState({gameStat: gameStatArray, isLoading: false,});
     }
 
     
 
     render() {
-        //<h3 className="statistics-game-name">{this.props.gameName}</h3>
         const gameStat = this.state.gameStat;
         return (
             <div className="one-game-stat">

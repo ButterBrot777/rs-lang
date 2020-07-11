@@ -13,7 +13,7 @@
 .dictionary-btn {
     background-color: rgb(77, 129, 185);
     color: white;
-    width: 20vw;
+    width: 200px;
     height: 60px;
     font-size: 24px;
     border: none;
@@ -44,6 +44,7 @@
 }
 
 .word-main-info {
+    height: 220px;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -107,7 +108,8 @@
 
 
 .dictionary-image {
-    width: 20vw;
+    height: 200px;
+    width: auto
 }
 
 .word-learning-info {
@@ -126,18 +128,76 @@
     border-right: 1px solid rgba(168, 167, 167, 0.6);
 }
 
+.put-to-learning-btn-container {
+    align-self: center;
+}
+
 .put-to-learning-btn {
-    width: 15vw;
+    width: 150px;
     align-self: center;
     margin-left: 20px;
 }
 
+.train-hard-btn-container {
+    position: relative;
+    margin: 0px auto;
+    padding: 10px 0;
+    width: 200px;
+    height: 40px;
+}
+
 .train-hard-btn {
-    margin-left: 40vw;
-    width: 20vw;
+    position: relative;
+    box-sizing: border-box;
+    padding: 10px;
+    width: 200px;
+    height: 100%;
     text-align: center;
 }
 
 .invisible {
     display: none;
+}
+
+@media only screen and (max-width: 620px) {
+    .dictionary-word-container {
+        display: block;
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .word-main-info {
+        width: 100%;
+        display: block;
+        height: 320px;
+    }
+
+    .dictionary-image {
+        height: 150px;
+        width: auto
+    }
+
+    .word-text {
+        width: 100%;
+    }
+    
+
+    .word-info {
+        width: 100%;
+    }
+
+    .put-to-learning-btn-container {
+        position: relative;
+        width: 150px;
+        margin: 0 auto;
+    }
+
+    .put-to-learning-btn {
+        position: relative;
+        width: 150px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
 }

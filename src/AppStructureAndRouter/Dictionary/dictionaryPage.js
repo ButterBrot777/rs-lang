@@ -2,14 +2,9 @@ import React from 'react';
 import Word from './dictionaryWord';
 import DictionaryHeader from './dictionaryHeader';
 import { getAllUserWords, getSettingsUser } from '../ServerRequest/ServerRequests';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import './dictionary.css'
 
-const userId = localStorage.getItem('userId');
-const token = localStorage.getItem('token');
-let user = {
-  userId,
-  token
-};
 class Dictionary extends React.Component {
     constructor(props) {
         super(props);
@@ -78,10 +73,10 @@ class Dictionary extends React.Component {
                 </header>
                 
                 <div className="dictionary-words-list">
-                    {currentData.map(element => <Word userId={user.userId} token={user.token} difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
+                    {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
-                <div>
-                    {words === "hard" ? <button className="dictionary-btn train-hard-btn">Повторить</button> : ''}
+                <div className="train-hard-btn-container">
+                    {words === "hard" ? <Link className="dictionary-btn train-hard-btn" to="/BasicGame">Train hard words</Link> : ''}
                 </div>
                
             </div>
