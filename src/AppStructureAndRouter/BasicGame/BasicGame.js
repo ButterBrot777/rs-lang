@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Card from './Card';
 import LettersInput from './LettersInput';
-import { addSettingsUser, getSettingsUser, getNewWords,
+import {
+  addSettingsUser, getSettingsUser, getNewWords,
   getUserWord, createUserWord, updateUserWord, getAllUserWords, getWordById
 } from '../ServerRequest/ServerRequests';
 import { BrowserRouter as Router, Link } from "react-router-dom";
@@ -68,8 +69,8 @@ class Game1 extends Component {
             .then(() => this.addCurrentDataToState());
         } else {
           let wordLimit = this.state.maxWordsPerDay - this.state.wordsPerDay;
-          this.startGameWithNewWords();
-          this.startGameWithLearntWords(wordLimit)
+          this.startGameWithLearntWords(wordLimit);
+          this.startGameWithNewWords()
             .then(() => this.addCurrentDataToState());
         }
       }
@@ -79,6 +80,12 @@ class Game1 extends Component {
   addSettingsToState = async () => {
     let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } }
       = await getSettingsUser();
+    if (page >= 29 && level < 6) {
+      level++;
+      page = 0;
+    } else {
+      page++;
+    }
     this.setState({
       wordsPerDay,
       level,
@@ -107,12 +114,6 @@ class Game1 extends Component {
     })
     if (fullData.length < wordsLimit) {
       let wordsNeeded = wordsLimit - fullData.length;
-      if (page >= 29 && level < 6) {
-        level++;
-        page = 0;
-      } else {
-        page++;
-      }
       let extraData = await getNewWords(page, level);
       extraData.filter((data, idx) => {
         if (idx < wordsNeeded) {
@@ -127,14 +128,23 @@ class Game1 extends Component {
 
   startGameWithLearntWords = async (maxWordsPerDay) => {
     const userWords = await getAllUserWords();
-    const wordsForGame = this.filterUserWords(maxWordsPerDay, userWords);
-    const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
-    const fullData = await Promise.all(promises);
-    this.setState({
-      fullData: this.state.fullData.concat(fullData)
-    })
+    if (!userWords) {
+      if (this.props.basicGameWords === 'learned') {
+        alert('Sorry, you do not have words to repeat, please choose New words mode on the Home page.')
+      } else if (this.props.hardWordsTraining) {
+        alert('Sorry, you do not have Hard words to repeat')
+      } else if (this.props.basicGameWords === 'combined') {
+        return;
+      }
+    } else {
+      const wordsForGame = this.filterUserWords(maxWordsPerDay, userWords);
+      const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
+      const fullData = await Promise.all(promises);
+      this.setState({
+        fullData: this.state.fullData.concat(fullData)
+      })
+    }
   }
-
 
   addCurrentDataToState = () => {
     let { fullData, currentDataIdx } = this.state;
@@ -605,51 +615,51 @@ class Game1 extends Component {
         <div className={this.state.isImageLoaded || !this.state.imageHint ? "game-container" : "loading"}>
           {this.state.isStats && (
             <div className="game-end">
-              <div>Карточек завершено: {this.state.wordsPerGame}</div>
-              <div>Правильные ответы: {correctGuessesPercent}%</div>
-              <div>Новые слова: {Math.min(this.state.wordsPerDay, this.state.maxWordsPerDay)}</div>
-              <div> Самая длинная серия правильных ответов:
+              <div>Words completed: {this.state.wordsPerGame}</div>
+              <div>Correct answers: {correctGuessesPercent}%</div>
+              <div>New words: {Math.min(this.state.wordsPerDay, this.state.maxWordsPerDay)}</div>
+              <div>Longest correct answers streak:
                 {Math.max(this.state.correctGuessesStreak, this.state.correctGuessesStreakTemp)}</div>
             </div>
           )}
           <header className="basic-game-header">
             <div className="incorrect"></div>
             <div className="checkboxes-container">
-              <span>Показать кнопку: </span>
+              <span>Show buttons: </span>
               <span>
-                <label>Удалить</label>
+                <label>Delete</label>
                 <input type="checkbox" name="addToDeleted" className="checkbox-display-btns"
                   checked={this.state.buttons.addToDeleted} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Сложные</label>
+                <label>Hard Words</label>
                 <input type="checkbox" name="addToHard" className="checkbox-display-btns"
                   checked={this.state.buttons.addToHard} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Ответ</label>
+                <label>Answer</label>
                 <input type="checkbox" name="showAnswer" className="checkbox-display-btns"
                   checked={this.state.buttons.showAnswer} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Выбор сложности</label>
+                <label>Choose Difficulty</label>
                 <input type="checkbox" name="chooseDifficulty" className="checkbox-display-btns"
                   checked={this.state.buttons.chooseDifficulty} onChange={this.handleCheckboxChange} />
               </span>
             </div>
             <div className="btns-container">
               <button className={this.state.hints.translationHint ? "btn" : "btn opaque"}
-                onClick={this.toggleTranslationHint}>перевод</button>
+                onClick={this.toggleTranslationHint}>Translation</button>
               <button className={this.state.hints.meaningHint ? "btn" : "btn opaque"}
-                onClick={this.toggleMeaningHint}>значение</button>
+                onClick={this.toggleMeaningHint}>Meaning</button>
               <button className={this.state.hints.exampleHint ? "btn" : "btn opaque"}
-                onClick={this.toggleExampleHint}>пример</button>
+                onClick={this.toggleExampleHint}>Example</button>
               <button className={this.state.hints.transcriptionHint ? "btn" : "btn opaque"}
-                onClick={this.toggleTranscriptionHint}>транскрипция</button>
+                onClick={this.toggleTranscriptionHint}>Transcription</button>
               <button className={this.state.hints.imageHint ? "btn" : "btn opaque"}
-                onClick={this.toggleImageHint}>картинка</button>
+                onClick={this.toggleImageHint}>Image</button>
               <button className={this.state.hints.soundHint ? "btn" : "btn opaque"}
-                onClick={this.toggleSoundHint}>звук</button>
+                onClick={this.toggleSoundHint}>Sound</button>
             </div>
           </header>
           <main className="basic-game-main">
@@ -664,16 +674,16 @@ class Game1 extends Component {
                     handleInputChange={this.handleInputChange} coloredLetters={this.state.coloredLetters}
                   />
                   <div>{translationBlock}</div>
-                  <button className="btn btn-further" onClick={this.onClickFurther}>Дальше</button>
+                  <button className="btn btn-further" onClick={this.onClickFurther}>Next</button>
                 </form>
               </div>
             )}
             {(this.state.isDifficultyChoice && this.state.buttons.chooseDifficulty) ?
               (<div className="btns-container">
-                <button className="btn btn-colored" onClick={this.repeatWord}>Снова</button>
-                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'hard', false, false)}>Трудно</button>
-                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'good', false, false)}>Хорошо</button>
-                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'easy', false, false)}>Легко</button>
+                <button className="btn btn-colored" onClick={this.repeatWord}>Again</button>
+                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'hard', false, false)}>Hard</button>
+                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'good', false, false)}>Good</button>
+                <button className="btn btn-colored" onClick={this.chooseWordDifficulty.bind(this, 'easy', false, false)}>Easy</button>
               </div>) : ''}
           </main>
           <footer className="basic-game-footer">
@@ -685,13 +695,13 @@ class Game1 extends Component {
             <div className="btns-container">
               {this.state.buttons.showAnswer &&
                 <button className={(this.state.isGuessed || this.state.isDifficultyChoice) ? "btn opaque" : "btn"}
-                  onClick={this.onShowAnswer}>Показать ответ</button>}
+                  onClick={this.onShowAnswer}>Show Answer</button>}
               {this.state.buttons.addToDeleted &&
                 <button className={(this.state.isGuessed || this.state.isSkipped) ? "btn opaque" : "btn"}
-                  onClick={this.addToDictionary.bind(this, 'none', true, false)}>Удалить</button>}
+                  onClick={this.addToDictionary.bind(this, 'none', true, false)}>Delete</button>}
               {this.state.buttons.addToHard &&
                 <button className={(this.state.isGuessed || this.state.isSkipped) ? "btn opaque" : "btn"}
-                  onClick={this.addToDictionary.bind(this, 'none', false, true)}>Сложные</button>}
+                  onClick={this.addToDictionary.bind(this, 'none', false, true)}>Hard Words</button>}
             </div>
           </footer>
         </div>
