@@ -1,16 +1,6 @@
 :root {
   --text-color: rgb(251, 201, 126);
 }
-/* .savannah-container{
-  position:absolute;
-  margin-top: -10vh;
-  height: 100vh;
-  width: 100vw;
-  background-image: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(./images/background.jpg);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
 .savannah-start-btn select{
   width: 175px;
   margin-bottom: 150px;

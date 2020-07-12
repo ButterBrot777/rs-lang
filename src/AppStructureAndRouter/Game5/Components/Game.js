@@ -28,7 +28,6 @@ class Game extends Component{
 
   nextWord(word){
     this.timer = this.props.difficulty
-    // console.log(word === this.state.wordsToLearn[this.state.word].wordTranslate, this.trueAnswer,  this.falseAnswer)
     if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
       this.trueAnswer.push(this.state.wordsToLearn[this.state.word])
     }else{
@@ -38,8 +37,8 @@ class Game extends Component{
   }
   timerRaund(){
     let timer = setInterval(()=>{
-      // console.log(this.timer)
-      if(this.timer === 0 & this.state.word === this.state.wordsToLearn.length || this.state.word === this.state.wordsToLearn.length-1 & this.state.end){
+      if(this.timer === 0 & this.state.word === this.state.wordsToLearn.length 
+        || this.state.word === this.state.wordsToLearn.length-1 & this.state.end){
         this.setState({
           statistic: !this.state.statistic,
           word:0

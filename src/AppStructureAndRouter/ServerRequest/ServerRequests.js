@@ -16,9 +16,6 @@ async function signInRequest(userData){
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
     localStorage.setItem('refreshToken', content.refreshToken)
-    console.log(localStorage.getItem('token'))
-    console.log(localStorage.getItem('userId'))
-    console.log(localStorage.getItem('refreshToken'))
     return content;
   }else{ 
     throw new Error(rawResponse.status);

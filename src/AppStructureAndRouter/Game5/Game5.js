@@ -21,6 +21,7 @@ class Game5 extends Component{
     this.requestWords = this.requestWords.bind(this)
     this.handleDifficultyGameSavannah = this.handleDifficultyGameSavannah.bind(this)
     this.handleLoadingWindow = this.handleLoadingWindow.bind(this)
+    this.zxc =this.zxc.bind(this)
   }
 
   handleDifficultyGameSavannah(value){
@@ -84,13 +85,33 @@ class Game5 extends Component{
         words: res,
       })
   })
+
   const getWordById = async (wordId) => {
     const url = `${baseUrl}/words/${wordId}?noAssets=true`;
     const rawResponse = await fetch(url);
     const content = await rawResponse.json();
     return content;
   }
+  // const getSettingsUser = async () => {
+  //   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  //         method: 'GET',
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`,
+  //           'accept': 'application/json',
+  //         },
+  //       });
+  //       const content = await rawResponse.json();
+  //       return content;
+  // }
   
+  }
+   zxc(wordsObj){
+    if(wordsObj.length < 20){
+      console.log('меньше нужного')
+    }else{
+      // getSettingsUser().then(res=> console.log(res))
+    }
+    return wordsObj
   }
   render(){
     if(this.state.startGame){
@@ -117,7 +138,7 @@ class Game5 extends Component{
           <video id="background-video" loop autoPlay>
             <source src={video} type='video/mp4' />
           </video>
-          {!this.state.words || this.state.loadingWindow ? <LoadingWindow background={'red'}/> : ''}
+          {!this.state.words || this.state.loadingWindow ? <LoadingWindow background={'#657587'}/> : ''}
           <HomePage handleLoading={this.handleLoading} handleDifficulty ={this.handleDifficultyGameSavannah} difficulty={this.state.difficultyGameSavannah} handleLoadingWindow={this.handleLoadingWindow}/>
         </div>
       )

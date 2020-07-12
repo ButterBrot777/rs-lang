@@ -24,7 +24,7 @@ class Statistic extends Component{
     return(
       <div className="results">
         <div className="results-container">
-          <p className="errors">Ошибок
+          <p className="errors">Errors
             <span className="errors-number">{this.props.true.length}</span>
           </p>
           <div className="error-items">
@@ -34,7 +34,7 @@ class Statistic extends Component{
                     onCardClick={this.handleCardClick} />
             )}
           </div>
-            <p className="success">Знаю
+            <p className="success">I know
               <span className="success-number">{this.props.false.length}</span>
             </p>
           <div className="success-items">

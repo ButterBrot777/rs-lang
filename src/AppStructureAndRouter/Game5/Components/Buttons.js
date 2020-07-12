@@ -5,9 +5,9 @@ class Buttons extends Component{
     super(props)
     this.state={
     }
-    this.lllgggl = this.lllgggl.bind(this)
+    this.eventClick = this.eventClick.bind(this)
   }
-  lllgggl(event){
+  eventClick(event){
       let buttons =  document.body.querySelectorAll('.btns-wrapper button')
       buttons.forEach((el)=>{
         if(el.id === event.code){
@@ -18,10 +18,10 @@ class Buttons extends Component{
       })
   }
   componentDidMount(){
-    document.addEventListener('keyup', this.lllgggl)
+    document.addEventListener('keyup', this.eventClick)
   }
   componentWillUnmount(){
-    document.removeEventListener('keyup', this.lllgggl)
+    document.removeEventListener('keyup', this.eventClick)
   }
   render(){
     return(

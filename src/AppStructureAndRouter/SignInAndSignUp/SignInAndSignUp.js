@@ -163,7 +163,7 @@ class SignInAndSignUp extends Component {
       </div>
   return (
     <div className="modal">
-      {this.state.loading ? <LoadingWindow/> : ''}
+      {this.state.loading ? <LoadingWindow background={'red'}/> : ''}
       <div className="modal__container" >
       {this.props.SignFlag ? '' : <Link to='/Registration'><button className="button button_colored">Go to Sign Up</button></Link>}
        <form className='form-container' onSubmit={this.props.SignFlag ? this.formSubmitSignUp : this.formSubmitSignIn}>
