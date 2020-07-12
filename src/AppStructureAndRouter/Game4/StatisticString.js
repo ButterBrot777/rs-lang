@@ -7,7 +7,7 @@ export default function StatisticString(prop) {
       audio.play()
   }
   return (
-      <div>
+      <div className={'statistic__string'}>
           <button onClick={() => playAudio()}>Звук</button>
           <p>{`${prop.wordData.textExample}`}</p>
       </div>

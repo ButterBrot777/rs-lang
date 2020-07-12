@@ -96,8 +96,10 @@ export default function GameBody(prop) {
     return (
         <div >
             <div className='main__container'>
-                {(prop.state.settings.soundButton) ? <button onClick={() => playSound()}> звук</button>:null}
-                {(prop.state.settings.translation) ? <p>{prop.state.gameData[prop.state.stringCount].textExampleTranslate}</p>:null}
+                <div className={'game__hint'}>
+                    {(prop.state.settings.soundButton) ? <button onClick={() => playSound()}> звук</button>:null}
+                    {(prop.state.settings.translation) ? <p>{prop.state.gameData[prop.state.stringCount].textExampleTranslate}</p>:null}
+                </div>
                 {prop.state.gameData.slice(0,prop.state.stringCount + 1)
                     .map((e, i) =>
                         <GameString gameState = {prop.state}
@@ -106,13 +108,15 @@ export default function GameBody(prop) {
                                     play = {false}
                         />)}
             </div>
-            <GameString
-                string = {prop.state.gameData[prop.state.stringCount].textExample}
-                gameState = {prop.state}
-                canClicked = {prop.state.canClicked}
-                index = {prop.state.stringCount}
-                play = {true}
-            />
+            <div className={'play__field'}>
+                <GameString
+                    string = {prop.state.gameData[prop.state.stringCount].textExample}
+                    gameState = {prop.state}
+                    canClicked = {prop.state.canClicked}
+                    index = {prop.state.stringCount}
+                    play = {true}
+                />
+            </div>
             {button()}
         </div>
     )

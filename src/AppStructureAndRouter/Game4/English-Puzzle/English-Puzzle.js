@@ -14,6 +14,10 @@ export default function EnglishPuzzle() {
   if(localStorage.getItem('soundButton') === null){ localStorage.setItem('soundButton','true') };
   if(localStorage.getItem('autoSound') === null){ localStorage.setItem('autoSound','true') };
 
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
+  const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+
   const [gameState, setGameState] = useState({
         settings:{
             translation:localStorage.getItem('translation') === 'true',
@@ -54,6 +58,7 @@ export default function EnglishPuzzle() {
 
   });
 
+
   useEffect(() => {
       // setGameState({...gameState,completed:false})
       console.log(gameState)
@@ -61,11 +66,12 @@ export default function EnglishPuzzle() {
   },);
 
   useEffect(() => {
-      getUserWord('5efdfae4d972730017fada6a')
+      getUserWord(userId)
+
   },[]);
 
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmRmYWU0ZDk3MjczMDAxN2ZhZGE2YSIsImlhdCI6MTU5NDQ2NzkxNSwiZXhwIjoxNTk0NDgyMzE1fQ.y6vvLUoTs1Sb0RKEI2Iv8YBw7csb62FaT8MkDH3O5Z8';
+
   async function getUserWord ( userId){
         const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/`, {
             method: 'GET',
@@ -116,6 +122,7 @@ export default function EnglishPuzzle() {
         )
 
    };
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));

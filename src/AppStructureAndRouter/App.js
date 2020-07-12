@@ -50,7 +50,7 @@ export default class App extends Component {
 
 		return (
 			<Router>
-				<div className="landing-page" tabIndex={0}>
+				<div className="landing-page" >
 					<div className="wrapper wrapper__header_colored">
 						<div className="header__wrapper wrapper__inner">
 							<header id="header" className="header">

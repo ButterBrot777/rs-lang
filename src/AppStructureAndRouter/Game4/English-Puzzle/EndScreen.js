@@ -1,7 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import paintings1 from "./PathObjects/level1";
 
 export default function EndScreen(prop) {
+    useEffect(() => {
+        sendStatistic()
+    },[])
+
+    const userId = localStorage.getItem('userId');
+    console.log('юзерIд',userId)
+    const token = localStorage.getItem('token');
+    const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+
     function showStatistic() {
         prop.setState({
             ...prop.state,
@@ -9,6 +18,50 @@ export default function EndScreen(prop) {
             statisticScreen:true,
         })
     }
+    function sendStatistic() {
+        getStatisticsUser().then( data =>{
+           data.optional["puzzle"][`${+new Date()}`] = {
+                "errors": prop.state.statistic.falseWords.length, // кол-во ошибок
+                "trues": prop.state.statistic.trueWords.length // кол-во правильных ответов
+            };
+            delete data.id
+            let stat = data;
+            updateStatisticsUser(stat)
+            }
+        )
+    }
+
+    const getStatisticsUser = async () => {
+        const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+            method: 'GET',
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+            },
+        });
+        const content = await rawResponse.json();
+        console.log('статистика',content)
+        return content;
+    };
+
+    const updateStatisticsUser = async (statisticsData) => {
+        const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+            method: 'PUT',
+            withCredentials: true,
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(statisticsData)
+        });
+        const content = await rawResponse.json();
+        console.log('ответ',content)
+        return content;
+    };
+
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             let j = Math.floor(Math.random() * (i + 1));
@@ -40,6 +93,7 @@ export default function EndScreen(prop) {
         prop.setState({
                 ...prop.state,
                 stringCount:0,
+                canClicked: true,
                 imageCount:imageCount,
                 image:image,
                 lengthArrayCurrent:lengthCurrent,

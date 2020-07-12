@@ -73,7 +73,7 @@ h1{
 
   color: red;
 }
-.button{
+.header__button__english{
 
 }
 .button__active{
@@ -83,4 +83,38 @@ h1{
   max-height: 700px;
 
 
+}
+.start__page__main__bg{
+  height: 100vh;
+  background-image: url("./English-Puzzle/assets/olen_art_vektor_134088_1920x1080.jpg");
+  background-size: cover;
+}
+.start__page__main__container{
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+
+}
+.english__header{
+  width: 100vw;
+  justify-content: flex-end;
+  display: flex;
+
+}
+.english__header__button__container{
+  display: flex;
+  justify-content: space-between;
+  width: 30vw;
+  padding: 10px;
+}
+.game__hint{
+  text-align: center;
+}
+.play__field{
+  margin-top:30px ;
+}
+.statistic__string{
+  display: flex;
 }

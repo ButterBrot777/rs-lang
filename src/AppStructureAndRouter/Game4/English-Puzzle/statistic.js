@@ -34,6 +34,7 @@ export default function Statistic(prop) {
         prop.setState({
                 ...prop.state,
                 stringCount:0,
+                canClicked: true,
                 imageCount:imageCount,
                 image:image,
                 lengthArrayCurrent:lengthCurrent,
