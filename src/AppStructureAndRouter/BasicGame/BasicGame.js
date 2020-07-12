@@ -688,14 +688,9 @@ class Game1 extends Component {
                   checked={this.state.buttons.showAnswer} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-<<<<<<< HEAD
-                <label>Difficulty</label>
-                <input type="checkbox" name="chooseDifficulty" className="checkbox-display-btns"
-=======
                 <label>Choose Difficulty</label>
                 <input type="checkbox" name="chooseDifficulty"
                   className={this.state.isDifficultyChoice ? "checkbox-display-btns opaque" : "checkbox-display-btns"}
->>>>>>> feat: update user word as hard in case of error
                   checked={this.state.buttons.chooseDifficulty} onChange={this.handleCheckboxChange} />
               </span>
             </div>

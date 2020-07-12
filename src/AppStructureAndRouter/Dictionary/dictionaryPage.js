@@ -77,11 +77,7 @@ class Dictionary extends React.Component {
                     <DictionaryHeader words={words} getLearning={this.getLearning}
                         getHard={this.getHard} getDeleted={this.getDeleted} />
                 </header>
-                <Link to="/BasicGame">
-                <button onClick={() => this.props.handlehardWordsTraining()}>
-                    Учить сложные
-                </button>
-                </Link>
+                
                 <div className="dictionary-words-list">
                     {currentData.map(element => <Word userId={user.userId} token={user.token} difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
