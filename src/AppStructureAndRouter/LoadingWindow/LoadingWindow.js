@@ -3,13 +3,21 @@ import React, {Component} from 'react';
 
 import './LoadingWindow.css'
 class LoadingWindow extends Component{
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
+    this.state={
+
+    }
   }
   render(){
     return(
-      <div className='form-loading'>
-       <h2>Loading...</h2>
+      <div className="loader" style={{backgroundColor: `${this.props.background}`}}>
+        <div className="l_main">
+          <div className="l_square"><span></span><span></span><span></span></div>
+          <div className="l_square"><span></span><span></span><span></span></div>
+          <div className="l_square"><span></span><span></span><span></span></div>
+          <div className="l_square"><span></span><span></span><span></span></div>
+        </div>
       </div>
     )
   }
