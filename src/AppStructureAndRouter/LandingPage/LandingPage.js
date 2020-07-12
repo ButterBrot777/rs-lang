@@ -150,7 +150,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Yuliya Kogol</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:kogol.julia@gmail.com">kogol.julia@gmail.com</a>
+                  <a className="employee__contact" href="mailto:kogol.julia@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/22-22"><div className="employee__photo employee-1"></div></a>
               </article>
@@ -158,7 +158,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Kirill Vorobeychik</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:vorob.edu@gmail.com">vorob.edu@gmail.com</a>
+                  <a className="employee__contact" href="mailto:vorob.edu@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/vorobeychik"><div className="employee__photo employee-2"></div></a>
               </article>
@@ -166,7 +166,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Ilya Shihutin</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:kathyr@gmail.com">kathyr@gmail.com</a>
+                  <a className="employee__contact" href="mailto:kathyr@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/ilyashihutin"><div className="employee__photo employee-3"></div></a>
               </article>
@@ -174,7 +174,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Nastya Koval</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:anasteziyam@gmail.com">anasteziyam@gmail.com</a>
+                  <a className="employee__contact" href="mailto:anasteziyam@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/nastiakoval"><div className="employee__photo employee-4"></div></a>
               </article>
@@ -182,7 +182,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Andrey Sapranovich</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:sapranovich.andrey@gmail.com">sapranovich.andrey@gmail.com</a>
+                  <a className="employee__contact" href="mailto:sapranovich.andrey@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/sapranovich"><div className="employee__photo employee-5"></div></a>
               </article>
@@ -190,7 +190,7 @@ class About extends React.Component {
                 <div className="employee__content">
                   <h5 className="employee__name">Pavel Karenda</h5>
                   <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:korendos@gmail.com">korendos@gmail.com</a>
+                  <a className="employee__contact" href="mailto:korendos@gmail.com">mail me</a>
                 </div>
                 <a href="https://github.com/butterbrot777"><div className="employee__photo employee-6"></div></a>
               </article>

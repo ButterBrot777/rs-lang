@@ -22,7 +22,7 @@ a {
 
 /* styles for link */
 a:link {
-  color: #ffffff;
+  // color: #ffffff;
   text-decoration: none;
 }
 
@@ -104,7 +104,8 @@ a:link {
   display: block;
   margin-top: 7rem;
   position: absolute;
-  left: 45.5%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .button_details {
@@ -113,5 +114,6 @@ a:link {
   margin-bottom: 5rem;
   text-transform: uppercase;
   position: absolute;
-  left: 45.5%;
+  left: 50%;
+  transform: translateX(-50%);
 }

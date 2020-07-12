@@ -19,13 +19,17 @@ class HomePage extends Component {
 						</div>
 						<div className="start-menu">
               <h2 className="user-info__title">User Info:</h2>
-
-							<Link to="/Stat">
-								<span className="button button-settings_bordered">Statistic</span>
+							<div className="user-info__links">
+							<Link to="/Stat" className="button button-settings_bordered">
+								Statistic
 							</Link>
-							<Link to="/Dictionaty">
-								<span className="button button-settings_bordered">Dictionary</span>
+							<Link to="/Dictionary" className="button button-settings_bordered">
+								Dictionary
 							</Link>
+							<Link to="/Dictionary" className="button button-settings_bordered">
+								Test
+							</Link>
+						</div>
 						</div>
 						<div className="start-menu">
 							<ul className="mini-games">
