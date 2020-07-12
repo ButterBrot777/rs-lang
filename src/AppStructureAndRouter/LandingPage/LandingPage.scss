@@ -4,7 +4,7 @@
 .wrapper__header_colored {
   background-color: rgb(20,40,60);
   height: 8rem;
-  position: sticky;
+  // position: sticky;
   width: 100%;
   top: 0;
   z-index: 1;
@@ -39,7 +39,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // padding: 1rem 0;
+  padding: 0 2rem;
 }
 
 .logo {
@@ -54,7 +54,6 @@
 /* =================================== */
 
 .promo {
-  max-height: 1100px;
   min-height: 700px;
 }
 .promo__title {
@@ -186,7 +185,6 @@
 .detail__text {
   font-size: 3rem;
   height: 5rem;
-  overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 200;
   text-align: justify;
@@ -297,4 +295,77 @@
   color: #666d89;
   font-size: 1.6rem;
   font-weight: 400;
+}
+
+/* ================ MEDIA =================== */
+
+@media (max-width: 990px) {
+  .details {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail__text {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+  .button_details {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 950px) {
+  .promo {
+    min-height: 500px;
+  }
+  .promo__title {
+    line-height: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 15%;
+    font-size: calc(2em + 1vw);
+  }
+  .promo__description {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .intro__title {
+    padding: 2rem 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    line-height: 4rem;
+    font-size: calc(2em + 1vw);
+  }
+  .about-us > .layout-3-column > * {
+    flex-basis: 28%;
+    margin-bottom: 3rem;
+    min-width: 310px;
+  }
+}
+
+@media (max-width: 570px) {
+  .wrapper__header_colored {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo {
+    display: none;
+  }
+
+  .promo__title {
+    line-height: 7rem;
+    padding: 10% 0;
+  }
+
+  .layout-2-column > * {
+    flex-basis: 70%;
+  }
+  .feature__text {
+    height: 15rem;
+  }
+
+  .layout-3-column > * {
+    flex-basis: 51%;
+  }
 }

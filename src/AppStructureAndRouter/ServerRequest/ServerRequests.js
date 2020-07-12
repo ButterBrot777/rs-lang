@@ -1,3 +1,4 @@
+const refreshToken = localStorage.getItem('refreshToken');
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
 const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
@@ -38,6 +39,9 @@ async function signUpRequest(userData){
 }
 
 const startSettingsUser = async () => {
+  let date = new Date()
+  date.setDate(date.getDate() - 1);
+  let yesterday = date.toLocaleDateString();
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
@@ -53,6 +57,7 @@ const startSettingsUser = async () => {
           "level": 0,
           "page": 0,
           "wordsLearntPerPage": 0,
+          "lastTrain": yesterday,
           "hints": {
             "meaningHint": true,
             "translationHint": true,
@@ -199,17 +204,32 @@ const getAllUserWords = async () => {
   return content;
 };
 
-const loginUser = async user => {
-  const rawResponse = await fetch(`${baseUrl}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(user)
-  });
+async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
+  const url = `${baseUrl}/words?page=${page}&group=${group}&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerPage}`;
+  const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
-};
+}
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getWordData, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+const getRefreshToken = async () => {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${refreshToken}`,
+          'accept': 'application/json',
+        },
+      });
+      const content = await rawResponse.json();
+      localStorage.setItem('token', content.token)
+      localStorage.setItem('refreshToken', content.refreshToken)
+      return content;
+}
+
+const getWordById = async (wordId) => {
+  const url = `${baseUrl}/words/${wordId}?noAssets=true`;
+  const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
+
+export {getWordById, getRefreshToken, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser,  getWordData, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams}
