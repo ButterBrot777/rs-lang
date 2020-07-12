@@ -1,7 +1,9 @@
 import React from 'react';
-import { getUserWord, createUserWord, updateUserWord, addSettingsUser, 
-    getSettingsUser, getWordById, getNewWords, 
-    getAllUserWords, getStatisticsUser } from '../ServerRequest/ServerRequests';
+import {
+    getUserWord, createUserWord, updateUserWord, addSettingsUser,
+    getSettingsUser, getWordById, getNewWords,
+    getAllUserWords, getStatisticsUser, updateStatisticsUser
+} from '../ServerRequest/ServerRequests';
 import Card from './Card';
 
 import mainImg from './assets/main.jpg';
@@ -58,40 +60,60 @@ class Game1 extends React.Component {
     }
 
     componentWillUnmount = () => {
-        // long term stats
         recognition.removeEventListener('end', startListening);
         recognition.stop();
         if (this.state.correctGuess.length > 0) {
             this.updateIncorrectGuesses();
+            this.sendStats();
         }
     }
 
     updateIncorrectGuesses = () => {
         let incorrectGuess = this.filterIncorrectGuess();
+        this.setState({
+            incorrectGuess
+        })
         let diffLevel = "hard";
         if (incorrectGuess) {
             incorrectGuess.map(word => this.handleUserWordUpdate(diffLevel, word.id))
         }
     }
 
+    sendStats = () => {
+        getStatisticsUser().then(data => {
+            data.optional["speakIt"][`${+new Date()}`] = {
+                "errors": this.state.incorrectGuess.length,
+                "trues": this.state.correctGuess.length
+            };
+            delete data.id;
+            let stat = data;
+            updateStatisticsUser(stat);
+        })
+    }
+
+
     startGame = async () => {
         let fullData = [];
         const userWords = await getAllUserWords();
-        if (!userWords) {
+        if (userWords.length === 0 || !userWords) {
             this.startGameWithNewWords();
         } else {
             const wordsForGame = this.filterUserWords(userWords);
-            const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
-            fullData = await Promise.all(promises);
-            if (fullData.length < wordsPerGame) {
-                let { wordsLearntPerPage, page, level } = this.state;
-                const wordsNeeded = wordsPerGame - fullData.length;
-                const extraData = await getNewWords(page, level);
-                extraData.filter((data, idx) => {
-                    if (idx >= wordsLearntPerPage && idx < wordsNeeded) {
-                        fullData.push(data);
-                    }
-                })
+            if (wordsForGame.length === 0) {
+                this.startGameWithNewWords();
+            } else {
+                const promises = wordsForGame.map(async (word) => await getWordById(word.wordId));
+                fullData = await Promise.all(promises);
+                if (fullData.length < wordsPerGame) {
+                    let { wordsLearntPerPage, page, level } = this.state;
+                    const wordsNeeded = wordsPerGame - fullData.length;
+                    const extraData = await getNewWords(page, level);
+                    extraData.filter((data, idx) => {
+                        if (idx >= wordsLearntPerPage && idx < wordsNeeded) {
+                            fullData.push(data);
+                        }
+                    })
+                }
             }
         }
         this.setState({
@@ -168,6 +190,7 @@ class Game1 extends React.Component {
     changeLevel = () => {
         if (this.state.correctGuess.length > 0) {
             this.updateIncorrectGuesses();
+            this.sendStats();
         }
         recognition.removeEventListener('end', startListening);
         recognition.stop();
@@ -209,11 +232,6 @@ class Game1 extends React.Component {
         </div>)
     }
 
-    handleStatsUpdate = () => {
-        getStatisticsUser();
-        updateStatisticsUser();
-    }
-
     checkGuess = () => {
         let inputValue = this.state.inputValue;
         let firstChar = inputValue.charAt(0);
@@ -235,7 +253,7 @@ class Game1 extends React.Component {
                 isStatistics: true,
             })
             this.handleSettingsUpdate();
-            this.handleStatsUpdate();
+            this.sendStats();
         }
     }
 
@@ -349,7 +367,7 @@ class Game1 extends React.Component {
             createUserWord(wordId, newWord);
         } else {
             let interval;
-            switch (word.optional.diffLevel) {
+            switch (word.difficulty) {
                 case 'hard':
                     interval = word.optional.repeatsStreak * hardInterval;
                     break;
@@ -369,6 +387,7 @@ class Game1 extends React.Component {
             } else {
                 nextTrain = lastTrain;
             }
+            console.log(interval, nextTrain)
             let newWord = {
                 "difficulty": word.difficulty,
                 "optional": {
@@ -384,6 +403,7 @@ class Game1 extends React.Component {
             updateUserWord(wordId, newWord);
         }
     }
+
     render() {
         const resultBlock = (this.state.currentObj && !this.state.isRecognition)
             ? this.showResult()
@@ -401,7 +421,7 @@ class Game1 extends React.Component {
                 </div>
                 <div className={(this.state.isStatistics) ? "game hidden" : "game"}>
                     <div className="header">
-                        <div>
+                        <div className="inputs-container">
                             <label>Level
                         <input type="text" name="level"
                                     autoComplete="off"
@@ -452,7 +472,7 @@ class Game1 extends React.Component {
                 </div>
                 <div className={(this.state.isStatistics) ? "results" : "results hidden"}>
                     <div className="results-container">
-                        <p className="errors">Ошибок
+                        <p className="errors">Errors
                         <span className="errors-number">{this.state.incorrectGuess.length}</span>
                         </p>
                         <div className="error-items">
@@ -466,7 +486,7 @@ class Game1 extends React.Component {
                                 )
                             }
                         </div>
-                        <p className="success">Знаю
+                        <p className="success">Correct
                         <span className="success-number">{this.state.correctGuess.length}</span>
                         </p>
                         <div className="success-items">

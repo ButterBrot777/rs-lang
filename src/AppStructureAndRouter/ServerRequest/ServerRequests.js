@@ -163,7 +163,6 @@ const getStatisticsUser = async () => {
   }
 }
 
-
 const getNewWords = async (page, group) => {
   const url = `${baseUrl}/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
@@ -187,20 +186,11 @@ const getUserWord = async (wordId) => {
       }
   });
   if (rawResponse.status === 200) {
-<<<<<<< HEAD
     const content = await rawResponse.json();
     return content;
   } else if (rawResponse.status === 401) {
     await getRefreshToken();
     await getUserWord(wordId);
-=======
-      const content = await rawResponse.json();
-  console.log(content)
-
-      return content;
-  } else if (rawResponse.status === 404){
-      return false;
->>>>>>> 0cf6f13... feat: get correct words to the game
   } else{ 
     throw new Error(rawResponse.status);
   }
@@ -217,7 +207,6 @@ const createUserWord = async (wordId, wordData) => {
     },
     body: JSON.stringify(wordData)
   });
-<<<<<<< HEAD
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
@@ -227,11 +216,6 @@ const createUserWord = async (wordId, wordData) => {
   } else{ 
     throw new Error(rawResponse.status);
   }
-=======
-  const content = await rawResponse.json();
-  console.log(content)
-  return content;
->>>>>>> 0cf6f13... feat: get correct words to the game
 };
 
 const updateUserWord = async (wordId, wordData) => {
@@ -245,7 +229,6 @@ const updateUserWord = async (wordId, wordData) => {
     },
     body: JSON.stringify(wordData)
   });
-<<<<<<< HEAD
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
@@ -255,11 +238,6 @@ const updateUserWord = async (wordId, wordData) => {
   } else{ 
     throw new Error(rawResponse.status);
   }
-=======
-  const content = await rawResponse.json();
-  console.log(content)
-  return content;
->>>>>>> 0cf6f13... feat: get correct words to the game
 };
 
 const getAllUserWords = async () => {

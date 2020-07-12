@@ -29,10 +29,10 @@ code {
   font-size: 70px;
   text-transform: uppercase;
   letter-spacing: 10px;
-  color:  #00c2b2;
+  color: #00c2b2;
   margin: 0 0 20px 0;
   -webkit-text-stroke-width: 2px;
-    -webkit-text-stroke-color: black;
+  -webkit-text-stroke-color: black;
 }
 
 .start-info {
@@ -42,6 +42,7 @@ code {
   font-weight: 700;
   max-width: 600px;
   color: rgb(39, 36, 36);
+  padding: 0 10px;
 }
 
 .start-button {
@@ -141,6 +142,7 @@ code {
 .cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 10px auto 65px;
 }
 
@@ -183,6 +185,8 @@ code {
 
 .btns {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn {
@@ -230,7 +234,7 @@ code {
 .results-container {
   width: 100%;
   max-width: 780px;
-  padding: 10px ;
+  padding: 10px;
   background-color: white;
   box-sizing: border-box;
   border-radius: 10px;
@@ -281,4 +285,39 @@ code {
 
 .success-items {
   margin-bottom: 10px;
+}
+
+.inputs-container {
+  display: flex;
+}
+
+/* =========== MEDIA ========== */
+
+@media (max-width: 768px) {
+  .start-name {
+    font-size: 50px;
+  }
+  .btn-wide {
+    width: 150px;
+  }
+  .btn {
+    font-size: 20px;
+    padding: 7px 12px;
+  }
+  .cards {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .btns {
+    flex-direction: column;
+  }
+  .btn {
+    margin: 10px 0;
+  }
+  .image {
+    width: 250px;
+    height: 130px;
+  }
 }
