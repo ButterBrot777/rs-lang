@@ -86,8 +86,6 @@ const startSettingsUser = async () => {
     body: JSON.stringify(settingsData)
   });
   const content = await rawResponse.json();
-  console.log('add sett', content)
-
   return content;
 }
 
@@ -100,7 +98,6 @@ const getSettingsUser = async () => {
         },
       });
       const content = await rawResponse.json();
-      console.log('got sett', content)
       return content;
 }
 
@@ -151,8 +148,6 @@ const getUserWord = async (wordId) => {
   });
   if (rawResponse.status === 200) {
       const content = await rawResponse.json();
-  console.log('got', content)
-
       return content;
   } else if (rawResponse.status === 404){
       return false;
@@ -173,8 +168,6 @@ const createUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
-  console.log('created', content)
-
   return content;
 };
 
@@ -190,7 +183,6 @@ const updateUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
-  console.log('updated', content)
   return content;
 };
 
@@ -207,26 +199,12 @@ const getAllUserWords = async () => {
   return content;
 };
 
-const loginUser = async user => {
-  const rawResponse = await fetch(`${baseUrl}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(user)
-  });
-  const content = await rawResponse.json();
-  return content;
-};
-
 async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
   const url = `${baseUrl}/words?page=${page}&group=${group}&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerPage}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
 }
-
 
 const getRefreshToken = async () => {
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
@@ -237,7 +215,6 @@ const getRefreshToken = async () => {
         },
       });
       const content = await rawResponse.json();
-      console.log(content)
       localStorage.setItem('token', content.token)
       localStorage.setItem('refreshToken', content.refreshToken)
       return content;
@@ -247,8 +224,7 @@ const getWordById = async (wordId) => {
   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
-  // console.log(content)
   return content;
 }
 
-export {getWordById, getRefreshToken, loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams}
+export {getWordById, getRefreshToken, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams}
