@@ -6,7 +6,7 @@ import LoadingWindow from '../LoadingWindow/LoadingWindow'
 import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest} from '../ServerRequest/ServerRequests'
 
 
-import './SignInAndSignUp.css'
+import './SignInAndSignUp.scss'
 
 class SignInAndSignUp extends Component {
   constructor(props){
@@ -195,12 +195,12 @@ class SignInAndSignUp extends Component {
            <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
            CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>
 
-           <div className='form-btns'>
+           <div className="form-btns">
              <button className="button button_colored" disabled={!this.state.formValid}>Submit</button>
-             <Link to='/'><button className="button button_bordered">Close</button></Link>  
+             <Link to='/' className="button button_bordered">Close</Link>  
            </div>
        </form>
-       {this.props.SignFlag ? <Link to='/Authorization'><button className="button button_colored">Go to Sign In</button></Link> : ''}
+       {this.props.SignFlag ? <Link to='/Authorization' className="button button_colored">Go to Sign In</Link> : ''}
        </div>
     </div>
   );

@@ -16,7 +16,10 @@ async function signInRequest(userData){
     const content = await rawResponse.json();
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
+<<<<<<< HEAD
     localStorage.setItem('refreshToken', content.refreshToken);
+=======
+>>>>>>> develop
     return content;
   }else{ 
     throw new Error(rawResponse.status);
@@ -40,9 +43,12 @@ async function signUpRequest(userData){
 }
 
 const startSettingsUser = async () => {
+<<<<<<< HEAD
   let date = new Date()
   date.setDate(date.getDate() - 1);
   let yesterday = date.toLocaleDateString();
+=======
+>>>>>>> develop
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
@@ -199,6 +205,7 @@ const getAllUserWords = async () => {
   return content;
 };
 
+<<<<<<< HEAD
 async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
   const url = `${baseUrl}/words?page=${page}&group=${group}&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerPage}`;
   const rawResponse = await fetch(url);
@@ -226,5 +233,19 @@ const getWordById = async (wordId) => {
   const content = await rawResponse.json();
   return content;
 }
+=======
+const loginUser = async user => {
+  const rawResponse = await fetch(`${baseUrl}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  });
+  const content = await rawResponse.json();
+  return content;
+};
+>>>>>>> develop
 
 export {getWordById, getRefreshToken, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams}
