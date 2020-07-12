@@ -14,8 +14,8 @@ class HomePage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			maxWordsPerDay: 0,
-			wordsPerDay: 0,
+			maxWordsPerDay: '',
+			wordsPerDay: '',
 			redirect: false,
 			isModalWindow: false
 		};
@@ -42,13 +42,6 @@ class HomePage extends Component {
 		})
 	}
 
-	componentDidUpdate = (prevState) => {
-		if (this.state.wordsPerDay !== prevState.wordsPerDay
-			|| this.state.maxWordsPerDay !== prevState.maxWordsPerDay) {
-			this.handleSettingsUpdate();
-		}
-	}
-
 	inputCheck = (event) => {
 		if (/^\d+$/.test(event.target.value) || event.target.value === '') {
 			const target = event.target;
@@ -63,41 +56,43 @@ class HomePage extends Component {
 	handleSettingsUpdate = () => {
 		let { lastTrain, wordsPerDay, page, level,
 			wordsLearntPerPage, maxWordsPerDay, hints } = this.state;
-		if (wordsPerDay > 0 && maxWordsPerDay > 0) {
-			let newSettings = {
-				"wordsPerDay": wordsPerDay,
-				"optional": {
-					"maxWordsPerDay": maxWordsPerDay,
-					"level": level,
-					"page": page,
-					"wordsLearntPerPage": wordsLearntPerPage,
-					"lastTrain": lastTrain,
-					"hints": {
-						"meaningHint": hints.meaningHint,
-						"translationHint": hints.translationHint,
-						"exampleHint": hints.exampleHint,
-						"soundHint": hints.soundHint,
-						"imageHint": hints.imageHint,
-						"transcriptionHint": hints.transcriptionHint
-					},
-				}
-			};
-			addSettingsUser(newSettings);
-		}
+		let newSettings = {
+			"wordsPerDay": wordsPerDay,
+			"optional": {
+				"maxWordsPerDay": maxWordsPerDay,
+				"level": level,
+				"page": page,
+				"wordsLearntPerPage": wordsLearntPerPage,
+				"lastTrain": lastTrain,
+				"hints": {
+					"meaningHint": hints.meaningHint,
+					"translationHint": hints.translationHint,
+					"exampleHint": hints.exampleHint,
+					"soundHint": hints.soundHint,
+					"imageHint": hints.imageHint,
+					"transcriptionHint": hints.transcriptionHint
+				},
+			}
+		};
+		addSettingsUser(newSettings);
 	}
 
 	handleStartGame = () => {
-		let date = new Date();
-		let today = date.toLocaleDateString();
-		if (this.state.lastTrain === today) {
-			this.setState({
-				isModalWindow: true
-			});
+		if (this.state.wordsPerDay > 0 && this.state.maxWordsPerDay > 0) {
+			this.handleSettingsUpdate();
+			let date = new Date();
+			let today = date.toLocaleDateString();
+			if (this.state.lastTrain === today) {
+				this.setState({
+					isModalWindow: true
+				});
+			} else {
+				this.setState({
+					redirect: true,
+				});
+			}
 		} else {
-			this.setState({
-				redirect: true,
-				lastTrain: today
-			});
+			alert('The number of words should be more than 0')
 		}
 	}
 
@@ -114,7 +109,7 @@ class HomePage extends Component {
 					<div className="game-end">
 						<button className="btn" onClick={this.closeModal}>Close</button>
 						<h1 className="info-big">Hurrah, that's it for today!</h1>
-						<div>You have more new cards but you exceeded the limit for 
+						<div>You have more new cards but you exceeded the limit for
 						today. You can continue your training but please keep in mind you will have more words to repeat.</div>
 						<Link className="btn" to="/BasicGame">Play More</Link>
 					</div>
