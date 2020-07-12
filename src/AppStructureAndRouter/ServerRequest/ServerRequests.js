@@ -15,12 +15,15 @@ async function signInRequest(userData){
     const content = await rawResponse.json();
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
+    localStorage.setItem('refreshToken', content.refreshToken)
+    console.log(localStorage.getItem('token'))
+    console.log(localStorage.getItem('userId'))
+    console.log(localStorage.getItem('refreshToken'))
     return content;
   }else{ 
     throw new Error(rawResponse.status);
   }
 }
-
 async function signUpRequest(userData){
   const rawResponse = await fetch(`${baseUrl}/users`, {
      method: 'POST',

@@ -1,10 +1,12 @@
+:root {
+  --text-color: rgb(251, 201, 126);
+}
 .results {
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-image: url('./assets/bg.jpg'); */
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -12,7 +14,6 @@
   transition: .5s;
   text-align: center;
 }
-
 .results-container {
   height: 80vh;
   overflow: scroll;
@@ -23,12 +24,10 @@
   box-sizing: border-box;
   border-radius: 10px;
 }
-
 .errors {
   margin-bottom: 10px;
   font-size: 24px;
 }
-
 .errors-number {
   background-color: tomato;
   color: white;
@@ -36,12 +35,10 @@
   padding: 0 10px;
   margin-left: 5px;
 }
-
 .success {
   margin: 10px 0;
   font-size: 24px;
 }
-
 .success-number {
   background-color: #00c2b2;
   color: white;
@@ -49,7 +46,6 @@
   padding: 0 10px;
   margin-left: 5px;
 }
-
 .results__card {
   display: flex;
   flex-direction: row;
@@ -62,19 +58,12 @@
   padding: 3px 0;
   border-radius: 5px;
 }
-
 .results__text {
   margin: 10px;
 }
-
 .success-items {
   margin-bottom: 10px;
 }
-
-:root {
-  --text-color: rgb(251, 201, 126);
-}
-
 .results__btns button{
   padding: 10px 20px;
   font-size: 20px;
@@ -86,8 +75,6 @@
   color: var(--text-color);
   cursor:pointer;
 }
-
-
 .results__btns button:hover{
   background-color: var(--text-color);
   color: black;
