@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
-import { Route, Redirect, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
 export default class StartSettings extends Component {
-	
+
 	handleSubmit = event => {
 		event.preventDefault();
 	};
@@ -15,7 +14,7 @@ export default class StartSettings extends Component {
 					<input
 						type="text"
 						name="maxWordsPerDay"
-						placeholder="words"
+						placeholder="max words"
 						autoFocus={true}
 						autoComplete="off"
 						value={this.props.maxWordsPerDay}
@@ -28,6 +27,7 @@ export default class StartSettings extends Component {
 					<input
 						type="text"
 						name="wordsPerDay"
+						placeholder="new words"
 						autoComplete="off"
 						value={this.props.wordsPerDay}
 						onChange={(event) => this.props.inputCheck(event)}
@@ -43,18 +43,15 @@ export default class StartSettings extends Component {
 						<option value="combined">combined</option>
 					</select>
 				</label>
-				{/* <Link to="/BasicGame"> */}
-					{
-					this.props.redirect ?
-						<Redirect from="/" to="/BasicGame" /> :
+				{this.props.redirect ?
+					<Redirect from="/" to="/BasicGame" /> :
 					<input
 						type="button"
 						value="Start Training"
 						className="button button_bordered button-training "
 						onClick={this.props.handleStartGame}
 					/>
-				// </ Link >
-					}
+				}
 			</form>
 		);
 	}
