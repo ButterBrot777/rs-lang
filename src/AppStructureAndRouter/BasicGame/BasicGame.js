@@ -35,6 +35,7 @@ class Game1 extends Component {
       wordsPerGame: 0,
       correctGuesses: 0,
       incorrectGuesses: 0,
+      incorrectGuessesObj: [],
       correctGuessesStreak: 0,
       correctGuessesStreakTemp: 0,
       hints: {
@@ -59,27 +60,54 @@ class Game1 extends Component {
     this.addSettingsToState().then(() => {
       if (hardWordsTraining) {
         this.startGameWithLearntWords()
-          .then(() => this.addCurrentDataToState());
+          .then(() => this.addCurrentDataToState())
+          .catch(() => document.location.href = '/HomePage')
       } else {
         if (basicGameWords === 'new') {
           this.startGameWithNewWords()
-            .then(() => this.addCurrentDataToState());
+            .then(() => this.addCurrentDataToState())
+            .catch(() => document.location.href = '/HomePage')
         } else if (basicGameWords === 'learned') {
           this.startGameWithLearntWords(this.state.maxWordsPerDay)
-            .then(() => this.addCurrentDataToState());
+            .then(() => this.addCurrentDataToState())
+            .catch(() => document.location.href = '/HomePage')
         } else {
           let wordLimit = this.state.maxWordsPerDay - this.state.wordsPerDay;
           this.startGameWithLearntWords(wordLimit);
           this.startGameWithNewWords()
-            .then(() => this.addCurrentDataToState());
+            .then(() => this.addCurrentDataToState())
+            .catch(() => document.location.href = '/HomePage')
         }
       }
     })
   }
 
   addSettingsToState = async () => {
-    let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } }
-      = await getSettingsUser();
+    let settings = await getSettingsUser();
+    if (!settings) {
+      let date = new Date()
+      date.setDate(date.getDate() - 1);
+      let yesterday = date.toLocaleDateString();
+      settings = {
+        "wordsPerDay": 20,
+        "optional": {
+          "maxWordsPerDay": 40,
+          "level": 0,
+          "page": 0,
+          "wordsLearntPerPage": 0,
+          "lastTrain": yesterday,
+          "hints": {
+            "meaningHint": true,
+            "translationHint": true,
+            "exampleHint": true,
+            "soundHint": false,
+            "imageHint": false,
+            "transcriptionHint": false
+          }
+        }
+      }
+    }
+    let { wordsPerDay, optional: { maxWordsPerDay, level, page, wordsLearntPerPage, hints } } = settings;
     if (page >= 29 && level < 6) {
       level++;
       page = 0;
@@ -126,23 +154,34 @@ class Game1 extends Component {
     })
   }
 
+  handleNoWords = () => {
+    let { basicGameWords, hardWordsTraining } = this.props;
+    if (basicGameWords === 'learned') {
+      alert('Sorry, you do not have words to repeat, please choose New words mode on the Home page.');
+    } else if (hardWordsTraining) {
+      alert('Sorry, you do not have Hard words to repeat');
+      document.location.href = '/HomePage';
+    } else if (basicGameWords === 'combined') {
+      alert('Please note that you only have new words to learn');
+      return;
+    }
+  }
+
   startGameWithLearntWords = async (maxWordsPerDay) => {
     const userWords = await getAllUserWords();
-    if (!userWords) {
-      if (this.props.basicGameWords === 'learned') {
-        alert('Sorry, you do not have words to repeat, please choose New words mode on the Home page.')
-      } else if (this.props.hardWordsTraining) {
-        alert('Sorry, you do not have Hard words to repeat')
-      } else if (this.props.basicGameWords === 'combined') {
-        return;
-      }
+    if (userWords.length === 0 || !userWords) {
+      this.handleNoWords()
     } else {
       const wordsForGame = this.filterUserWords(maxWordsPerDay, userWords);
-      const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
-      const fullData = await Promise.all(promises);
-      this.setState({
-        fullData: this.state.fullData.concat(fullData)
-      })
+      if (wordsForGame.length === 0) {
+        this.handleNoWords();
+      } else {
+        const promises = wordsForGame.map(async (word) => await getWordById(word.wordId))
+        const fullData = await Promise.all(promises);
+        this.setState({
+          fullData: this.state.fullData.concat(fullData)
+        })
+      }
     }
   }
 
@@ -193,12 +232,14 @@ class Game1 extends Component {
     const value = target.name === 'addToDeleted' ? target.checked : 'addToHard'
       ? target.checked : 'showAnswer' ? target.checked : 'chooseDifficulty';
     const name = target.name;
-    this.setState({
-      buttons: {
-        ...this.state.buttons,
-        [name]: value
-      }
-    });
+    if (!(name === 'chooseDifficulty' && this.state.isDifficultyChoice)) {
+      this.setState({
+        buttons: {
+          ...this.state.buttons,
+          [name]: value
+        }
+      });
+    }
   }
 
   toggleExampleHint = () => {
@@ -351,7 +392,9 @@ class Game1 extends Component {
         correctGuessesStreakTemp: longestStreak,
         correctGuessesStreak: 0,
         incorrectGuesses: this.state.incorrectGuesses + 1,
+        incorrectGuessesObj: [...prevState.incorrectGuessesObj, this.state.currentData]
       }));
+      this.updateDifficultyStats('hard', false, false);
     }
   }
 
@@ -418,7 +461,10 @@ class Game1 extends Component {
             isDifficultyChoice: true,
           })
         } else {
-          this.updateDifficultyStats('good', false, false);
+          let incorrect = this.state.incorrectGuessesObj.find(el => el.id === this.state.currentData.id);
+          if (!incorrect) {
+            this.updateDifficultyStats('good', false, false);
+          }
           setTimeout(() => {
             this.continueGame();
           }, 3000)
@@ -642,8 +688,14 @@ class Game1 extends Component {
                   checked={this.state.buttons.showAnswer} onChange={this.handleCheckboxChange} />
               </span>
               <span>
+<<<<<<< HEAD
                 <label>Difficulty</label>
                 <input type="checkbox" name="chooseDifficulty" className="checkbox-display-btns"
+=======
+                <label>Choose Difficulty</label>
+                <input type="checkbox" name="chooseDifficulty"
+                  className={this.state.isDifficultyChoice ? "checkbox-display-btns opaque" : "checkbox-display-btns"}
+>>>>>>> feat: update user word as hard in case of error
                   checked={this.state.buttons.chooseDifficulty} onChange={this.handleCheckboxChange} />
               </span>
             </div>
