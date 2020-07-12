@@ -62,10 +62,9 @@ export default class App extends Component {
 				</Link>
 			</div>
 		);
-
 		return (
 			<Router>
-				<div className="landing-page" tabIndex={0}>
+				<div className="landing-page" >
 					<div className="wrapper wrapper__header_colored">
 						<div className="header__wrapper wrapper__inner">
 							<header id="header" className="header">
@@ -99,7 +98,7 @@ export default class App extends Component {
 									<UnauthorizedUserPage />
 								)}
 						</Route>
-						<Route path="/BasicGame">
+            <Route path="/BasicGame">
 							{this.state.userAuthorized !== '' ? <BasicGame basicGameWords={this.state.basicGameWords}
 							hardWordsTraining={this.state.hardWordsTraining}
 							 /> : <UnauthorizedUserPage />}
