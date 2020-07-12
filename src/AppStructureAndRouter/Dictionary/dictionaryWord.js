@@ -9,7 +9,7 @@ class Word extends React.Component {
         super(props);
         this.state = {
             data: {},
-            image: "files/01_0001.jpg",
+            image: "",
             tooltipPos: {},
             tooltipText: '',
             isLoading: false
