@@ -10,20 +10,23 @@ import paintings1 from "./PathObjects/level1";
     }
 
     function removeWord() {
-        let current =  gameContext.gameState.indexOfPlayWord
+
         let chosenWords = gameContext.gameState.chosenWords;
         let currentString = gameContext.gameState.currentString;
         let str = gameContext.gameState.strExample;
-        let index = str.indexOf(prop.word)
-        console.log('index',index)
-        chosenWords[prop.index] = '';
+        let index = str.indexOf(prop.word);
+        console.log('убираю',index)
+        chosenWords.splice(chosenWords.indexOf(prop.word),1);
+        chosenWords.push('');
         let empty = chosenWords.indexOf('');
         currentString[index] = prop.word;
         gameContext.setGameState({
             ...gameContext.gameState,
             chosenWords:chosenWords,
             indexOfPlayWord:empty,
-            needToCheck:false })
+            needToCheck:false,
+            checkedWords:[],
+        })
     }
 
      let width = 0;
@@ -50,7 +53,7 @@ import paintings1 from "./PathObjects/level1";
 
                  index = gameContext.gameState.currentStr.indexOf(prop.word);
              }
-             console.log('11111111111111111',localStorage.getItem('flag') )
+
          }
          width =
              (100 / gameContext.gameState.length) * gameContext.gameState.lengthArray[gameContext.gameState.strExample.indexOf(prop.word)]

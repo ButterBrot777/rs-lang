@@ -78,9 +78,9 @@ export default function GameBody(prop) {
     }
 
     function playSound() {
-        if(prop.state.settings.autoSound){let path = prop.state.gameData[prop.state.stringCount].audioExample;
-            let audio = new Audio(`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${path}`)
-            audio.play();}
+        let path = prop.state.gameData[prop.state.stringCount].audioExample;
+            let audio = new Audio(`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${path}`);
+            audio.play()
     }
 
     function button() {
@@ -97,7 +97,7 @@ export default function GameBody(prop) {
         <div >
             <div className='main__container'>
                 <div className={'game__hint'}>
-                    {(prop.state.settings.soundButton) ? <button onClick={() => playSound()}> звук</button>:null}
+                    {(prop.state.settings.soundButton) ? <button onClick={() => playSound()}> звук</button>:''}
                     {(prop.state.settings.translation) ? <p>{prop.state.gameData[prop.state.stringCount].textExampleTranslate}</p>:null}
                 </div>
                 {prop.state.gameData.slice(0,prop.state.stringCount + 1)

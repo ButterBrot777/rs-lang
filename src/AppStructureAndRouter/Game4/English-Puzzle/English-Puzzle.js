@@ -62,7 +62,8 @@ export default function EnglishPuzzle() {
   useEffect(() => {
       // setGameState({...gameState,completed:false})
       console.log(gameState)
-      console.log(localStorage)
+
+
   },);
 
   useEffect(() => {
