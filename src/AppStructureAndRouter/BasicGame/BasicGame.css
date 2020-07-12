@@ -38,7 +38,7 @@ code {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin: 10px auto;
+  padding: 0 2rem;
 }
 
 .basic-game-main {
@@ -104,16 +104,19 @@ code {
 }
 
 .btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   cursor: pointer;
   border: 0;
   outline: 0;
   border-radius: 5px;
-  padding: 7px;
-  background-color: seagreen;
+  padding: 7px 12px 7px;
+  background-color: #279c3f;
   color: rgb(17, 13, 13);
   transition: all 0.3s linear;
   margin: 10px 5px;
   font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
 }
 
 .btn-colored {
@@ -123,9 +126,8 @@ code {
 }
 
 .btn-further {
-  margin: 20px 5px 10px;
-  padding: 10px;
-  font-size: 20px;
+  margin: 2rem;
+  font-size: 2rem;
 }
 
 .hidden {
@@ -165,7 +167,7 @@ code {
   background-color: whitesmoke;
   display: flex;
   border-radius: 10px;
-  min-height: 300px;
+  /* min-height: 300px; */
 }
 
 .word-card-text {
@@ -204,7 +206,8 @@ label {
 }
 
 .progress-container {
-  margin-bottom: 10px;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .progress-current {
@@ -328,3 +331,66 @@ label {
   }
 }
 
+/* =========== MEDIA ========== */
+
+@media (max-width: 880px) {
+  .word-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .word-card-text {
+    display: flex;
+    margin: 0;
+    margin-bottom: 2rem;
+    align-items: center;
+  }
+  .word-card-text > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 320px;
+    flex-wrap: wrap;
+  }
+  .word-card-text > * * {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+}
+
+@media (max-width: 660px) {
+  .checkboxes-container {
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 4rem;
+    text-align: left;
+  }
+  .btns-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 2rem;
+  }
+  .btns-container > * {
+    flex: 30%;
+    margin: 0.5rem;
+  }
+  .basic-game-header {
+    flex-direction: row;
+  }
+  .word-card-text {
+    font-size: 1.6em;
+    align-items: center;
+  }
+  .word-card-text > * * {
+    text-align: center;
+
+  }
+  .word-card img {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+}

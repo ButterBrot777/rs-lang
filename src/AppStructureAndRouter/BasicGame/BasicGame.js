@@ -642,7 +642,7 @@ class Game1 extends Component {
                   checked={this.state.buttons.showAnswer} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Choose Difficulty</label>
+                <label>Difficulty</label>
                 <input type="checkbox" name="chooseDifficulty" className="checkbox-display-btns"
                   checked={this.state.buttons.chooseDifficulty} onChange={this.handleCheckboxChange} />
               </span>
