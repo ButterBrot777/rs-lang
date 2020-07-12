@@ -10,6 +10,8 @@ class Word extends React.Component {
         this.state = {
             data: {},
             image: "files/01_0001.jpg",
+            tooltipPos: {},
+            tooltipText: '',
             isLoading: false
         }
     }
@@ -17,7 +19,8 @@ class Word extends React.Component {
     componentDidMount = async () => {
         this.setState({ isLoading: true });
         const data = await getWordData(this.props.wordId);
-        this.setState({data: data, image: data.image, isLoading: false,})
+        this.setState({data: data, image: data.image, isLoading: false,});
+        this.drawDots();
     }
 
     putToLearning = async () => {
@@ -48,6 +51,91 @@ class Word extends React.Component {
         this.wordAudio.play();
     }
 
+    drawDots = () => {
+        const canvas = this.refs.canvas;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        const d = 5;
+        ctx.fillStyle='rgb(19,40,59)';
+        ctx.beginPath();
+        ctx.arc(5, 10, d, 0, 2*Math.PI);
+        ctx.fill();
+        let level = 0;
+        if (this.props.difficulty === 'hard' && this.props.optional.repeatsTotal <= 2) {
+            level = 1;
+            ctx.beginPath();
+            ctx.arc(20, 10, d, 0, 2*Math.PI);
+            ctx.fill();
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 2; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if ((this.props.difficulty === 'hard' && this.props.optional.repeatsTotal > 2) || (this.props.difficulty === 'good' && this.props.optional.repeatsTotal <= 2)) {
+            level = 2;
+            for (let i = 1; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 3; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if ((this.props.difficulty === 'good' && this.props.optional.repeatsTotal > 2) || (this.props.difficulty === 'easy' && this.props.optional.repeatsTotal <= 2)) {
+            level = 3;
+            for (let i = 1; i < 4; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 4; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if (this.props.difficulty === 'easy' && this.props.optional.repeatsTotal > 2) {
+            level = 4;
+            for (let i = 1; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else {
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 1; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        }
+
+        const tooltipTextVariants = [
+            'New word. Never played in daily train',
+            'You need to learn this word',
+            'You are learning this word',
+            'This word is common for you',
+            'You have an excellent memory'
+        ]
+
+        canvas.onmouseover = () => {
+            const tooltipPos = {
+                left: 0,
+            }
+            const tooltipText = tooltipTextVariants[level];
+            this.setState({ tooltipPos: tooltipPos, tooltipText: tooltipText });
+        }
+
+        canvas.onmouseout = () => {
+            this.setState({ tooltipPos: {}, tooltipText: '' });
+        }
+    }
+
     render() {
         const { data, image, isLoading } = this.state;
         const lastTrainDate = createDateFromTimestamp(this.props.optional.lastTrain);
@@ -56,6 +144,11 @@ class Word extends React.Component {
         if (data.textMeaning &&  data.textExample) {
             data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
             data.textExample = data.textExample.replace(BRACKETS_REGEXP, "");
+        }
+
+        const tooltipStyle = {
+            position: 'absolute',
+            left: this.state.tooltipPos.left
         }
        
         if (isLoading) {
@@ -73,7 +166,14 @@ class Word extends React.Component {
                             {this.props.transcriptionInfo ? <p className="dictionary-transcription">{data.transcription}</p> : ''}
                             <p className="dictionary-translation">{data.wordTranslate}</p>
                             {this.props.meaningInfo ? <p className="dictionary-meaning">{data.textMeaning}</p> : ''}
-                            {this.props.exampleInfo ? <p className="dictionary-example">{data.textExample}</p> : ''} 
+                            {this.props.exampleInfo ? <p className="dictionary-example">{data.textExample}</p> : ''}
+                            <div className="dictionary-word-canvas-container">
+                                <canvas ref="canvas" width={200} height={30}/>
+                                {this.state.tooltipText ? <div className="dictionary-word-tooltip" style={tooltipStyle}>
+                                    <p>{this.state.tooltipText}</p>
+                                </div> : ''}
+                            </div>
+                            
                         </div>
                         {this.props.imageInfo ? <img className="dictionary-image" src={imageSrc} alt={data.word} /> : ''}
                     </div>

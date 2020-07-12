@@ -76,7 +76,7 @@ class Dictionary extends React.Component {
                     {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
                 <div className="train-hard-btn-container">
-                    {words === "hard" ? <Link className="dictionary-btn train-hard-btn" to="/BasicGame">Train hard words</Link> : ''}
+                    {words === "hard" ? <Link to="/BasicGame"><button className="dictionary-btn train-hard-btn" onClick={this.props.handlehardWordsTraining}>Train hard words</button></Link> : ''}
                 </div>
                
             </div>

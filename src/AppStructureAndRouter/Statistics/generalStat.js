@@ -111,7 +111,7 @@ class GeneralStat extends React.Component {
 
     }
 
-    drawGrid = (ctx, h, w, max) => {
+    drawGrid = (ctx, h, w) => {
         for (let x = 50; x <= w; x += 100) {
             ctx.moveTo(x, 0);
             ctx.lineTo(x, h);
