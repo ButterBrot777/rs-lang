@@ -1,17 +1,8 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
-  background-color: whitesmoke;
+.speakit__app {
+  position: relative;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-.start-screen {
+.speakit__start-screen {
   position: absolute;
   background-image: url('./assets/bg.jpg');
   background-repeat: no-repeat;
@@ -25,7 +16,7 @@ code {
   transition: .5s;
 }
 
-.start-name {
+.speakit__start-name {
   font-size: 70px;
   text-transform: uppercase;
   letter-spacing: 10px;
@@ -35,7 +26,7 @@ code {
   -webkit-text-stroke-color: black;
 }
 
-.start-info {
+.speakit__start-info {
   margin: 0 auto 50px;
   text-align: center;
   font-size: 16px;
@@ -45,7 +36,7 @@ code {
   padding: 0 10px;
 }
 
-.start-button {
+.speakit__start-button {
   background-color: #115569;
   color: wheat;
   border-radius: 5px;
@@ -60,38 +51,39 @@ code {
   outline: 0;
 }
 
-.start-button:hover {
+.speakit__start-button:hover {
   transform: scale(1.1);
   transition: transform 0.3s ease;
 }
 
-.hidden {
+.speakit__hidden {
   display: none !important;
 }
 
-.header {
+.speakit__header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px 50px;
 }
 
-.settings-inputs {
+.speakit__settings-inputs {
   max-width: 30px;
   margin: 0 5px;
   text-align: center;
 }
 
-.rating {
+.speakit__rating {
   display: flex;
 }
 
-.star {
+.speakit__star {
   width: 40px;
   height: 40px;
   background-size: 40px;
 }
 
-.mic {
+.speakit__mic {
   width: 30px;
   height: 37px;
   position: absolute;
@@ -99,7 +91,7 @@ code {
   opacity: 0.8;
 }
 
-.main {
+.speakit__main {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -108,12 +100,12 @@ code {
   max-width: 1120px;
 }
 
-.result-card {
+.speakit__result-card {
   display: flex;
   flex-direction: column;
 }
 
-.image {
+.speakit__image {
   width: 390px;
   height: 220px;
   border-radius: 8px;
@@ -122,7 +114,7 @@ code {
   object-fit: initial;
 }
 
-.translation {
+.speakit__translation {
   color: rgb(39, 36, 36);
   text-align: center;
   min-height: 45px;
@@ -130,7 +122,7 @@ code {
   font-size: 24px;
 }
 
-.input-speech {
+.speakit__input-speech {
   min-height: 30px;
   text-align: center;
   font-size: 24px;
@@ -139,14 +131,14 @@ code {
   padding: 5px 0;
 }
 
-.cards {
+.speakit__cards {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 10px auto 65px;
 }
 
-.card {
+.speakit__card {
   border-radius: 10px;
   border: 1px solid grey;
   display: flex;
@@ -160,36 +152,36 @@ code {
   font-size: 20px;
 }
 
-.card:hover {
+.speakit__card:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
 
-.card-active {
+.speakit__card-active {
   background-color: rgba(0, 173, 159, .25);
 }
 
-.card__icon {
+.speakit__card-icon {
   width: 40px;
   height: 40px;
   background-size: cover;
 }
 
-.card__text {
+.speakit__card-text {
   text-align: center;
 }
 
-.bold {
+.speakit__bold {
   font-weight: bold;
 }
 
-.btns {
+.speakit__btns {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.btn {
+.speakit__btn {
   color: seashell;
   margin: 0 10px;
   background-color: #00c2b2;
@@ -202,21 +194,22 @@ code {
   border: 0;
 }
 
-.btn-wide {
+.speakit__btn-wide {
   width: 300px;
 }
 
-.btn-small {
+.speakit__btn-small {
   padding: 5px;
 }
 
-.btn-return, .btn-new-game, .btn-small {
+.speakit__btn-return, .speakit__btn-new-game, .speakit__btn-small {
   font-size: 20px;
+  margin-bottom: 10px;
 }
 
 /*****************STATS*******************/
 
-.results {
+.speakit__results {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -231,21 +224,20 @@ code {
   text-align: center;
 }
 
-.results-container {
-  width: 100%;
+.speakit__results-container {
+  width: 70%;
   max-width: 780px;
-  padding: 10px;
   background-color: white;
   box-sizing: border-box;
   border-radius: 10px;
 }
 
-.errors {
+.speakit__errors {
   margin-bottom: 10px;
   font-size: 24px;
 }
 
-.errors-number {
+.speakit__errors-number {
   background-color: tomato;
   color: white;
   border-radius: 30%;
@@ -253,12 +245,12 @@ code {
   margin-left: 5px;
 }
 
-.success {
+.speakit__success {
   margin: 10px 0;
   font-size: 24px;
 }
 
-.success-number {
+.speakit__success-number {
   background-color: #00c2b2;
   color: white;
   border-radius: 30%;
@@ -266,7 +258,7 @@ code {
   margin-left: 5px;
 }
 
-.results__card {
+.speakit__results-card {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -279,45 +271,74 @@ code {
   border-radius: 5px;
 }
 
-.results__text {
+.speakit__results-text {
   margin: 10px;
 }
 
-.success-items {
+.speakit__success-items {
   margin-bottom: 10px;
 }
 
-.inputs-container {
+.speakit__inputs-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* =========== MEDIA ========== */
 
+@media (max-width: 970px) {
+  .speakit__start-screen {
+    justify-content: start;
+    padding-top: 4rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .start-name {
+  .speakit__start-name {
     font-size: 50px;
   }
-  .btn-wide {
+  .speakit__btn-wide {
     width: 150px;
   }
-  .btn {
+  .speakit__btn {
     font-size: 20px;
     padding: 7px 12px;
   }
-  .cards {
+  .speakit__btn-small {
+    padding: 5px;
+  }
+  .speakit__cards {
     margin-bottom: 20px;
   }
 }
 
+@media (max-width: 700px) {
+  .speakit__results-card {
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 450px) {
-  .btns {
+  .speakit__btns {
     flex-direction: column;
   }
-  .btn {
+  .speakit__btn {
     margin: 10px 0;
   }
-  .image {
+  .speakit__image {
     width: 250px;
     height: 130px;
+  }
+}
+
+@media (max-width: 500px) {
+  .speakit__results-container {
+    overflow-y: scroll;
+  }
+  .speakit__results-card {
+    flex-direction: column;
+    margin: 5px 0;
+    font-size: 20px;
   }
 }
