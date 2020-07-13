@@ -516,6 +516,7 @@ class Game1 extends Component {
     let date = new Date();
     let today = date.toLocaleDateString();
     let { wordsPerDay, page, level, wordsLearntPerPage, maxWordsPerDay, hints } = this.state;
+    let { meaningHint, translationHint, exampleHint, soundHint, imageHint, transcriptionHint } = hints;
     if (wordsPerDay > 0 && maxWordsPerDay > 0) {
       let newSettings = {
         "wordsPerDay": wordsPerDay,
@@ -526,12 +527,12 @@ class Game1 extends Component {
           "wordsLearntPerPage": wordsLearntPerPage,
           "lastTrain": today,
           "hints": {
-            "meaningHint": hints.meaningHint,
-            "translationHint": hints.translationHint,
-            "exampleHint": hints.exampleHint,
-            "soundHint": hints.soundHint,
-            "imageHint": hints.imageHint,
-            "transcriptionHint": hints.transcriptionHint,
+            "meaningHint": meaningHint,
+            "translationHint": translationHint,
+            "exampleHint": exampleHint,
+            "soundHint": soundHint,
+            "imageHint": imageHint,
+            "transcriptionHint": transcriptionHint,
           },
         }
       };
@@ -673,22 +674,22 @@ class Game1 extends Component {
             <div className="checkboxes-container">
               <span>Show buttons: </span>
               <span>
-                <label>Delete</label>
+                <label className="label-text">Delete</label>
                 <input type="checkbox" name="addToDeleted" className="checkbox-display-btns"
                   checked={this.state.buttons.addToDeleted} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Hard Words</label>
+                <label className="label-text">Hard Words</label>
                 <input type="checkbox" name="addToHard" className="checkbox-display-btns"
                   checked={this.state.buttons.addToHard} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Answer</label>
+                <label className="label-text">Answer</label>
                 <input type="checkbox" name="showAnswer" className="checkbox-display-btns"
                   checked={this.state.buttons.showAnswer} onChange={this.handleCheckboxChange} />
               </span>
               <span>
-                <label>Choose Difficulty</label>
+                <label className="label-text">Choose Difficulty</label>
                 <input type="checkbox" name="chooseDifficulty"
                   className={this.state.isDifficultyChoice ? "checkbox-display-btns opaque" : "checkbox-display-btns"}
                   checked={this.state.buttons.chooseDifficulty} onChange={this.handleCheckboxChange} />
@@ -717,10 +718,11 @@ class Game1 extends Component {
               <div>
                 <form onSubmit={this.handleSubmit}>
                   <LettersInput isGuessCheck={this.state.isGuessCheck} word={this.state.currentWord}
+                  isGuessed={this.state.isGuessed} isSkipped={this.state.isSkipped} 
                     inputAttempt={this.state.inputAttempt} value={this.state.inputValue}
                     handleInputChange={this.handleInputChange} coloredLetters={this.state.coloredLetters}
                   />
-                  <div>{translationBlock}</div>
+                  <div className="label-text">{translationBlock}</div>
                   <button className="btn btn-further" onClick={this.onClickFurther}>Next</button>
                 </form>
               </div>

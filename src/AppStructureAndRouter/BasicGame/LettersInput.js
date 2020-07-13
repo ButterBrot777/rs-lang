@@ -28,7 +28,8 @@ class LettersInput extends React.Component {
                     }
                 </div>
                 <input
-                    type="text" className="word-input"
+                    type="text" className="word-input" 
+                    readOnly={(this.props.isGuessed || this.props.isSkipped) ? true : false}
                     autoFocus={true} autoComplete="off" value={this.props.value}
                     onChange={(e) => this.props.handleInputChange(e.target.value)}
                 ></input>
