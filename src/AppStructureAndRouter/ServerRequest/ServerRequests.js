@@ -1,6 +1,45 @@
-const token = localStorage.getItem('token');
-const userId = localStorage.getItem('userId');
 const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+
+// Проверка на рабочий Token
+const getToken = async () => {
+  console.log('getToken отработал')
+  let dateNow = +new Date()
+  if (localStorage.getItem('RefreshTime') > dateNow) {
+    return localStorage.getItem('token');
+  }
+  return getRefreshToken()
+}
+// Запрос на обновление Token  
+const getRefreshToken = async () => {
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/tokens`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+          'accept': 'application/json',
+        },
+      });
+      if (rawResponse.status === 200) {
+
+        const content = await rawResponse.json();
+        let date = +new Date();
+        const timeRefresh = 14400000
+
+        date += timeRefresh;
+        localStorage.setItem('RefreshTime', date);
+        localStorage.setItem('token', content.token)
+        localStorage.setItem('refreshToken', content.refreshToken)
+        // console.log(localStorage.getItem('token'), 'sdfsdfcxvcxvxcvxv13123123123131')
+        return localStorage.getItem('token')
+      } else {
+        localStorage.setItem('RefreshTime', '')
+        localStorage.setItem('userId', '');
+        localStorage.setItem('refreshToken', '')
+        localStorage.setItem('token', '')
+
+        throw new Error(rawResponse.status)
+      }
+}
+
 
 async function signInRequest(userData){
   const rawResponse = await fetch(`${baseUrl}/signin`, {
@@ -13,6 +52,9 @@ async function signInRequest(userData){
   });
   if(rawResponse.status === 200){
     const content = await rawResponse.json();
+    let date = +new Date();
+    date+=14400000;
+    localStorage.setItem('RefreshTime', date);
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
     localStorage.setItem('refreshToken', content.refreshToken)
@@ -38,7 +80,8 @@ async function signUpRequest(userData){
 }
 
 const startSettingsUser = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -69,7 +112,8 @@ const startSettingsUser = async () => {
 }
 
  const addSettingsUser = async (settingsData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -84,7 +128,8 @@ const startSettingsUser = async () => {
 }
 
 const getSettingsUser = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,7 +141,8 @@ const getSettingsUser = async () => {
 }
 
 const updateStatisticsUser = async (statisticsData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -111,7 +157,8 @@ const updateStatisticsUser = async (statisticsData) => {
 }
 
 const getStatisticsUser = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -125,6 +172,7 @@ const getStatisticsUser = async () => {
 
 
 const getNewWords = async (page, group) => {
+
   const url = `${baseUrl}/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
@@ -132,7 +180,8 @@ const getNewWords = async (page, group) => {
 }
 
 const getUserWord = async (wordId) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
@@ -151,7 +200,8 @@ const getUserWord = async (wordId) => {
 };
 
 const createUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
     method: 'POST',
     withCredentials: true,
     headers: {
@@ -166,7 +216,8 @@ const createUserWord = async (wordId, wordData) => {
 };
 
 const updateUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -181,7 +232,9 @@ const updateUserWord = async (wordId, wordData) => {
 };
 
 const getAllUserWords = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/`, {
+  const token = await getToken();
+  console.log(token)
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -205,5 +258,18 @@ const loginUser = async user => {
   const content = await rawResponse.json();
   return content;
 };
+const filterUserWords = async () => {
+  const userWords = await getAllUserWords();
+  const currentDate = new Date();
+  const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
+  console.log(wordsForGame)
+  return wordsForGame;
+}
+const getWordById = async (wordId) => {
+  const url = `${baseUrl}/words/${wordId}?noAssets=true`;
+  const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, filterUserWords, getWordById}

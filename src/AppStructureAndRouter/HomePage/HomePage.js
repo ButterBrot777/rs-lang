@@ -8,6 +8,7 @@ import './HomePage.scss';
 import StartSettings from './InputSelect';
 
 class HomePage extends Component {
+
 	render() {
 		return (
 			<div className="wrapper__home-page">
