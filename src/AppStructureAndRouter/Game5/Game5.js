@@ -29,9 +29,9 @@ class Game5 extends Component{
 
 
   async zxc(userWords, pageTransition, levelTransition){
-    if(userWords.length >= 40){
+    if(userWords.length >= 20){
 
-      return userWords.slice(0,40)
+      return userWords.slice(0,20)
     }else{
       if(levelTransition<29){
         levelTransition+=1

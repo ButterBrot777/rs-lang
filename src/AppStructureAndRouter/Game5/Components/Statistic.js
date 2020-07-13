@@ -70,4 +70,4 @@ class Card extends React.Component {
   }
 }
 
-export default Statistic
+// export default Statistic

@@ -212,6 +212,7 @@ const createUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
+  console.log(content)
   return content;
 };
 
