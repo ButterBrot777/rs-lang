@@ -167,7 +167,7 @@ code {
   background-color: whitesmoke;
   display: flex;
   border-radius: 10px;
-  /* min-height: 300px; */
+  min-height: 300px;
 }
 
 .word-card-text {
@@ -176,6 +176,10 @@ code {
   justify-content: space-evenly;
   margin-right: 10px;
   font-size: 22px;
+}
+
+.word-card-text div {
+  justify-content: center;
 }
 
 .word-input {
@@ -195,7 +199,7 @@ code {
   text-align: center;
 }
 
-label {
+.label-text {
   font-size: 16px;
 }
 
@@ -338,6 +342,7 @@ label {
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    justify-content: center;
   }
   .word-card-text {
     display: flex;
