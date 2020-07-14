@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 
 import WordsAll  from '../../AllWords/AllWords' 
 import Buttons from './Buttons'
-import Statistic from '../../StatisticPage/StatisticPage'
+// import Statistic from './Statistic'
+import Statistic from '../../StatisticPage/Statistic'
 
 class Game extends Component{
   timer = this.props.difficulty

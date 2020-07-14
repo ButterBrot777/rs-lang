@@ -36,7 +36,6 @@ const getRefreshToken = async () => {
         localStorage.setItem('refreshToken', '')
         localStorage.setItem('token', '')
 
-        throw new Error(rawResponse.status)
       }
 }
 
@@ -78,6 +77,39 @@ async function signUpRequest(userData){
     throw new Error(rawResponse.status);
    }
 }
+
+const startStatisticsUser = async () => {
+  const token = await getToken();
+  const date = +new Date()
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
+    method: 'PUT',
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        "learnedWords": 0,
+        "optional": {
+          "dateOfReg": date, 
+          "speakIt": [
+          ],
+          "puzzle": [
+          ],
+          "savannah": [
+          ],
+          "sprint": [
+          ],
+          "audioCall": [
+          ],
+        }
+      })
+  });
+  const content = await rawResponse.json();
+  return content;
+}
+
 
 const startSettingsUser = async () => {
   const token = await getToken();
@@ -166,8 +198,8 @@ const getStatisticsUser = async () => {
       'Accept': 'application/json',
     },
   });
-  const content = await rawResponse.json();
-  return content;
+  const content = await rawResponse.json()
+  return content
 }
 
 
@@ -273,4 +305,4 @@ const getWordById = async (wordId) => {
   return content;
 }
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, filterUserWords, getWordById}
+export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, filterUserWords, getWordById, startStatisticsUser}

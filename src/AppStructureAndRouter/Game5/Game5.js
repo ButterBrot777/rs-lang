@@ -86,8 +86,11 @@ class Game5 extends Component{
   .then(userWords=>{
     getSettingsUser()
     .then(res=>{
+      console.log(userWords)
+      console.log(res)
       let pageTransition = res.optional.level
       let levelTransition = res.optional.page
+      console.log(levelTransition, pageTransition)
       this.zxc(userWords, pageTransition, levelTransition).then(res=> {
         console.log(res)
         this.setState({

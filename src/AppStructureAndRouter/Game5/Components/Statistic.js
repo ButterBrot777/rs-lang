@@ -25,20 +25,20 @@ class Statistic extends Component{
       <div className="results">
         <div className="results-container">
           <p className="errors">Errors
-            <span className="errors-number">{this.props.true.length}</span>
+            <span className="errors-number">{this.props.false.length}</span>
           </p>
           <div className="error-items">
-            {this.props.true.map(wordObj =>
+            {this.props.false.map(wordObj =>
               <Card wordObj={wordObj} 
                     key={wordObj.id}
                     onCardClick={this.handleCardClick} />
             )}
           </div>
             <p className="success">I know
-              <span className="success-number">{this.props.false.length}</span>
+              <span className="success-number">{this.props.true.length}</span>
             </p>
           <div className="success-items">
-            {this.props.false.map(wordObj =>
+            {this.props.true.map(wordObj =>
               <Card wordObj={wordObj} 
                     key={wordObj.id} 
                     onCardClick={this.handleCardClick} />
@@ -70,4 +70,4 @@ class Card extends React.Component {
   }
 }
 
-// export default Statistic
+export default Statistic
