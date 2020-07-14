@@ -8,8 +8,8 @@ export default function StatisticString(prop) {
   }
   return (
       <div className={'statistic__string'}>
-          <button onClick={() => playAudio()}>Звук</button>
-          <p>{`${prop.wordData.textExample}`}</p>
+          <button className="button button_bordered" onClick={() => playAudio()}>Sound</button>
+          <p className="puzzle-result-message">{`${prop.wordData.textExample}`}</p>
       </div>
   )
 }

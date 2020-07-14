@@ -4,10 +4,9 @@ export  default function StartedPage(prop) {
 
         <div className={'start__page__main__bg'}>
             <div className={'start__page__main__container'}>
-                <p>English Puzzle</p>
-                <p>Click on words, collect phrases.</p>
-                <p>Words can be drag and drop. Select tooltips in the menu</p>
-                <button onClick={() => prop.setGameState({...prop.state, startedPage: false})}> Начать</button>
+                <h2>English Puzzle</h2>
+                <h3>Click on words, collect phrases.</h3>
+                <button className="button button_bordered" onClick={() => prop.setGameState({...prop.state, startedPage: false})}>Play</button>
             </div>
         </div >
     )

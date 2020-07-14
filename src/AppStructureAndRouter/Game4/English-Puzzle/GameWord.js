@@ -15,7 +15,6 @@ import paintings1 from "./PathObjects/level1";
         let currentString = gameContext.gameState.currentString;
         let str = gameContext.gameState.strExample;
         let index = str.indexOf(prop.word);
-        console.log('убираю',index)
         chosenWords.splice(chosenWords.indexOf(prop.word),1);
         chosenWords.push('');
         let empty = chosenWords.indexOf('');

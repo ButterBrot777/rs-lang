@@ -85,11 +85,11 @@ export default function GameBody(prop) {
 
     function button() {
          if( prop.state.completed === true ){
-             return <button onClick={() => showWord()}>continue</button>
+             return <button className="button button_bordered" onClick={() => showWord()}>Continue</button>
          } else if(prop.state.needToCheck && prop.state.completed === false) {
-             return <button onClick={() => check()}> Check</button>
+             return <button className="button button_bordered" onClick={() => check()}> Check</button>
          }else if(prop.state.needToCheck === false && prop.state.completed === false ){
-            return <button onClick={() => complete()}>I dont know</button>
+            return <button className="button button_bordered" onClick={() => complete()}>I dont know</button>
          }
     }
 
@@ -97,18 +97,19 @@ export default function GameBody(prop) {
         <div >
             <div className='main__container'>
                 <div className={'game__hint'}>
-                    {(prop.state.settings.soundButton) ? <button onClick={() => playSound()}> звук</button>:''}
-                    {(prop.state.settings.translation) ? <p>{prop.state.gameData[prop.state.stringCount].textExampleTranslate}</p>:null}
+                    {(prop.state.settings.soundButton) ? <button className="button button_colored" onClick={() => playSound()}>Play</button>:''}
+                    {button()}
+                    {(prop.state.settings.translation) ? <p className="translation-example">{prop.state.gameData[prop.state.stringCount].textExampleTranslate}</p>:null}
                 </div>
-                {prop.state.gameData.slice(0,prop.state.stringCount + 1)
+            </div>
+            <div className={'play__field'}>
+            {prop.state.gameData.slice(0,prop.state.stringCount + 1)
                     .map((e, i) =>
                         <GameString gameState = {prop.state}
                                     string = {e.textExample}
                                     index ={i} canClicked = {false}
                                     play = {false}
                         />)}
-            </div>
-            <div className={'play__field'}>
                 <GameString
                     string = {prop.state.gameData[prop.state.stringCount].textExample}
                     gameState = {prop.state}
@@ -117,7 +118,6 @@ export default function GameBody(prop) {
                     play = {true}
                 />
             </div>
-            {button()}
         </div>
     )
 }

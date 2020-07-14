@@ -1,15 +1,12 @@
-h1{
-  color: darkcyan;
-  font-size: 30px;
-}
-.Game4{
-  background-color: crimson;
-}
 .game__string{
   display: flex;
-  width:800px;
-  background-color: red;
+  width: 800px;
+  justify-content: flex-start;
   height: 70px;
+  background-color: #d1c6cf;
+}
+.game__string:last-child {
+  margin-top: 2rem;
 }
 .lds-ring {
   display: inline-block;
@@ -35,7 +32,10 @@ h1{
 .Statistic__word{
   display: flex;
 }
-.Main__container{
+.main__container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0 auto;
   width: 50%;
 }
@@ -57,9 +57,11 @@ h1{
   }
 }
 .game__word{
+  color: white;
+  font-size: 2rem;
   height: 70px;
 
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 .game__word__text{
   color: black;
@@ -73,18 +75,16 @@ h1{
 
   color: red;
 }
-.header__button__english{
-
+.game__hint > .button_colored {
+  margin-right: 2rem;
 }
 .button__active{
   background-color: green;
 }
-.main__container{
-  max-height: 700px;
 
-
-}
 .start__page__main__bg{
+  font-size: 2rem;
+  color: white;
   height: 100vh;
   background-image: url("./English-Puzzle/assets/olen_art_vektor_134088_1920x1080.jpg");
   background-size: cover;
@@ -99,22 +99,120 @@ h1{
 }
 .english__header{
   width: 100vw;
-  justify-content: flex-end;
+  justify-content: center;
   display: flex;
 
 }
 .english__header__button__container{
   display: flex;
   justify-content: space-between;
-  width: 30vw;
   padding: 10px;
 }
 .game__hint{
   text-align: center;
 }
+
 .play__field{
-  margin-top:80px ;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+.btn-further {
+  margin: 2rem;
+  font-size: 2rem;
 }
 .statistic__string{
   display: flex;
+  padding: 0.5rem;
+}
+.statistic__string > *:first-child {
+  margin: 0 1rem;
+}
+
+.btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  cursor: pointer;
+  border: 0;
+  outline: 0;
+  border-radius: 5px;
+  padding: 7px 12px 7px;
+  background-color: #279c3f;
+  color: rgb(17, 13, 13);
+  transition: all 0.3s linear;
+  margin: 10px 5px;
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+}
+.translation-example {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 2rem;
+}
+.game__text {
+  font-size: 2rem;
+}
+
+.end__screen__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.end__screen__main img {
+  width: 100%;
+}
+.end__screen__main .button {
+  margin: 2rem 1rem;
+}
+.image-name-result {
+  font-size: 2rem;
+  text-align: center;
+}
+.puzzle-result-message {
+  display: flex;
+  font-size: 1.8rem;
+  margin: 0;
+  align-items: center;
+}
+.puzzle-statistic-info {
+  padding: 2rem;
+}
+.puzzle-final-message {
+  font-size: 2.5rem;
+  margin-left: 2rem;
+}
+.puzzle-statistic-button-container {
+  margin: 2rem;
+  margin-left: 3.5rem;
+}
+
+/* ================ MEDIA ============ */
+
+@media (max-width: 840px) {
+  .play__field {
+    flex-direction: column;
+    transform: rotate(-90deg);
+  }
+  div .play__field {
+    display: flex;
+    margin-top: 32rem;
+  }
+}
+
+@media (max-width: 490px) {
+  .game__hint > * {
+    margin: 0;
+    margin-right: 0 !important;
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .english__header__button__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

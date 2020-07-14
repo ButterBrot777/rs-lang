@@ -59,23 +59,17 @@ export default function Statistic(prop) {
 
     return (
         <div>
-            <div>
-                <img src={`https://raw.githubusercontent.com/jules0802/rslang_data_paintings/master/${prop.state.image.cutSrc}`} />
-                <p>{`${prop.state.image.author}-${prop.state.image.name} (${prop.state.image.year})`}</p>
+            <div className="puzzle-statistic-info">
+                <div className="puzzle-knowledge-info">
+                <p className="puzzle-final-message">I dont know: {prop.state.statistic.falseWords.length}</p>
+                {prop.state.statistic.trueWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
+                <p className="puzzle-final-message">I know: {prop.state.statistic.trueWords.length}</p>
+                {prop.state.statistic.falseWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
             </div>
-            <div>
-                <div>
-                    <p>I dont know {prop.state.statistic.trueWords.length}</p>
-                    {prop.state.statistic.trueWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
-                </div>
-                <div>
-                    <p>I know {prop.state.statistic.falseWords.length}</p>
-                    {prop.state.statistic.falseWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
-                </div>
-            </div>
-            <div>
-                <buttton onClick = {() => newGame(prop.state.gameData.slice(10))} >Continue</buttton>
-            </div>
+        </div>
+        <div className="puzzle-statistic-button-container">
+            <buttton className="button button_colored" onClick = {() => newGame(prop.state.gameData.slice(10))} >Continue</buttton>
+        </div>
         </div>
     )
 }
