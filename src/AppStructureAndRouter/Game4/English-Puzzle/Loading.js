@@ -1,8 +1,8 @@
 import React from "react";
 
-export default class Loading extends React.Component{
+export default class Loading extends React.Component {
     render() {
-        return(
+        return (
             <div className="lds-ring">
                 <div></div>
                 <div></div>

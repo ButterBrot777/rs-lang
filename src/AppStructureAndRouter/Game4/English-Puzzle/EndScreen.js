@@ -17,7 +17,6 @@ export default function EndScreen(prop) {
     const hardInterval = 1;
 
     async function  handleUserWordUpdate(diffLevel, wordId){
-        console.log(diffLevel,wordId)
         let word = await getUserWord(wordId);
         let lastTrain = +new Date();
         if (!word) {
@@ -40,7 +39,7 @@ export default function EndScreen(prop) {
                     nextTrain
                 }
             }
-            console.log('1', newWord)
+
 
             createUserWord(wordId, newWord);
         } else {
@@ -65,7 +64,7 @@ export default function EndScreen(prop) {
             } else {
                 nextTrain = lastTrain;
             }
-            console.log(nextTrain)
+
             let repeatsStreak = word.optional.repeatsStreak + 1;
             let repeatsTotal = word.optional.repeatsTotal + 1;
             let newWord = { ...word, optional: { ...word.optional, repeatsStreak, repeatsTotal, lastTrain, nextTrain } }
@@ -109,7 +108,7 @@ export default function EndScreen(prop) {
             },
         });
         const content = await rawResponse.json();
-        console.log('статистика',content)
+
         return content;
     };
 
@@ -125,25 +124,18 @@ export default function EndScreen(prop) {
             body: JSON.stringify(statisticsData)
         });
         const content = await rawResponse.json();
-        console.log('ответ',content)
+
         return content;
     };
 
 
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array
 
-    };
 
-    function newGame(){
-        localStorage.setItem('imageCount',`${prop.state.imageCount + 1}`);
+    function newGame() {
+        localStorage.setItem('imageCount', `${prop.state.imageCount + 1}`);
         prop.setState({
             ...prop.state,
-            loading:true,
+            loading: true,
         })
         prop.newGame(userId)
 

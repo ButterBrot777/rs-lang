@@ -1,5 +1,6 @@
 import React from "react";
-export  default function StartedPage(prop) {
+
+export default function StartedPage(prop) {
     return (
 
         <div className={'start__page__main__bg'}>
@@ -9,6 +10,6 @@ export  default function StartedPage(prop) {
                 <p>Words can be drag and drop. Select tooltips in the menu</p>
                 <button onClick={() => prop.setGameState({...prop.state, startedPage: false})}> Начать</button>
             </div>
-        </div >
+        </div>
     )
 }
