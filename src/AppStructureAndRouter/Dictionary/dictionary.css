@@ -186,6 +186,23 @@
     text-align: center;
 }
 
+.dictionary-arrows-container {
+    display: flex;
+    justify-content: center;
+    color: rgba(19,40,59);
+    font-size: 36px;
+}
+
+.dictionary-arrow-left {
+    margin-right: 40px;
+    cursor: pointer;
+}
+
+.dictionary-arrow-right {
+    margin-left: 40px;
+    cursor: pointer;
+}
+
 .invisible {
     display: none;
 }
@@ -201,7 +218,7 @@
     .word-main-info {
         width: 100%;
         display: block;
-        height: 380px;
+        height: auto;
     }
 
     .dictionary-image {
