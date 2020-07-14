@@ -32,6 +32,18 @@ export default class App extends Component {
 		this.userLogOut = this.userLogOut.bind(this);
 		// this.refreshToken = this.refreshToken.bind(this)
 	}
+
+	handleWordsChoice = (value) => {
+    this.setState({
+      basicGameWords: value
+    })
+  }
+
+  handlehardWordsTraining = () => {
+    this.setState({
+      hardWordsTraining: true
+    })
+  }
 	
 	// refreshToken(){
 	// 	const refreshToken = localStorage.getItem('refreshToken');
