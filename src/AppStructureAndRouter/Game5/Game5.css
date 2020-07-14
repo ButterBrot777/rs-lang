@@ -204,10 +204,10 @@
   .savannah-game_content{
     height: 70vh;
   }
-  .savannah-game_control-btns{
+  /* .savannah-game_control-btns{
     width: 550px;
     display: inline-block;
-  }
+  } */
 }
 @media (min-width: 320px) and (max-width: 550px) {
   .savannah-game_control-btns{
@@ -216,8 +216,8 @@
   .savannah-game_content{
     height: 50vh;
   }
-  .savannah-game_control-btns{
+  /* .savannah-game_control-btns{
     width: 320px;
     display: inline-block;
-  }
+  } */
 }

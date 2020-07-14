@@ -4,6 +4,9 @@ import Loading from './Components/Loading'
 import LoadingWindow from '../LoadingWindow/LoadingWindow'
 import Game from './Components/Game'
 import HomePage from './Components/HomePage'
+import {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, filterUserWords, getWordById} from '../ServerRequest/ServerRequests'
+
+
 
 import './Game5.css'
 import video from  './images/background-video.mp4'
@@ -21,9 +24,43 @@ class Game5 extends Component{
     this.requestWords = this.requestWords.bind(this)
     this.handleDifficultyGameSavannah = this.handleDifficultyGameSavannah.bind(this)
     this.handleLoadingWindow = this.handleLoadingWindow.bind(this)
-    this.zxc =this.zxc.bind(this)
+    this.addNewWords =this.addNewWords.bind(this)
+    this.resetGame = this.resetGame.bind(this)
+  }
+  
+  resetGame(){
+    this.requestWords()
+    this.setState({
+      difficultyGameSavannah: '9',
+      startGame: false,
+      loadingWindow: true,
+      loading: false
+    })
   }
 
+  async addNewWords(userWords, pageTransition, levelTransition){
+    if(userWords.length >= 20){
+
+      return userWords.slice(0,20)
+    }else{
+      if(levelTransition<29){
+        levelTransition+=1
+      }else if(pageTransition < 5){
+        pageTransition += 1
+        levelTransition = 0 
+      }else{
+        pageTransition = 0
+        levelTransition = 0 
+      }
+      console.log(levelTransition, pageTransition)
+      let addWords = await getNewWords(levelTransition, pageTransition)
+      let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
+      // console.log(newWordsFilter)
+      userWords = userWords.concat(newWordsFilter)
+      return this.addNewWords(userWords, pageTransition, levelTransition)
+    }
+  }
+  
   handleDifficultyGameSavannah(value){
     this.setState({
      difficultyGameSavannah:value
@@ -50,69 +87,30 @@ class Game5 extends Component{
       loading: !this.state.loading
     })
   }
+
  async requestWords(){
-
-  const token = localStorage.getItem('token');
-  const userId = localStorage.getItem('userId');
-  const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
-
-  const getAllUserWords = async () => {
-    const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/`, {
-      method: 'GET',
-      withCredentials: true,
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-      }
-    });
-    const content = await rawResponse.json();
-    return content
-     
-  }
-  const filterUserWords = async () => {
-    const userWords = await getAllUserWords();
-    const currentDate = new Date();
-    const wordsForGame = userWords.filter(word => word.optional.deleted===false && word.optional.hardWord===false && word.optional.nextTrain <= +currentDate);
-    return wordsForGame;
-  }
-  filterUserWords().then(wordsId=>{
-    console.log(wordsId)
-    return Promise.all(wordsId.map((wordId)=>getWordById(wordId.wordId))
-  )
-  }).then(res=>{
-    console.log(res)
-      this.setState({
-        words: res,
+  filterUserWords()
+  .then(wordsId=>{
+      console.log(wordsId)
+      return Promise.all(wordsId.map((wordId)=>getWordById(wordId.wordId)))})
+  .then(userWords=>{
+    getSettingsUser()
+    .then(res=>{
+      console.log(userWords)
+      console.log(res)
+      let pageTransition = res.optional.level
+      let levelTransition = res.optional.page
+      console.log(levelTransition, pageTransition)
+      this.addNewWords(userWords, pageTransition, levelTransition).then(res=> {
+        console.log(res)
+        this.setState({
+          words: res,
+        })
       })
+    })
   })
+  }
 
-  const getWordById = async (wordId) => {
-    const url = `${baseUrl}/words/${wordId}?noAssets=true`;
-    const rawResponse = await fetch(url);
-    const content = await rawResponse.json();
-    return content;
-  }
-  // const getSettingsUser = async () => {
-  //   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //           'accept': 'application/json',
-  //         },
-  //       });
-  //       const content = await rawResponse.json();
-  //       return content;
-  // }
-  
-  }
-   zxc(wordsObj){
-    if(wordsObj.length < 20){
-      console.log('меньше нужного')
-    }else{
-      // getSettingsUser().then(res=> console.log(res))
-    }
-    return wordsObj
-  }
   render(){
     if(this.state.startGame){
       return(
@@ -120,7 +118,7 @@ class Game5 extends Component{
             <video id="background-video" loop autoPlay>
               <source src={video} type='video/mp4' />
             </video>
-            <Game  difficulty={this.state.difficultyGameSavannah} words={this.state.words} />
+            <Game  difficulty={this.state.difficultyGameSavannah} words={this.state.words} resetGame={this.resetGame}/>
           </div>
       )   
     }else if(this.state.loading){

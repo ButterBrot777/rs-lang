@@ -1,7 +1,44 @@
-const refreshToken = localStorage.getItem('refreshToken');
-const token = localStorage.getItem('token');
-const userId = localStorage.getItem('userId');
 const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+
+// Проверка на рабочий Token
+const getToken = async () => {
+  console.log('getToken отработал')
+  let dateNow = +new Date()
+  if (localStorage.getItem('RefreshTime') > dateNow) {
+    return localStorage.getItem('token');
+  }
+  return getRefreshToken()
+}
+// Запрос на обновление Token  
+const getRefreshToken = async () => {
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/tokens`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+      'accept': 'application/json',
+    },
+  });
+  if (rawResponse.status === 200) {
+
+    const content = await rawResponse.json();
+    let date = +new Date();
+    const timeRefresh = 14400000
+
+    date += timeRefresh;
+    localStorage.setItem('RefreshTime', date);
+    localStorage.setItem('token', content.token)
+    localStorage.setItem('refreshToken', content.refreshToken)
+    // console.log(localStorage.getItem('token'), 'sdfsdfcxvcxvxcvxv13123123123131')
+    return localStorage.getItem('token')
+  } else {
+    localStorage.setItem('RefreshTime', '')
+    localStorage.setItem('userId', '');
+    localStorage.setItem('refreshToken', '')
+    localStorage.setItem('token', '')
+
+  }
+}
+
 
 async function signInRequest(userData) {
   const rawResponse = await fetch(`${baseUrl}/signin`, {
@@ -14,10 +51,13 @@ async function signInRequest(userData) {
   });
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
+    let date = +new Date();
+    date += 14400000;
+    localStorage.setItem('RefreshTime', date);
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
     localStorage.setItem('refreshToken', content.refreshToken)
-    return content;
+    // return content;
   } else {
     throw new Error(rawResponse.status);
   }
@@ -38,11 +78,41 @@ async function signUpRequest(userData) {
   }
 }
 
+const startStatisticsUser = async () => {
+  const token = await getToken();
+  const date = +new Date()
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
+    method: 'PUT',
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "learnedWords": 0,
+      "optional": {
+        "dateOfReg": date,
+        "speakIt": { neverPlayed: true },
+        "puzzle": { neverPlayed: true },
+        "savannah": { neverPlayed: true },
+        "sprint": { neverPlayed: true },
+        "audioCall": { neverPlayed: true }
+      }
+    })
+  })
+  const content = await rawResponse.json();
+  console.log(content)
+  return content;
+}
+
+
 const startSettingsUser = async () => {
+  const token = await getToken();
   let date = new Date()
   date.setDate(date.getDate() - 1);
   let yesterday = date.toLocaleDateString();
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -81,7 +151,8 @@ const startSettingsUser = async () => {
 }
 
 const addSettingsUser = async (settingsData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -103,28 +174,21 @@ const addSettingsUser = async (settingsData) => {
 }
 
 const getSettingsUser = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/settings`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
       'accept': 'application/json',
     },
   });
-  if (rawResponse.status === 200) {
-    const content = await rawResponse.json();
-    return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await getSettingsUser();
-  } else if (rawResponse.status === 404) {
-    return false;
-  } else {
-    throw new Error(rawResponse.status);
-  }
+  const content = await rawResponse.json();
+  return content;
 }
 
 const updateStatisticsUser = async (statisticsData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -145,8 +209,10 @@ const updateStatisticsUser = async (statisticsData) => {
   }
 }
 
+// не работает в статистике 
 const getStatisticsUser = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/statistics`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -154,18 +220,13 @@ const getStatisticsUser = async () => {
       'Accept': 'application/json',
     },
   });
-  if (rawResponse.status === 200) {
-    const content = await rawResponse.json();
-    return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await getStatisticsUser();
-  } else {
-    throw new Error(rawResponse.status);
-  }
+  const content = await rawResponse.json()
+  console.log(content, 'статистика')
+  return content
 }
 
 const getNewWords = async (page, group) => {
+
   const url = `${baseUrl}/words?page=${page}&group=${group}`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
@@ -179,7 +240,8 @@ const getWordData = async (wordId) => {
 }
 
 const getUserWord = async (wordId) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -201,7 +263,8 @@ const getUserWord = async (wordId) => {
 };
 
 const createUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
     method: 'POST',
     withCredentials: true,
     headers: {
@@ -211,19 +274,14 @@ const createUserWord = async (wordId, wordData) => {
     },
     body: JSON.stringify(wordData)
   });
-  if (rawResponse.status === 200) {
-    const content = await rawResponse.json();
-    return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await createUserWord();
-  } else {
-    throw new Error(rawResponse.status);
-  }
+  const content = await rawResponse.json();
+  console.log(content)
+  return content;
 };
 
 const updateUserWord = async (wordId, wordData) => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
+  const token = await getToken();
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/${wordId}`, {
     method: 'PUT',
     withCredentials: true,
     headers: {
@@ -245,7 +303,9 @@ const updateUserWord = async (wordId, wordData) => {
 };
 
 const getAllUserWords = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/`, {
+  const token = await getToken();
+  console.log(token)
+  const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/`, {
     method: 'GET',
     withCredentials: true,
     headers: {
@@ -271,31 +331,44 @@ async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
   return content;
 }
 
-const getRefreshToken = async () => {
-  const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${refreshToken}`,
-      'accept': 'application/json',
-    },
-  });
-  if (rawResponse.status === 200) {
-    const content = await rawResponse.json();
-    localStorage.setItem('token', content.token)
-    localStorage.setItem('refreshToken', content.refreshToken)
-    return content;
-  } else if (rawResponse.status === 403) {
-    document.location.reload();
-  } else {
-    throw new Error(rawResponse.status);
-  }
-}
+// const getRefreshToken = async () => {
+//   const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
+//     method: 'GET',
+//     headers: {
+//       'Authorization': `Bearer ${refreshToken}`,
+//       'accept': 'application/json',
+//     },
+//   });
+//   if (rawResponse.status === 200) {
+//     const content = await rawResponse.json();
+//     localStorage.setItem('token', content.token)
+//     localStorage.setItem('refreshToken', content.refreshToken)
+//     return content;
+//   } else if (rawResponse.status === 403) {
+//     document.location.reload();
+//   } else {
+//     throw new Error(rawResponse.status);
+//   }
+// }
 
 const getWordById = async (wordId) => {
   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
   const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
+};
+const filterUserWords = async () => {
+  const userWords = await getAllUserWords();
+  const currentDate = new Date();
+  const wordsForGame = userWords.filter(word => word.optional.deleted === false && word.optional.hardWord === false && word.optional.nextTrain <= +currentDate);
+  console.log(wordsForGame)
+  return wordsForGame;
 }
+// const getWordById = async (wordId) => {
+//   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
+//   const rawResponse = await fetch(url);
+//   const content = await rawResponse.json();
+//   return content;
+// }
 
-export { getWordById, getRefreshToken, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getWordData, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams }
+export { getWordData, getAllUserWords, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, createUserWord, updateUserWord, filterUserWords, getWordById, startStatisticsUser, getNewWordsWithExtraParams }
