@@ -1,72 +1,28 @@
 import React from 'react';
-
+import soundIcon from './assets/sound.png';
 import './Game1.css';
-
-const regexpBrackets = new RegExp(/<[^>]*>/ig);
-
 class Card extends React.Component {
-
-    splitSentenceIntoWords = (sentence) => {
-        return sentence
-            .slice(0, sentence.length - 1)
-            .split(' ')
-    }
-
-    createWordElements = (sentence) => {
-        if (sentence) {
-            let arr = this.splitSentenceIntoWords(sentence);
-            return arr
-                .map((word, idx) => {
-                    if (regexpBrackets.test(word)) {
-                        return <span className="sentence__word colored" key={idx}>[...]</span>
-                    }
-                    return <span className="sentence__word" key={idx}>{word}</span>
-                })
-        }
-    }
-
     render() {
-        let exampleBlock;
-        if (this.props.hints.exampleHint) {
-            if (this.props.isSkipped || this.props.isGuessed || this.props.isDifficultyChoice) {
-                exampleBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textExample}` }}></div>;;
-            } else {
-                exampleBlock = this.createWordElements(this.props.wordData.textExample);
-            }
-        } else {
-            exampleBlock = '';
-        }
-
-        let meaningBlock;
-        if (this.props.hints.meaningHint) {
-            if (this.props.isSkipped || this.props.isGuessed || this.props.isDifficultyChoice) {
-                meaningBlock = <div dangerouslySetInnerHTML={{ __html: `${this.props.wordData.textMeaning}` }}></div>;
-            } else {
-                meaningBlock = this.createWordElements(this.props.wordData.textMeaning)
-            }
-        } else {
-            meaningBlock = '';
-        }
-
-        let translationBlock = this.props.hints.translationHint ? this.props.wordData.wordTranslate : '';
-
-        let transcriptionBlock = this.props.hints.transcriptionHint ? this.props.wordData.transcription : '';
-
-        let image = `https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.wordData.image}`;
-        let imageBlock = this.props.hints.imageHint ? <img src={image} alt=""></img> : '';
-
+        const { id, audio, transcription, word, wordTranslate } = this.props.wordObj;
+        const card = (this.props.isStatistics) ? "speakit__results-card" :
+            (!this.props.isStatistics && this.props.currentObj.id === id) ? "speakit__card speakit__card-active" : "speakit__card";
         return (
-            <div className="word-card">
-                <div className="word-card-text">
-                    <div>{exampleBlock}</div>
-                    {(this.props.isGuessed && this.props.hints.exampleHint) || (this.props.isDifficultyChoice && this.props.hints.exampleHint) ? <div>{this.props.wordData.textExampleTranslate}</div> : ''}
-                    <div>{meaningBlock}</div>
-                    {(this.props.isGuessed && this.props.hints.meaningHint) || (this.props.isDifficultyChoice && this.props.hints.meaningHint) ? <div>{this.props.wordData.textMeaningTranslate}</div> : ''}
-                    <div>{translationBlock}</div>
-                    <div>{transcriptionBlock}</div>
-                </div>
-                <div>{imageBlock}</div>
-            </div>
+            this.props.isStatistics ?
+                (
+                    <div data-id={id} className={card}>
+                        <img src={soundIcon} onClick={() => this.props.playSound(audio)}
+                            className="speakit__card-icon" alt="soundIcon"></img>
+                        <span className="speakit__bold speakit__results-text">{word}</span>
+                        <span className="speakit__results-text">{transcription}</span>
+                        <span className="speakit__results-text">{wordTranslate}</span>
+                    </div>) : (
+                    <div data-id={id} onClick={(e) => this.props.onCardClick(e)} className={card}>
+                        <img src={soundIcon} className="speakit__card-icon" alt="soundIcon"></img>
+                        <div className="speakit__card-text">
+                            <div className="bold">{word}</div>
+                            <div >{transcription}</div>
+                        </div>
+                    </div>)
         )
     }
 }

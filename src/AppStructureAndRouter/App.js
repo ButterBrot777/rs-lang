@@ -9,6 +9,7 @@ import LogoutBtn from './HeaderBtns/LogoutBtn';
 import HomePage from './HomePage/HomePage';
 import Statistics from '../AppStructureAndRouter/Statistics/Statistics';
 import Dictionary from '../AppStructureAndRouter/Dictionary/dictionaryPage';
+import Test from './BasicGame/Test';
 import SignInAndSignUp from './SignInAndSignUp/SignInAndSignUp';
 
 import UnauthorizedUserPage from './UnauthorizedUserPage/UnauthorizedUserPage';
@@ -18,17 +19,20 @@ import Game2 from './Game2/Game2';
 import Game3 from './Game3/Game3';
 import Game4 from './Game4/Game4';
 import Game5 from './Game5/Game5';
+import BasicGame from './BasicGame/BasicGame';
 
 export default class App extends Component {
 	constructor() {
 		super();
 		this.state = {
 			userAuthorized: localStorage.getItem('token'),
+			basicGameWords: 'combined',
+			hardWordsTraining: false
 		};
-
 		this.userLogOut = this.userLogOut.bind(this);
 		// this.refreshToken = this.refreshToken.bind(this)
 	}
+<<<<<<< HEAD
 	
 	// refreshToken(){
 	// 	const refreshToken = localStorage.getItem('refreshToken');
@@ -70,6 +74,21 @@ export default class App extends Component {
   //   // getRefreshToken()
 	// 	console.log(date, localStorage.getItem('RefreshTime'), Number(localStorage.getItem('RefreshTime')) - date)
 	// }
+=======
+
+	handleWordsChoice = (value) => {
+		this.setState({
+			basicGameWords: value
+		})
+	}
+
+	handlehardWordsTraining = () => {
+		this.setState({
+			hardWordsTraining: true
+		})
+	}
+
+>>>>>>> develop
 	userLogOut() {
 		localStorage.setItem('RefreshTime', '');
     localStorage.setItem('userId', '');
@@ -120,11 +139,17 @@ export default class App extends Component {
 						<Route path="/HomePage">
 							{this.state.userAuthorized !== '' ? (
 								<Fade right>
-									<HomePage />
+									<HomePage basicGameWords={this.state.basicGameWords}
+										handleWordsChoice={this.handleWordsChoice} />
 								</Fade>
 							) : (
 									<UnauthorizedUserPage />
 								)}
+						</Route>
+            <Route path="/BasicGame">
+							{this.state.userAuthorized !== '' ? <BasicGame basicGameWords={this.state.basicGameWords}
+							hardWordsTraining={this.state.hardWordsTraining}
+							 /> : <UnauthorizedUserPage />}
 						</Route>
 						<Route path="/Game1">
 							{this.state.userAuthorized !== '' ? <Game1 /> : <UnauthorizedUserPage />}
@@ -155,7 +180,11 @@ export default class App extends Component {
 							{this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
 						</Route>
 						<Route path="/Dictionary">
-							{this.state.userAuthorized !== '' ? <Dictionary /> : <UnauthorizedUserPage />}
+							{this.state.userAuthorized !== '' ? <Dictionary handlehardWordsTraining={this.handlehardWordsTraining} 
+							hardWordsTraining={this.state.hardWordsTraining}/> : <UnauthorizedUserPage />}
+						</Route>
+						<Route path="/Test">
+							{this.state.userAuthorized !== '' ? <Test /> : <UnauthorizedUserPage />}
 						</Route>
 					</Switch>
 				</div>
