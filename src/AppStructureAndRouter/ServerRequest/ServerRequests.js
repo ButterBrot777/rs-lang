@@ -1,8 +1,9 @@
+const refreshToken = localStorage.getItem('refreshToken');
 const token = localStorage.getItem('token');
 const userId = localStorage.getItem('userId');
 const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
 
-async function signInRequest(userData){
+async function signInRequest(userData) {
   const rawResponse = await fetch(`${baseUrl}/signin`, {
     method: 'POST',
     headers: {
@@ -11,33 +12,36 @@ async function signInRequest(userData){
     },
     body: JSON.stringify(userData)
   });
-  if(rawResponse.status === 200){
+  if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
+    localStorage.setItem('refreshToken', content.refreshToken)
     return content;
-  }else{ 
+  } else {
+    throw new Error(rawResponse.status);
+  }
+}
+async function signUpRequest(userData) {
+  const rawResponse = await fetch(`${baseUrl}/users`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+  });
+  if (rawResponse.status === 200) {
+    return userData;
+  } else {
     throw new Error(rawResponse.status);
   }
 }
 
-async function signUpRequest(userData){
-  const rawResponse = await fetch(`${baseUrl}/users`, {
-     method: 'POST',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify(userData)
-   });
-   if(rawResponse.status === 200){
-    return userData;
-   }else{ 
-    throw new Error(rawResponse.status);
-   }
-}
-
 const startSettingsUser = async () => {
+  let date = new Date()
+  date.setDate(date.getDate() - 1);
+  let yesterday = date.toLocaleDateString();
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
@@ -48,27 +52,35 @@ const startSettingsUser = async () => {
     },
     body: JSON.stringify({
       "wordsPerDay": 20,
-        "optional": {
-          "maxWordsPerDay": 40,
-          "level": 0,
-          "page": 0,
-          "wordsLearntPerPage": 0,
-          "hints": {
-            "meaningHint": true,
-            "translationHint": true,
-            "exampleHint": true,
-            "soundHint": false,
-            "imageHint": false,
-            "transcriptionHint": false
+      "optional": {
+        "maxWordsPerDay": 40,
+        "level": 0,
+        "page": 0,
+        "wordsLearntPerPage": 0,
+        "lastTrain": yesterday,
+        "hints": {
+          "meaningHint": true,
+          "translationHint": true,
+          "exampleHint": true,
+          "soundHint": false,
+          "imageHint": false,
+          "transcriptionHint": false
         }
       }
     })
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await startSettingsUser();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 }
 
- const addSettingsUser = async (settingsData) => {
+const addSettingsUser = async (settingsData) => {
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
     method: 'PUT',
     withCredentials: true,
@@ -79,20 +91,36 @@ const startSettingsUser = async () => {
     },
     body: JSON.stringify(settingsData)
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await addSettingsUser();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 }
 
 const getSettingsUser = async () => {
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/settings`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'accept': 'application/json',
-        },
-      });
-      const content = await rawResponse.json();
-      return content;
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'accept': 'application/json',
+    },
+  });
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await getSettingsUser();
+  } else if (rawResponse.status === 404) {
+    return false;
+  } else {
+    throw new Error(rawResponse.status);
+  }
 }
 
 const updateStatisticsUser = async (statisticsData) => {
@@ -106,8 +134,15 @@ const updateStatisticsUser = async (statisticsData) => {
     },
     body: JSON.stringify(statisticsData)
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await updateStatisticsUser();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 }
 
 const getStatisticsUser = async () => {
@@ -119,10 +154,16 @@ const getStatisticsUser = async () => {
       'Accept': 'application/json',
     },
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await getStatisticsUser();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 }
-
 
 const getNewWords = async (page, group) => {
   const url = `${baseUrl}/words?page=${page}&group=${group}`;
@@ -131,23 +172,32 @@ const getNewWords = async (page, group) => {
   return content;
 }
 
+const getWordData = async (wordId) => {
+  const rawResponse = await fetch(`${baseUrl}/words/${wordId}`);
+  const content = await rawResponse.json();
+  return content;
+}
+
 const getUserWord = async (wordId) => {
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
-      method: 'GET',
-      withCredentials: true,
-      headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-      }
+    method: 'GET',
+    withCredentials: true,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+    }
   });
   if (rawResponse.status === 200) {
-      const content = await rawResponse.json();
-      return content;
-  } else if (rawResponse.status === 404){
-      return false;
-  } else{ 
-      throw new Error(rawResponse.status);
-    }
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await getUserWord(wordId);
+  } else if (rawResponse.status === 404) {
+    return false;
+  } else {
+    throw new Error(rawResponse.status);
+  }
 };
 
 const createUserWord = async (wordId, wordData) => {
@@ -161,8 +211,15 @@ const createUserWord = async (wordId, wordData) => {
     },
     body: JSON.stringify(wordData)
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await createUserWord();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 };
 
 const updateUserWord = async (wordId, wordData) => {
@@ -176,8 +233,15 @@ const updateUserWord = async (wordId, wordData) => {
     },
     body: JSON.stringify(wordData)
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 401) {
+    await getRefreshToken();
+    await updateUserWord();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 };
 
 const getAllUserWords = async () => {
@@ -189,21 +253,49 @@ const getAllUserWords = async () => {
       'Accept': 'application/json',
     }
   });
-  const content = await rawResponse.json();
-  return content;
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content;
+  } else if (rawResponse.status === 402) {
+    await getRefreshToken();
+    await getAllUserWords();
+  } else {
+    throw new Error(rawResponse.status);
+  }
 };
 
-const loginUser = async user => {
-  const rawResponse = await fetch(`${baseUrl}`, {
-    method: 'POST',
+async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
+  const url = `${baseUrl}/words?page=${page}&group=${group}&wordsPerExampleSentenceLTE=15&wordsPerPage=${wordsPerPage}`;
+  const rawResponse = await fetch(url);
+  const content = await rawResponse.json();
+  return content;
+}
+
+const getRefreshToken = async () => {
+  const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
+    method: 'GET',
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Authorization': `Bearer ${refreshToken}`,
+      'accept': 'application/json',
     },
-    body: JSON.stringify(user)
   });
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    localStorage.setItem('token', content.token)
+    localStorage.setItem('refreshToken', content.refreshToken)
+    return content;
+  } else if (rawResponse.status === 403) {
+    document.location.reload();
+  } else {
+    throw new Error(rawResponse.status);
+  }
+}
+
+const getWordById = async (wordId) => {
+  const url = `${baseUrl}/words/${wordId}?noAssets=true`;
+  const rawResponse = await fetch(url);
   const content = await rawResponse.json();
   return content;
-};
+}
 
-export {loginUser, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord}
+export { getWordById, getRefreshToken, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getWordData, getNewWords, getUserWord, getAllUserWords, createUserWord, updateUserWord, getNewWordsWithExtraParams }

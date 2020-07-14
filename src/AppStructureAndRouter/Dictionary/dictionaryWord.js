@@ -1,39 +1,31 @@
 import React from 'react';
 import audio_icon from './audio-icon.png';
-import { updateUserWord } from '../ServerRequest/ServerRequests';
-const WORD_URL = 'https://afternoon-falls-25894.herokuapp.com/words/';
+import { updateUserWord, getWordData } from '../ServerRequest/ServerRequests';
+import { createDateFromTimestamp } from '../Statistics/dateConverter';
 const BRACKETS_REGEXP = new RegExp(/<[/\w]+>/g);
-
-const userId = localStorage.getItem('userId');
-const token = localStorage.getItem('token');
-let user = {
-  userId,
-  token
-};
 
 class Word extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: {},
-            image: "files/01_0001.jpg",
+            image: "",
+            tooltipPos: {},
+            tooltipText: '',
             isLoading: false
         }
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         this.setState({ isLoading: true });
-        const url = `${WORD_URL}${this.props.wordId}`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => this.setState({data: data, image: data.image, isLoading: false,}))
+        const data = await getWordData(this.props.wordId);
+        this.setState({data: data, image: data.image, isLoading: false,});
+        this.drawDots();
     }
-
-
 
     putToLearning = async () => {
         const wordObj = {
-            "difficulty": "good",
+            "difficulty": 'good',
             "optional": {
                 "deleted": false,
                 "hardWord": false,
@@ -43,13 +35,7 @@ class Word extends React.Component {
                 "nextTrain": this.props.optional.nextTrain
             }
         }
-        const updatedWord = {
-            userId : user.userId,
-            token: user.token,
-            wordId: this.props.wordId,
-            word: wordObj
-        } 
-        const content = await updateUserWord(updatedWord);
+        const content = await updateUserWord(this.props.wordId, wordObj);
         this.setState({isLoading: false});
         this.props.onWordTypeChange(content);
     }
@@ -65,18 +51,104 @@ class Word extends React.Component {
         this.wordAudio.play();
     }
 
-    createDateFromTimestamp = (timestamp) => {
-        const dateObj = new Date(timestamp); 
-        return `${dateObj.getDate()}.${dateObj.getMonth()}.${dateObj.getFullYear()}`;
+    drawDots = () => {
+        const canvas = this.refs.canvas;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        const d = 5;
+        ctx.fillStyle='rgb(19,40,59)';
+        ctx.beginPath();
+        ctx.arc(5, 10, d, 0, 2*Math.PI);
+        ctx.fill();
+        let level = 0;
+        if (this.props.difficulty === 'hard' && this.props.optional.repeatsTotal <= 2) {
+            level = 1;
+            ctx.beginPath();
+            ctx.arc(20, 10, d, 0, 2*Math.PI);
+            ctx.fill();
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 2; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if ((this.props.difficulty === 'hard' && this.props.optional.repeatsTotal > 2) || (this.props.difficulty === 'good' && this.props.optional.repeatsTotal <= 2)) {
+            level = 2;
+            for (let i = 1; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 3; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if ((this.props.difficulty === 'good' && this.props.optional.repeatsTotal > 2) || (this.props.difficulty === 'easy' && this.props.optional.repeatsTotal <= 2)) {
+            level = 3;
+            for (let i = 1; i < 4; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 4; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else if (this.props.difficulty === 'easy' && this.props.optional.repeatsTotal > 2) {
+            level = 4;
+            for (let i = 1; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        } else {
+            ctx.fillStyle='rgba(168, 167, 167, 0.6)';
+            for (let i = 1; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(5+15*i, 10, d, 0, 2*Math.PI);
+                ctx.fill();
+            }
+        }
+
+        const tooltipTextVariants = [
+            'New word. Never played in daily train',
+            'You need to learn this word',
+            'You are learning this word',
+            'This word is common for you',
+            'You have an excellent memory'
+        ]
+
+        canvas.onmouseover = () => {
+            const tooltipPos = {
+                left: 0,
+            }
+            const tooltipText = tooltipTextVariants[level];
+            this.setState({ tooltipPos: tooltipPos, tooltipText: tooltipText });
+        }
+
+        canvas.onmouseout = () => {
+            this.setState({ tooltipPos: {}, tooltipText: '' });
+        }
     }
+
     render() {
         const { data, image, isLoading } = this.state;
-        const lastTrainDate = this.createDateFromTimestamp(this.props.optional.lastTrain);
-        const nextTrainDate = this.createDateFromTimestamp(this.props.optional.nextTrain);
+        const lastTrainDate = createDateFromTimestamp(this.props.optional.lastTrain);
+        const nextTrainDate = createDateFromTimestamp(this.props.optional.nextTrain);
         const imageSrc = `data:image/jpg;base64,${image}`;
         if (data.textMeaning &&  data.textExample) {
             data.textMeaning = data.textMeaning.replace(BRACKETS_REGEXP, "");
             data.textExample = data.textExample.replace(BRACKETS_REGEXP, "");
+        }
+
+        const tooltipStyle = {
+            position: 'absolute',
+            left: this.state.tooltipPos.left
         }
        
         if (isLoading) {
@@ -94,17 +166,26 @@ class Word extends React.Component {
                             {this.props.transcriptionInfo ? <p className="dictionary-transcription">{data.transcription}</p> : ''}
                             <p className="dictionary-translation">{data.wordTranslate}</p>
                             {this.props.meaningInfo ? <p className="dictionary-meaning">{data.textMeaning}</p> : ''}
-                            {this.props.exampleInfo ? <p className="dictionary-example">{data.textExample}</p> : ''} 
+                            {this.props.exampleInfo ? <p className="dictionary-example">{data.textExample}</p> : ''}
+                            <div className="dictionary-word-canvas-container">
+                                <canvas ref="canvas" width={200} height={30}/>
+                                {this.state.tooltipText ? <div className="dictionary-word-tooltip" style={tooltipStyle}>
+                                    <p>{this.state.tooltipText}</p>
+                                </div> : ''}
+                            </div>
+                            
                         </div>
                         {this.props.imageInfo ? <img className="dictionary-image" src={imageSrc} alt={data.word} /> : ''}
                     </div>
                     <div className="word-learning-info">
-                        <p className="dictionary-last-train"> Последняя тренировка: {lastTrainDate}</p>  
-                        <p className="dictionary-repeats">Кол-во повторений: {this.props.optional.repeatsTotal}</p>  
-                        <p className="dictionary-next-train">Следующая тренировка: {nextTrainDate}</p>
+                        <p className="dictionary-last-train"> Last train: {lastTrainDate}</p>  
+                        <p className="dictionary-repeats">Repeats: {this.props.optional.repeatsTotal}</p>  
+                        <p className="dictionary-next-train">Next train: {nextTrainDate}</p>
                     </div>
                 </div>
-                {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Восстановить</button> : ''} 
+                <div className="put-to-learning-btn-container">
+                    {this.props.words === "hard" || this.props.words === "deleted" ? <button className="dictionary-btn put-to-learning-btn" onClick={this.putToLearning}>Restore</button> : ''}
+                </div>
             </div>
         )
     }
