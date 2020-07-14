@@ -1,13 +1,80 @@
 import React, {useEffect} from "react";
 import paintings1 from "./PathObjects/level1";
+import {createUserWord, getUserWord, updateUserWord} from "../../ServerRequest/ServerRequests";
 
 export default function EndScreen(prop) {
+
+
     useEffect(() => {
         sendStatistic()
+
+        prop.state.statistic.trueWords.map((e) => handleUserWordUpdate("good", e.id));
+        prop.state.statistic.falseWords.map((e) => handleUserWordUpdate("hard", e.id));
     },[])
 
+    const easyInterval = 3;
+    const goodInterval = 2;
+    const hardInterval = 1;
+
+    async function  handleUserWordUpdate(diffLevel, wordId){
+        let word = await getUserWord(wordId);
+        let lastTrain = +new Date();
+        if (!word) {
+            let interval = (diffLevel === 'good') ? goodInterval : hardInterval;
+            let nextTrain;
+            if (diffLevel === 'good') {
+                nextTrain = new Date().setDate(new Date().getDate() + interval);
+            } else {
+                nextTrain = lastTrain;
+            }
+            let newWord = {
+                "difficulty": diffLevel,
+                "optional": {
+                    "deleted": false,
+                    "hardWord": false,
+                    "repeatsStreak": 1,
+                    "repeatsTotal": 1,
+                    "addingDate": lastTrain,
+                    lastTrain,
+                    nextTrain
+                }
+            }
+
+
+            createUserWord(wordId, newWord);
+        } else {
+            let interval;
+            switch (word.difficulty) {
+                case 'hard':
+                    interval = word.optional.repeatsStreak * hardInterval;
+                    break;
+                case 'good':
+                    interval = word.optional.repeatsStreak * goodInterval;
+                    break;
+                case 'easy':
+                    interval = word.optional.repeatsStreak * easyInterval;
+                    break;
+                default:
+                    interval = 0;
+                    break;
+            }
+            let nextTrain;
+            if (diffLevel === 'good') {
+                nextTrain = new Date().setDate(new Date().getDate() + interval);
+            } else {
+                nextTrain = lastTrain;
+            }
+
+            let repeatsStreak = word.optional.repeatsStreak + 1;
+            let repeatsTotal = word.optional.repeatsTotal + 1;
+            let newWord = { ...word, optional: { ...word.optional, repeatsStreak, repeatsTotal, lastTrain, nextTrain } }
+            delete newWord.id;
+            delete newWord.wordId;
+            updateUserWord(wordId, newWord);
+        }
+    }
+
     const userId = localStorage.getItem('userId');
-    console.log('юзерIд',userId)
     const token = localStorage.getItem('token');
     const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
 
@@ -20,13 +87,13 @@ export default function EndScreen(prop) {
     }
     function sendStatistic() {
         getStatisticsUser().then( data =>{
-           data.optional["puzzle"][`${+new Date()}`] = {
-                "errors": prop.state.statistic.falseWords.length, // кол-во ошибок
-                "trues": prop.state.statistic.trueWords.length // кол-во правильных ответов
-            };
-            delete data.id
-            let stat = data;
-            updateStatisticsUser(stat)
+                data.optional["puzzle"][`${+new Date()}`] = {
+                    "errors": prop.state.statistic.falseWords.length, // кол-во ошибок
+                    "trues": prop.state.statistic.trueWords.length // кол-во правильных ответов
+                };
+                delete data.id
+                let stat = data;
+                updateStatisticsUser(stat)
             }
         )
     }
@@ -41,7 +108,7 @@ export default function EndScreen(prop) {
             },
         });
         const content = await rawResponse.json();
-        console.log('статистика',content)
+
         return content;
     };
 
@@ -57,61 +124,20 @@ export default function EndScreen(prop) {
             body: JSON.stringify(statisticsData)
         });
         const content = await rawResponse.json();
-        console.log('ответ',content)
+
         return content;
     };
 
 
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array
 
-    };
 
-    function newGame(array){
-        let imageCount = prop.state.imageCount + 1;
-        localStorage.setItem('imageCount',`${imageCount}`)
-        let image = paintings1[imageCount];
-        let dataArray = array;
-        dataArray = dataArray.filter(e => e.textExample
-            .split(' ')
-            .filter((e,i,array) => array.indexOf(e) !== array.lastIndexOf(e)).length === 0
-        );
-        let str = shuffle(dataArray[0].textExample.split(' '));
-        let currentStr = dataArray[0].textExample.split(' ');
-        let lengthCurrent = currentStr.map(e => e.length)
-        let strExample = str.slice(0);
-        let wordLength = strExample.length
-        let length = str.map(e => e.length).reduce((acc,curr) => acc + curr,0);
-        let lengthArray = str.map(e => e.length);
-
-        let emptyArray = new Array(str.length).fill('');
-        console.log('ggggg',dataArray);
+    function newGame() {
+        localStorage.setItem('imageCount', `${prop.state.imageCount + 1}`);
         prop.setState({
-                ...prop.state,
-                stringCount:0,
-                canClicked: true,
-                imageCount:imageCount,
-                image:image,
-                lengthArrayCurrent:lengthCurrent,
-                currentStr:currentStr,
-                gameData: dataArray,
-                loading:false,
-                chosenWords:emptyArray,
-                currentString:str,
-                strExample:strExample,
-                length:length,
-                lengthArray:lengthArray,
-                wordLength:wordLength,
-                endScreen: false,
-                lastStrings:[],
-                completed:false,
-            }
-        )
-
+            ...prop.state,
+            loading: true,
+        })
+        prop.newGame(userId)
 
     }
 

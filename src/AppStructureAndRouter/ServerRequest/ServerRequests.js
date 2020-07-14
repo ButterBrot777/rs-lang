@@ -200,6 +200,8 @@ const getUserWord = async (wordId) => {
   }
 };
 
+
+
 const createUserWord = async (wordId, wordData) => {
   const rawResponse = await fetch(`${baseUrl}/users/${userId}/words/${wordId}`, {
     method: 'POST',
