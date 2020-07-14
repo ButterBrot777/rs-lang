@@ -64,7 +64,7 @@ class GeneralStat extends React.Component {
         const canvas = this.refs[canva];
         const ctx = canvas.getContext('2d');
         const maxFromData = Math.max(...wordsPerDay.map(el => el[2]));
-        const max = maxFromData % 10 ? (maxFromData + 10 - maxFromData%10) : maxFromData;
+        const max = maxFromData % 1000 ? (maxFromData + 1000 - maxFromData%1000) : maxFromData;
         const relW = (canvas.width-50) / wordsPerDay.length;
         const relH = canvas.height / max;
         this.drawGrid(ctx, canvas.height, canvas.width, max);

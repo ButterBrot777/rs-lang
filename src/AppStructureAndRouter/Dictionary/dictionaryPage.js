@@ -11,6 +11,10 @@ class Dictionary extends React.Component {
         this.state = {
             allData: [],
             currentData: [],
+            learningWords: [],
+            hardWords: [],
+            deletedWords: [],
+            page: 1,
             words: '',
             meaningInfo: true,
             exampleInfo: true,
@@ -25,6 +29,7 @@ class Dictionary extends React.Component {
         this.getUserSettings();
         const content = await getAllUserWords();
         this.setState({ allData: content, isLoading: false, });
+        this.getWordsByType();
         this.getLearning();
     }
 
@@ -39,19 +44,45 @@ class Dictionary extends React.Component {
         })
     }
 
-    getLearning = () => {
+    getWordsByType = () => {
         const learningWords = this.state.allData.filter(word => word.optional.deleted === false && word.optional.hardWord === false);
-        this.setState({ currentData: learningWords, words: 'learning', isLoading: false, });
+        const hardWords = this.state.allData.filter(word => word.optional.hardWord === true);
+        const deletedWords = this.state.allData.filter(word => word.optional.deleted === true);
+        this.setState({ learningWords: learningWords, hardWords: hardWords, deletedWords: deletedWords });
+    }
+
+    getCurrentWordsByPage = (currentTypeData, page) => {
+        
+        const currentPageDataArr = currentTypeData.slice((page-1)*10, page*10);
+        this.setState({ currentData: currentPageDataArr, page: page });
+    }
+
+    getNextPage = () => {
+        const page = Math.ceil(this.state[`${this.state.words}Words`].length / 10) > this.state.page ? this.state.page + 1 : this.state.page;
+        this.getCurrentWordsByPage(this.state[`${this.state.words}Words`], page);
+    }
+
+    getPrevPage = () => {
+        const page = this.state.page > 1 ? this.state.page - 1 : 1; 
+        this.getCurrentWordsByPage(this.state[`${this.state.words}Words`], page);
+    }
+
+    getLearning = () => {
+        const learningWords = this.state.learningWords;
+        this.getCurrentWordsByPage(learningWords, 1);
+        this.setState({ page: 1, words: 'learning', isLoading: false, });
     }
 
     getHard = () => {
-        const hardWords = this.state.allData.filter(word => word.optional.hardWord === true);
-        this.setState({ currentData: hardWords, words: 'hard', isLoading: false, });
+        const hardWords = this.state.hardWords;
+        this.getCurrentWordsByPage(hardWords, 1);
+        this.setState({ page: 1, words: 'hard', isLoading: false, });
     }
 
     getDeleted = () => {
-        const deletedWords = this.state.allData.filter(word => word.optional.deleted === true);
-        this.setState({ currentData: deletedWords, words: 'deleted', isLoading: false, });
+        const deletedWords = this.state.deletedWords;
+        this.getCurrentWordsByPage(deletedWords, 1);
+        this.setState({ page: 1, words: 'deleted', isLoading: false, });
     }
 
     updateAllData = (wordObj) => {
@@ -65,6 +96,16 @@ class Dictionary extends React.Component {
         if (isLoading) {
             return <p>Loading ...</p>;
         }
+
+        let maxPage;
+        if (words === 'learning') {
+            maxPage = Math.ceil(this.state.learningWords.length / 10);
+        } else if (words === 'hard') {
+            maxPage = Math.ceil(this.state.hardWords.length / 10);
+        } else {
+            maxPage = Math.ceil(this.state.deletedWords.length / 10);
+        }
+
         return (
             <div>
                 <header>
@@ -75,10 +116,13 @@ class Dictionary extends React.Component {
                 <div className="dictionary-words-list">
                     {currentData.map(element => <Word difficulty={element.difficulty} optional={element.optional} meaningInfo={this.state.meaningInfo} exampleInfo={this.state.exampleInfo} transcriptionInfo={this.state.transcriptionInfo} imageInfo={this.state.imageInfo} wordId={element.wordId} words={words} onWordTypeChange={this.updateAllData} key={element.wordId} />)}
                 </div>
+                <div className="dictionary-arrows-container">
+                    <p className={this.state.page === 1 ? "dictionary-arrow-left dictionary-arrow-unable" : "dictionary-arrow-left"} onClick={this.getPrevPage} >&lt;</p>
+                    <p className={this.state.page === maxPage ? "dictionary-arrow-right dictionary-arrow-unable" : "dictionary-arrow-right"} onClick={this.getNextPage} >&gt;</p>
+                </div>
                 <div className="train-hard-btn-container">
                     {words === "hard" ? <Link to="/BasicGame"><button className="dictionary-btn train-hard-btn" onClick={this.props.handlehardWordsTraining}>Train hard words</button></Link> : ''}
                 </div>
-
             </div>
 
         )

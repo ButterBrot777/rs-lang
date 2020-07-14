@@ -44,6 +44,12 @@ export default class App extends Component {
 		})
 	}
 
+	disablehardWordsTraining = () => {
+		this.setState({
+		  hardWordsTraining: false
+		})
+	}
+
 	userLogOut() {
 		localStorage.setItem('token', '');
 		this.setState({
@@ -92,7 +98,9 @@ export default class App extends Component {
 							{this.state.userAuthorized !== '' ? (
 								<Fade right>
 									<HomePage basicGameWords={this.state.basicGameWords}
-										handleWordsChoice={this.handleWordsChoice} />
+										handleWordsChoice={this.handleWordsChoice}
+										disablehardWordsTraining={this.disablehardWordsTraining}
+										/>
 								</Fade>
 							) : (
 									<UnauthorizedUserPage />
