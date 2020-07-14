@@ -29,6 +29,7 @@ class Game5 extends Component{
   }
   
   resetGame(){
+    this.requestWords()
     this.setState({
       difficultyGameSavannah: '9',
       startGame: false,
