@@ -22,8 +22,32 @@ class HomePage extends Component {
 	}
 
 	componentDidMount = async () => {
-		let { wordsPerDay, optional: { lastTrain, maxWordsPerDay,
-			level, page, wordsLearntPerPage, hints } } = await getSettingsUser();
+		let settings = await getSettingsUser();
+		if (!settings) {
+			let date = new Date()
+			date.setDate(date.getDate() - 1);
+			let yesterday = date.toLocaleDateString();
+			settings = {
+				"wordsPerDay": 20,
+				"optional": {
+					"maxWordsPerDay": 40,
+					"level": 0,
+					"page": 0,
+					"wordsLearntPerPage": 0,
+					"lastTrain": yesterday,
+					"hints": {
+						"meaningHint": true,
+						"translationHint": true,
+						"exampleHint": true,
+						"soundHint": false,
+						"imageHint": false,
+						"transcriptionHint": false
+					}
+				}
+			}
+		}
+		let { wordsPerDay, optional: { maxWordsPerDay, level, page,
+			wordsLearntPerPage, hints, lastTrain } } = settings;
 		this.setState({
 			maxWordsPerDay,
 			wordsPerDay,
