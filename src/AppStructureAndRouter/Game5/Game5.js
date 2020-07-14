@@ -24,11 +24,20 @@ class Game5 extends Component{
     this.requestWords = this.requestWords.bind(this)
     this.handleDifficultyGameSavannah = this.handleDifficultyGameSavannah.bind(this)
     this.handleLoadingWindow = this.handleLoadingWindow.bind(this)
-    this.zxc =this.zxc.bind(this)
+    this.addNewWords =this.addNewWords.bind(this)
+    this.resetGame = this.resetGame.bind(this)
+  }
+  
+  resetGame(){
+    this.setState({
+      difficultyGameSavannah: '9',
+      startGame: false,
+      loadingWindow: true,
+      loading: false
+    })
   }
 
-
-  async zxc(userWords, pageTransition, levelTransition){
+  async addNewWords(userWords, pageTransition, levelTransition){
     if(userWords.length >= 20){
 
       return userWords.slice(0,20)
@@ -47,10 +56,10 @@ class Game5 extends Component{
       let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
       // console.log(newWordsFilter)
       userWords = userWords.concat(newWordsFilter)
-      return this.zxc(userWords, pageTransition, levelTransition)
+      return this.addNewWords(userWords, pageTransition, levelTransition)
     }
   }
-
+  
   handleDifficultyGameSavannah(value){
     this.setState({
      difficultyGameSavannah:value
@@ -91,7 +100,7 @@ class Game5 extends Component{
       let pageTransition = res.optional.level
       let levelTransition = res.optional.page
       console.log(levelTransition, pageTransition)
-      this.zxc(userWords, pageTransition, levelTransition).then(res=> {
+      this.addNewWords(userWords, pageTransition, levelTransition).then(res=> {
         console.log(res)
         this.setState({
           words: res,
@@ -108,7 +117,7 @@ class Game5 extends Component{
             <video id="background-video" loop autoPlay>
               <source src={video} type='video/mp4' />
             </video>
-            <Game  difficulty={this.state.difficultyGameSavannah} words={this.state.words} />
+            <Game  difficulty={this.state.difficultyGameSavannah} words={this.state.words} resetGame={this.resetGame}/>
           </div>
       )   
     }else if(this.state.loading){

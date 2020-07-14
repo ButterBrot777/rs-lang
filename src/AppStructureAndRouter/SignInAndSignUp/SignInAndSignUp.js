@@ -3,7 +3,7 @@ import {BrowserRouter as Router,Link} from "react-router-dom";
 
 import PasswordOptions from './PasswordOptions/PasswordOptions'
 import LoadingWindow from '../LoadingWindow/LoadingWindow'
-import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest, startStatisticsUser} from '../ServerRequest/ServerRequests'
+import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest, startStatisticsUser, getStatisticsUser} from '../ServerRequest/ServerRequests'
 
 
 import './SignInAndSignUp.scss'

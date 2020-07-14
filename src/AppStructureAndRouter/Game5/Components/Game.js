@@ -74,7 +74,7 @@ class Game extends Component{
   }
   render(){
     if(this.state.statistic){
-      return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'}/>
+      return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} resetGame ={this.props.resetGame}/>
     }else{
       return(
         <div className='savannah-game'>

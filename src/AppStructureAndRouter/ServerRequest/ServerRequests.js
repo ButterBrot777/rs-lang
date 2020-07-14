@@ -57,7 +57,7 @@ async function signInRequest(userData){
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
     localStorage.setItem('refreshToken', content.refreshToken)
-    return content;
+    // return content;
   }else{ 
     throw new Error(rawResponse.status);
   }
@@ -93,20 +93,16 @@ const startStatisticsUser = async () => {
         "learnedWords": 0,
         "optional": {
           "dateOfReg": date, 
-          "speakIt": [
-          ],
-          "puzzle": [
-          ],
-          "savannah": [
-          ],
-          "sprint": [
-          ],
-          "audioCall": [
-          ],
+          "speakIt": {neverPlayed: true},
+          "puzzle": {neverPlayed: true},
+          "savannah": {neverPlayed: true},
+          "sprint": {neverPlayed: true},
+          "audioCall": {neverPlayed: true}
         }
       })
-  });
+  })
   const content = await rawResponse.json();
+  console.log(content)
   return content;
 }
 
@@ -188,6 +184,7 @@ const updateStatisticsUser = async (statisticsData) => {
   return content;
 }
 
+// не работает в статистике 
 const getStatisticsUser = async () => {
   const token = await getToken();
   const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/statistics`, {
@@ -199,6 +196,7 @@ const getStatisticsUser = async () => {
     },
   });
   const content = await rawResponse.json()
+  console.log(content, 'статистика')
   return content
 }
 

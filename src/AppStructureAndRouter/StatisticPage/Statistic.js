@@ -48,15 +48,17 @@ componentWillMount(){
 }
 sendStatistic() {
   getStatisticsUser().then( data =>{
+    console.log(data, 'пришли данные о статистике')
      data.optional[this.props.nameGame][`${+new Date()}`] = {
           "errors": this.props.false.length, // кол-во ошибок
           "trues": this.props.true.length // кол-во правильных ответов
       };
       delete data.id
       let stat = data;
+      console.log(stat, 'то, что обнавляется ')
       updateStatisticsUser(stat)
       }
-  )
+  ).catch(err=>console.log('Ошибка при обнавлении статистики'))
 }
 
   handleCardClick = (e) => {
@@ -160,7 +162,7 @@ handleUserWordUpdate = async (diffLevel, wordId) => {
           </div>
           <div className="results__btns">
             <Link to='/HomePage'><button>HomePage</button></Link>
-            <button onClick={this.props.defaultlevel}>New Game</button>
+            <button onClick={this.props.resetGame}>New Game</button>
           </div>
         </div>
       </div>
