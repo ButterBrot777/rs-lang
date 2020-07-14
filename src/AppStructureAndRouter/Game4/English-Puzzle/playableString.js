@@ -60,7 +60,7 @@ export default function PlayableString(prop) {
     return (
         <div className="game__word" style={styling} onClick={((prop.canClicked && prop.word !== '') ? () => addWord():() => null)}>
             <p>
-                {prop.word}
+                {prop.word.replace('</b>','').replace('<b>','')}
             </p>
         </div>
     )

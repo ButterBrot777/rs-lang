@@ -80,6 +80,7 @@ export default function GameBody(prop) {
     function playSound() {
         let path = prop.state.gameData[prop.state.stringCount].audioExample;
             let audio = new Audio(`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${path}`);
+            audio.pause();
             audio.play()
     }
 
@@ -102,7 +103,9 @@ export default function GameBody(prop) {
                 </div>
                 {prop.state.gameData.slice(0,prop.state.stringCount + 1)
                     .map((e, i) =>
-                        <GameString gameState = {prop.state}
+                        <GameString
+                                    key = {i}
+                                    gameState = {prop.state}
                                     string = {e.textExample}
                                     index ={i} canClicked = {false}
                                     play = {false}

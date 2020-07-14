@@ -88,7 +88,7 @@ import paintings1 from "./PathObjects/level1";
     return (
         <div className='game__word' style={styling} onClick={((prop.state.completed === false && prop.word !== '') ? () => removeWord():() => null)}>
             <p className={styleName}>
-                {prop.word}
+                {prop.word.replace('</b>','').replace('<b>','')}
             </p>
         </div>
     )
