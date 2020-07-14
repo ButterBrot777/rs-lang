@@ -79,6 +79,7 @@ class HomePage extends Component {
 
 	handleStartGame = () => {
 		if (this.state.wordsPerDay > 0 && this.state.maxWordsPerDay > 0) {
+			this.props.disablehardWordsTraining();
 			this.handleSettingsUpdate();
 			let date = new Date();
 			let today = date.toLocaleDateString();
