@@ -32,7 +32,6 @@ export default class App extends Component {
 		this.userLogOut = this.userLogOut.bind(this);
 		// this.refreshToken = this.refreshToken.bind(this)
 	}
-<<<<<<< HEAD
 	
 	// refreshToken(){
 	// 	const refreshToken = localStorage.getItem('refreshToken');
@@ -74,21 +73,6 @@ export default class App extends Component {
   //   // getRefreshToken()
 	// 	console.log(date, localStorage.getItem('RefreshTime'), Number(localStorage.getItem('RefreshTime')) - date)
 	// }
-=======
-
-	handleWordsChoice = (value) => {
-		this.setState({
-			basicGameWords: value
-		})
-	}
-
-	handlehardWordsTraining = () => {
-		this.setState({
-			hardWordsTraining: true
-		})
-	}
-
->>>>>>> develop
 	userLogOut() {
 		localStorage.setItem('RefreshTime', '');
     localStorage.setItem('userId', '');

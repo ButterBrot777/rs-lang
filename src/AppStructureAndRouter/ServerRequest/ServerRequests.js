@@ -371,4 +371,4 @@ const filterUserWords = async () => {
 //   return content;
 // }
 
-export { getWordData, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, createUserWord, updateUserWord, filterUserWords, getWordById, startStatisticsUser, getNewWordsWithExtraParams }
+export { getWordData, getAllUserWords, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, createUserWord, updateUserWord, filterUserWords, getWordById, startStatisticsUser, getNewWordsWithExtraParams }
