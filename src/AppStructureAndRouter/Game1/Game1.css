@@ -210,7 +210,6 @@
 /*****************STATS*******************/
 
 .speakit__results {
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
