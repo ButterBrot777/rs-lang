@@ -205,7 +205,6 @@ const getStatisticsUser = async () => {
     },
   });
   const content = await rawResponse.json()
-  console.log(content, 'статистика')
   return content
 }
 
@@ -258,7 +257,6 @@ const createUserWord = async (wordId, wordData) => {
     body: JSON.stringify(wordData)
   });
   const content = await rawResponse.json();
-  console.log(content)
   return content;
 };
 
@@ -284,7 +282,6 @@ const updateUserWord = async (wordId, wordData) => {
 
 const getAllUserWords = async () => {
   const token = await getToken();
-  console.log(token)
   const rawResponse = await fetch(`${baseUrl}/users/${localStorage.getItem('userId')}/words/`, {
     method: 'GET',
     withCredentials: true,
@@ -317,7 +314,6 @@ const filterUserWords = async () => {
   const userWords = await getAllUserWords();
   const currentDate = new Date();
   const wordsForGame = userWords.filter(word => word.optional.deleted === false && word.optional.hardWord === false && word.optional.nextTrain <= +currentDate);
-  console.log(wordsForGame)
   return wordsForGame;
 }
 

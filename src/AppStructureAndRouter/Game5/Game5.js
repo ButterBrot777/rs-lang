@@ -97,7 +97,6 @@ class Game5 extends Component{
     .then(res=>{
       let pageTransition = res.optional.level
       let levelTransition = res.optional.page
-      console.log(levelTransition, pageTransition)
       this.addNewWords(userWords, pageTransition, levelTransition).then(res=> {
         this.setState({
           words: res,

@@ -2,7 +2,221 @@ h1{
   color: darkcyan;
   font-size: 30px;
 }
-.Game3{
+.Game6{
   height: 70vh;
   background-color: crimson;
+}
+.common__word{
+  font-size: 2rem;
+}
+
+.word__container{
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+.image{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.sound{
+  width: 150px;
+  height: 150px;
+  background-image: url("AudioCall/assets/soundButton-Bg.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 50%;
+
+}
+
+.sound__small{
+  width: 25px;
+  height: 25px;
+  background-image: url("AudioCall/assets/soundButton-Bg.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.text_inactiv{
+  color: grey;
+  font-size: 2rem;
+}
+.text__inactiv__false{
+  text-decoration: line-through;
+  color: grey;
+  font-size: 2rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
+
+}
+.right__word{
+  color: green;
+  font-size: 2rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+.icon{
+  height: 25px;
+  width: 25px;
+}
+
+.word__focused{
+  text-shadow: 3px 5px 6px #6C9, -6px -7px 6px #D9FFA7;
+  font-size: 2rem;
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.item__container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid black;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: black transparent transparent transparent;
+}
+.statistic__word{
+  display: flex;
+  max-width: 30%;
+  justify-content: space-between;
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  align-content: center;
+  align-items: center;
+}
+.Main__container{
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.container{
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+}
+.statistic__sound__button{
+
+}
+.btn__container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 110%;
+}
+.game__word__container{
+  display: flex;
+
+}
+.close__button__container{
+  display: flex;
+  justify-content:flex-end;
+  width: 100%;
+}
+.close__button{
+  margin-top:10px ;
+  margin-right: 10px;
+}
+.content__container{
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+.hint__text{
+  font-size: 2rem;
+}
+.started__page__text{
+  font-size: 2rem;
+  color: white;
+}
+.started__page__head{
+  font-size: 3rem;
+  color: white;
+}
+.started__page__container{
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  margin-top: 10%;
+
+}
+.start__page__main{
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-image: url("./AudioCall/assets/86ffb87572d657f335cd7cd828c70de3.jpg");
+
+}
+.loading__container{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 80vh;
+}
+.statisric__string{
+  display: flex;
+  font-size: 1.8rem;
+  margin: 0;
+  align-items: center;
+}
+.statistic__header{
+  font-size: 2.5rem;
+  margin-left: 2rem;
+}
+.statistic__container{
+  padding: 2rem;
+}
+.margin__button{
+  margin-left: 2rem;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 840px) {
+  .word__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
 }
