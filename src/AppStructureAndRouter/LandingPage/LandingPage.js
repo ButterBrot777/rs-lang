@@ -30,9 +30,7 @@ class Promo extends React.Component {
                 Train a foreign language every day and you will succeed
               </p>
             </div>
-            <Link to="/Registration">
-              <span className="button button_colored button_promo">GET STARTED</span>
-            </Link>
+              { localStorage.getItem('token') === '' ? <Link to="/Registration"><span className="button button_colored button_promo">GET STARTED</span></Link> : ''}
           </section>
         </div>
       </div>
