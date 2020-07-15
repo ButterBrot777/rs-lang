@@ -1,8 +1,344 @@
-h1{
-  color: darkcyan;
-  font-size: 30px;
+.speakit__app {
+  position: relative;
 }
-.Game1{
-  height: 70vh;
-  background-color: crimson;
+
+.speakit__start-screen {
+  position: absolute;
+  background-image: url('./assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: .5s;
+}
+
+.speakit__start-name {
+  font-size: 70px;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  color: #00c2b2;
+  margin: 0 0 20px 0;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+}
+
+.speakit__start-info {
+  margin: 0 auto 50px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  max-width: 600px;
+  color: rgb(39, 36, 36);
+  padding: 0 10px;
+}
+
+.speakit__start-button {
+  background-color: #115569;
+  color: wheat;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  font-weight: 500;
+  font-size: 25px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid grey;
+  outline: 0;
+}
+
+.speakit__start-button:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.speakit__hidden {
+  display: none !important;
+}
+
+.speakit__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 50px;
+}
+
+.speakit__settings-inputs {
+  max-width: 30px;
+  margin: 0 5px;
+  text-align: center;
+}
+
+.speakit__rating {
+  display: flex;
+}
+
+.speakit__star {
+  width: 40px;
+  height: 40px;
+  background-size: 40px;
+}
+
+.speakit__mic {
+  width: 30px;
+  height: 37px;
+  position: absolute;
+  padding-left: 5px;
+  opacity: 0.8;
+}
+
+.speakit__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.speakit__result-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.speakit__image {
+  width: 390px;
+  height: 220px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  margin: 10px 0;
+  object-fit: initial;
+}
+
+.speakit__translation {
+  color: rgb(39, 36, 36);
+  text-align: center;
+  min-height: 45px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.speakit__input-speech {
+  min-height: 30px;
+  text-align: center;
+  font-size: 24px;
+  color: rgb(39, 36, 36);
+  border: 1px solid rgb(39, 36, 36);
+  padding: 5px 0;
+}
+
+.speakit__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px auto 65px;
+}
+
+.speakit__card {
+  border-radius: 10px;
+  border: 1px solid grey;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px 10px 10px 10px;
+  min-width: 170px;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 9px -1px 12px -1px rgba(0, 0, 255, .2);
+  font-size: 20px;
+}
+
+.speakit__card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.speakit__card-active {
+  background-color: rgba(0, 173, 159, .25);
+}
+
+.speakit__card-icon {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+}
+
+.speakit__card-text {
+  text-align: center;
+}
+
+.speakit__bold {
+  font-weight: bold;
+}
+
+.speakit__btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.speakit__btn {
+  color: seashell;
+  margin: 0 10px;
+  background-color: #00c2b2;
+  padding: 8px 20px;
+  font-size: 24px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  outline: 0;
+  border: 0;
+}
+
+.speakit__btn-wide {
+  width: 300px;
+}
+
+.speakit__btn-small {
+  padding: 5px;
+}
+
+.speakit__btn-return, .speakit__btn-new-game, .speakit__btn-small {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/*****************STATS*******************/
+
+.speakit__results {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('./assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  transition: .5s;
+  text-align: center;
+}
+
+.speakit__results-container {
+  width: 70%;
+  max-width: 780px;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.speakit__errors {
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.speakit__errors-number {
+  background-color: tomato;
+  color: white;
+  border-radius: 30%;
+  padding: 0 10px;
+  margin-left: 5px;
+}
+
+.speakit__success {
+  margin: 10px 0;
+  font-size: 24px;
+}
+
+.speakit__success-number {
+  background-color: #00c2b2;
+  color: white;
+  border-radius: 30%;
+  padding: 0 10px;
+  margin-left: 5px;
+}
+
+.speakit__results-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
+  min-width: 170px;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 3px 0;
+  border-radius: 5px;
+}
+
+.speakit__results-text {
+  margin: 10px;
+}
+
+.speakit__success-items {
+  margin-bottom: 10px;
+}
+
+.speakit__inputs-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========== MEDIA ========== */
+
+@media (max-width: 970px) {
+  .speakit__start-screen {
+    justify-content: start;
+    padding-top: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .speakit__start-name {
+    font-size: 50px;
+  }
+  .speakit__btn-wide {
+    width: 150px;
+  }
+  .speakit__btn {
+    font-size: 20px;
+    padding: 7px 12px;
+  }
+  .speakit__btn-small {
+    padding: 5px;
+  }
+  .speakit__cards {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .speakit__results-card {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 450px) {
+  .speakit__btns {
+    flex-direction: column;
+  }
+  .speakit__btn {
+    margin: 10px 0;
+  }
+  .speakit__image {
+    width: 250px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 500px) {
+  .speakit__results-container {
+    overflow-y: scroll;
+  }
+  .speakit__results-card {
+    flex-direction: column;
+    margin: 5px 0;
+    font-size: 20px;
+  }
 }

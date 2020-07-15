@@ -3,10 +3,10 @@ import {BrowserRouter as Router,Link} from "react-router-dom";
 
 import PasswordOptions from './PasswordOptions/PasswordOptions'
 import LoadingWindow from '../LoadingWindow/LoadingWindow'
-import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest} from '../ServerRequest/ServerRequests'
+import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest, startStatisticsUser, getStatisticsUser} from '../ServerRequest/ServerRequests'
 
 
-import './SignInAndSignUp.css'
+import './SignInAndSignUp.scss'
 
 class SignInAndSignUp extends Component {
   constructor(props){
@@ -18,7 +18,6 @@ class SignInAndSignUp extends Component {
       emailValid: false,
       passwordValid: false,
       passwordRepeatValid: false,
-      // passwordСondition: false,
       formValid: false,
       loading: false,
 
@@ -28,8 +27,7 @@ class SignInAndSignUp extends Component {
       MinPresenceOneDigit: false,
       MinOneSpecialCharacter:false
     }
-    
-    // this.conditionPassword = this.conditionPassword.bind(this);
+
     this.setUserInput = this.setUserInput.bind(this);
     this.validateField = this.validateField.bind(this);
     this.formSubmitSignIn = this.formSubmitSignIn.bind(this);
@@ -56,26 +54,21 @@ class SignInAndSignUp extends Component {
   callLoading(){
     this.setState({
       loading: !this.state.loading,
-  });
+    })
   }
-  // conditionPassword(){
-  //   this.setState({
-  //     passwordСondition: !this.state.passwordСondition,
-  // });
-  // }
-// отслеживание вводимых данных
+
   setUserInput(e){
     const name = e.target.name;
     const value = e.target.value;
-  
-    this.setState({[name]: value},() => {this.validateField(name, value)});
+    this.setState({
+      [name]: value},() => {this.validateField(name, value)
+    })
   }
 //проверка вводимых данных с условием
   validateField(fieldName, value){   
     let passwordValid = this.state.passwordValid
     let emailValid = this.state.emailValid
     let passwordRepeatValid = this.state.passwordRepeatValid;
-
     let MinPasswordLength = this.state.MinPasswordLength
     let MinPresenceOneUppercaseLetter = this.state.MinPresenceOneUppercaseLetter
     let MinPresenceOneCapitalLetter = this.state.MinPresenceOneCapitalLetter
@@ -84,7 +77,7 @@ class SignInAndSignUp extends Component {
 
     switch(fieldName) {
       case 'email':
-       emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/);
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/);
         break;
       case 'password':
         passwordValid = value.match(/^((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[+\-_@$!%*?&#.,;:[\]{}]).{8,})$/);
@@ -108,7 +101,8 @@ class SignInAndSignUp extends Component {
       MinPresenceOneCapitalLetter: MinPresenceOneCapitalLetter,
       MinPresenceOneDigit: MinPresenceOneDigit,
       MinOneSpecialCharacter:MinOneSpecialCharacter,
-      MinPasswordLength: MinPasswordLength},this.validateForm);
+      MinPasswordLength: MinPasswordLength
+    },this.validateForm);
   }
 //проверка формы на валидность
   validateForm() {
@@ -117,7 +111,6 @@ class SignInAndSignUp extends Component {
     }else{
       this.setState({formValid: this.state.emailValid && this.state.passwordValid});
     }
-    
   }
 // отправка формы на аутентификацию пользователя
   async formSubmitSignIn(e){
@@ -129,12 +122,13 @@ class SignInAndSignUp extends Component {
     }
     console.log( 'Данные на аутентификацию',UserData);
     signInRequest(UserData)
-      .then(res=>getSettingsUser(res))
+      // .then(ok=>getSettingsUser())
       .then(ok=> document.location.href = "/HomePage")
       .catch(err=>{
         this.callLoading();
-        alert(err)})
-        this.droppingForm();
+        alert(err)
+      })
+    this.droppingForm();
   }
   async formSubmitSignUp(e){
     e.preventDefault();
@@ -145,48 +139,47 @@ class SignInAndSignUp extends Component {
         'password': this.state.password
       }
       signUpRequest(UserData)
-        .then(ok => signInRequest(UserData))
-        .then(res => startSettingsUser(res))
-        .then(res=>getSettingsUser(res))
+        .then(res => signInRequest(res))
+        .then(ok => startSettingsUser())
+        .then(ok=> startStatisticsUser())
         .then(ok=> document.location.href = "/HomePage")
         .catch(err=>{
           this.callLoading();
-          console.log(err)})
+          console.log(err)
+        })
     }else{
       alert('повторно пароль введен не правильно')
     }
-    this.droppingForm();
-    // console.log(this.state.password,  this.state.passwordRepeat, this.state.password  === this.state.passwordRepeat)
-    
+    this.droppingForm(); 
   }
   render(){
-    let RepeatPassword =  <div className='form-group '>
-    <label htmlFor='passwordRepeat'>Password-repeat</label>
-    <input id="passwordRepeat" name='passwordRepeat' type='password'
-     className={!this.state.passwordRepeatValid ? this.state.passwordRepeat !== '' ? 'liquid':'' : 'solid'} value={this.state.passwordRepeat} placeholder="Password-repeat"
-     onChange={(event)=>this.setUserInput(event)}></input>
-     </div>
-
+    let RepeatPassword = 
+      <div className='form-group'>
+        <label htmlFor='passwordRepeat'></label>
+        <input id="passwordRepeat" name='passwordRepeat' type='password'
+          className={!this.state.passwordRepeatValid ? this.state.passwordRepeat !== '' ? 'liquid':'' : 'solid'} value={this.state.passwordRepeat} placeholder="Password-repeat"
+          onChange={(event)=>this.setUserInput(event)}>
+        </input>
+      </div>
   return (
-    
     <div className="modal">
-      {this.state.loading ? <LoadingWindow/> : ''}
+      {this.state.loading ? <LoadingWindow background={'red'}/> : ''}
       <div className="modal__container" >
-      {this.props.SignFlag ? '' : <Link to='/Registration'><button>Go to Sign Up</button></Link>}
+      {this.props.SignFlag ? '' : <Link to='/Registration'><button className="button button_colored">Go to Sign Up</button></Link>}
        <form className='form-container' onSubmit={this.props.SignFlag ? this.formSubmitSignUp : this.formSubmitSignIn}>
        {this.props.SignFlag ? <h3> Sign Up</h3> : <h3> Sign In</h3>}
   
            <div className='form-group'>
-              <label htmlFor='Email'>Email</label>
-              <input id="email" name='email' 
+              <label htmlFor='Email'></label>
+              <input id="email" name='email' required
               className={!this.state.emailValid ? this.state.email !== '' ? 'liquid':'' : 'solid'} value={this.state.email} placeholder="Enter your Email"
               onChange={(event)=>this.setUserInput(event)}></input>
            </div>
 
-           <div className='form-group '>
-              <label htmlFor='Password'>Password</label>
-              <input id="password" name='password' type='password'
-               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid':'' : 'solid'}  value={this.state.password} placeholder="Password"
+           <div className="form-group">
+              <label htmlFor="Password"></label>
+              <input id="password" name="password" type="password" required
+               className={!this.state.passwordValid ? this.state.password !== '' ? 'liquid': '' : 'solid'}  value={this.state.password} placeholder="Password"
                onChange={(event)=>this.setUserInput(event)}></input>
            </div>
 
@@ -195,15 +188,15 @@ class SignInAndSignUp extends Component {
            <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
            CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>
 
-           <div className='fomm-btns'>
-             <button disabled={!this.state.formValid}>Submit</button>
-             <Link to='/'><button>Close</button></Link>  
+           <div className="form-btns">
+             <button className="button button_colored" disabled={!this.state.formValid}>Submit</button>
+             <Link to='/' className="button button_bordered">Close</Link>  
            </div>
        </form>
-       {this.props.SignFlag ? <Link to='/Authorization'><button>Go to Sign In</button></Link> : ''}
+       {this.props.SignFlag ? <Link to='/Authorization' className="button button_colored">Go to Sign In</Link> : ''}
        </div>
     </div>
-  );
+  )
   }
 }
 export default SignInAndSignUp
