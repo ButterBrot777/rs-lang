@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router,Link} from "react-router-dom";
+import AudioCall from "./AudioCall/Game";
 
 import './Game3.css'
 class Game3 extends Component{
@@ -8,10 +9,7 @@ class Game3 extends Component{
   }
   render(){
     return(
-      <div className="Game3">
-      <h1>Game3</h1>
-      <Link to="/HomePage"><button>Close Game3</button></Link>
-      </div> 
+     <AudioCall />
     )
   }
 }

@@ -5,6 +5,10 @@
 .package-lock.json
 /.pnp
 .pnp.js
+.idea
+package-lock.json
+.gitignore
+npm
 
 package-lock.json
 
@@ -26,3 +30,4 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+.idea

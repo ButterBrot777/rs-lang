@@ -133,8 +133,8 @@ class HomePage extends Component {
 				{this.state.isModalWindow && (
 					<div className="game-end">
 						<button className="btn" onClick={this.closeModal}>Close</button>
-						<h1 className="info-big">Hurrah, that's it for today!</h1>
-						<div>You have more new cards but you exceeded the limit for
+						<h2 className="game-end__title">Hurrah, that's it for today!</h2>
+						<div className="game-end__text">You have more new cards but you exceeded the limit for
 						today. You can continue your training but please keep in mind you will have more words to repeat.</div>
 						<Link className="btn" to="/BasicGame">Play More</Link>
 					</div>
@@ -167,27 +167,27 @@ class HomePage extends Component {
 							<ul className="mini-games">
 								<li>
 									<Link to="/Game1" className="button button_bordered button-game">
-										Game1
+										SPEACKIT
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game2" className="button button_bordered button-game">
-										Game2
+										SPRINT
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game3" className="button button_bordered button-game">
-										Game3
+										AUDIO CALL
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game4" className="button button_bordered button-game">
-										Game4
+										ENGLISH PUZZLE
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game5" className="button button_bordered button-game">
-										Game5
+										SAWANNAH
 									</Link>
 								</li>
 							</ul>

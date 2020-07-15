@@ -162,10 +162,7 @@ export default class App extends Component {
 						</Route>
 						<Route path="/Game3">
 							{this.state.userAuthorized !== '' ? (
-								<Fade top opposite cascade collapse>
-									{' '}
 									<Game3 />
-								</Fade>
 							) : (
 									<UnauthorizedUserPage />
 								)}
@@ -176,9 +173,6 @@ export default class App extends Component {
 						<Route path="/Game5">
 							{this.state.userAuthorized !== '' ? <Game5 /> : <UnauthorizedUserPage />}
 						</Route>
-						{/* <Route path="/Game6">
-							{this.state.userAuthorized !== '' ? <Game6 /> : <UnauthorizedUserPage />}
-						</Route> */}
 						<Route path="/Stat">
 							{this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
 						</Route>
