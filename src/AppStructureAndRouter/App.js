@@ -43,6 +43,11 @@ export default class App extends Component {
     this.setState({
       hardWordsTraining: true
     })
+	}
+	disablehardWordsTraining = () => {
+    this.setState({
+      hardWordsTraining: false
+    })
   }
 	
 	// refreshToken(){

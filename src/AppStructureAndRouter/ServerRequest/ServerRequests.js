@@ -306,6 +306,7 @@ async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
   return content;
 }
 
+
 const getWordById = async (wordId) => {
   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
   const rawResponse = await fetch(url);
