@@ -2,7 +2,6 @@ const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
 
 // Проверка на рабочий Token
 const getToken = async () => {
-  console.log('getToken отработал')
   let dateNow = +new Date()
   if (localStorage.getItem('RefreshTime') > dateNow) {
     return localStorage.getItem('token');
@@ -98,7 +97,6 @@ const startStatisticsUser = async () => {
     })
   })
   const content = await rawResponse.json();
-  console.log(content)
   return content;
 }
 
@@ -244,6 +242,8 @@ const getUserWord = async (wordId) => {
     throw new Error(rawResponse.status);
   }
 };
+
+
 
 const createUserWord = async (wordId, wordData) => {
   const token = await getToken();
