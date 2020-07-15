@@ -22,8 +22,32 @@ class HomePage extends Component {
 	}
 
 	componentDidMount = async () => {
-		let { wordsPerDay, optional: { lastTrain, maxWordsPerDay,
-			level, page, wordsLearntPerPage, hints } } = await getSettingsUser();
+		let settings = await getSettingsUser();
+		if (!settings) {
+			let date = new Date()
+			date.setDate(date.getDate() - 1);
+			let yesterday = date.toLocaleDateString();
+			settings = {
+				"wordsPerDay": 20,
+				"optional": {
+					"maxWordsPerDay": 40,
+					"level": 0,
+					"page": 0,
+					"wordsLearntPerPage": 0,
+					"lastTrain": yesterday,
+					"hints": {
+						"meaningHint": true,
+						"translationHint": true,
+						"exampleHint": true,
+						"soundHint": false,
+						"imageHint": false,
+						"transcriptionHint": false
+					}
+				}
+			}
+		}
+		let { wordsPerDay, optional: { maxWordsPerDay, level, page,
+			wordsLearntPerPage, hints, lastTrain } } = settings;
 		this.setState({
 			maxWordsPerDay,
 			wordsPerDay,
@@ -79,6 +103,7 @@ class HomePage extends Component {
 
 	handleStartGame = () => {
 		if (this.state.wordsPerDay > 0 && this.state.maxWordsPerDay > 0) {
+			this.props.disablehardWordsTraining();
 			this.handleSettingsUpdate();
 			let date = new Date();
 			let today = date.toLocaleDateString();
@@ -108,8 +133,8 @@ class HomePage extends Component {
 				{this.state.isModalWindow && (
 					<div className="game-end">
 						<button className="btn" onClick={this.closeModal}>Close</button>
-						<h1 className="info-big">Hurrah, that's it for today!</h1>
-						<div>You have more new cards but you exceeded the limit for
+						<h2 className="game-end__title">Hurrah, that's it for today!</h2>
+						<div className="game-end__text">You have more new cards but you exceeded the limit for
 						today. You can continue your training but please keep in mind you will have more words to repeat.</div>
 						<Link className="btn" to="/BasicGame">Play More</Link>
 					</div>

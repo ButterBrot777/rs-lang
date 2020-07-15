@@ -14,11 +14,13 @@ class UnauthorizedUserPage extends Component{
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     return(
       <div className="unauthorized-page">
-        <h3>Авторизируйтесь, что бы посетить данную страницу</h3>
+        <div className='unauthorized-page-inner'>
+        <h3>You are not logged in</h3>
         <div className='unauthorized-page-btns'>
           <Link to="/Authorization"><button>Sign In</button></Link>
           <Link to="/Registration"><button>Sign Up</button></Link>
           <Link to="/"><button>Landing Page</button></Link>
+        </div>
         </div>
       </div> 
     )

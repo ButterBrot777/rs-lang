@@ -30,21 +30,70 @@ export default class App extends Component {
 			hardWordsTraining: false
 		};
 		this.userLogOut = this.userLogOut.bind(this);
+		// this.refreshToken = this.refreshToken.bind(this)
 	}
 
 	handleWordsChoice = (value) => {
-		this.setState({
-			basicGameWords: value
-		})
-	}
+    this.setState({
+      basicGameWords: value
+    })
+  }
 
-	handlehardWordsTraining = () => {
-		this.setState({
-			hardWordsTraining: true
-		})
+  handlehardWordsTraining = () => {
+    this.setState({
+      hardWordsTraining: true
+    })
 	}
-
+	disablehardWordsTraining = () => {
+    this.setState({
+      hardWordsTraining: false
+    })
+  }
+	
+	// refreshToken(){
+	// 	const refreshToken = localStorage.getItem('refreshToken');
+  //   const userId = localStorage.getItem('userId');
+	// 	const baseUrl = 'https://afternoon-falls-25894.herokuapp.com'
+		
+  //   const getRefreshToken = async () => {
+	// 		const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
+	// 					method: 'GET',
+	// 					headers: {
+	// 						'Authorization': `Bearer ${refreshToken}`,
+	// 						'accept': 'application/json',
+	// 					},
+	// 				});
+	// 				if (rawResponse.status === 200) {
+	// 					const content = await rawResponse.json();
+	// 					let date = +new Date();
+  //           date+=14400000;
+  //           localStorage.setItem('RefreshTime', date);
+	// 					localStorage.setItem('token', content.token)
+	// 					localStorage.setItem('refreshToken', content.refreshToken)
+	// 					return content;
+	// 				} else if (rawResponse.status === 403){
+	// 					localStorage.setItem('RefreshTime', '');
+  //           localStorage.setItem('userId', '');
+  //           localStorage.setItem('refreshToken', '')
+	// 	        localStorage.setItem('token', '');
+	// 				} else{ 
+	// 					throw new Error(rawResponse.status);
+	// 				}
+	// 	}
+	// 	let date = +new Date();
+  //   if(localStorage.getItem('RefreshTime') < date){
+	// 		getRefreshToken()
+  //      console.log('Запрос на изменение токена')
+	// 	}else{
+	// 		 console.log('ничего не делаем', localStorage.getItem('refreshToken'))
+	// 	}
+  //   // getRefreshToken()
+	// 	console.log(date, localStorage.getItem('RefreshTime'), Number(localStorage.getItem('RefreshTime')) - date)
+	// }
 	userLogOut() {
+		localStorage.setItem('RefreshTime', '');
+    localStorage.setItem('userId', '');
+    localStorage.setItem('refreshToken', '')
 		localStorage.setItem('token', '');
 		this.setState({
 			userAuthorized: localStorage.getItem('token'),
@@ -92,7 +141,9 @@ export default class App extends Component {
 							{this.state.userAuthorized !== '' ? (
 								<Fade right>
 									<HomePage basicGameWords={this.state.basicGameWords}
-										handleWordsChoice={this.handleWordsChoice} />
+										handleWordsChoice={this.handleWordsChoice}
+										disablehardWordsTraining={this.disablehardWordsTraining}
+										/>
 								</Fade>
 							) : (
 									<UnauthorizedUserPage />
@@ -125,9 +176,6 @@ export default class App extends Component {
 						<Route path="/Game5">
 							{this.state.userAuthorized !== '' ? <Game5 /> : <UnauthorizedUserPage />}
 						</Route>
-						{/* <Route path="/Game6">
-							{this.state.userAuthorized !== '' ? <Game6 /> : <UnauthorizedUserPage />}
-						</Route> */}
 						<Route path="/Stat">
 							{this.state.userAuthorized !== '' ? <Statistics /> : <UnauthorizedUserPage />}
 						</Route>
@@ -141,6 +189,6 @@ export default class App extends Component {
 					</Switch>
 				</div>
 			</Router>
-		);
+		)
 	}
 }

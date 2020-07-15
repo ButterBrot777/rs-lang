@@ -3,7 +3,7 @@ import {BrowserRouter as Router,Link} from "react-router-dom";
 
 import PasswordOptions from './PasswordOptions/PasswordOptions'
 import LoadingWindow from '../LoadingWindow/LoadingWindow'
-import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest} from '../ServerRequest/ServerRequests'
+import {signInRequest, getSettingsUser,startSettingsUser,signUpRequest, startStatisticsUser, getStatisticsUser} from '../ServerRequest/ServerRequests'
 
 
 import './SignInAndSignUp.scss'
@@ -141,7 +141,7 @@ class SignInAndSignUp extends Component {
       signUpRequest(UserData)
         .then(res => signInRequest(res))
         .then(ok => startSettingsUser())
-        // .then(ok=>getSettingsUser())
+        .then(ok=> startStatisticsUser())
         .then(ok=> document.location.href = "/HomePage")
         .catch(err=>{
           this.callLoading();
@@ -185,8 +185,8 @@ class SignInAndSignUp extends Component {
 
            {this.props.SignFlag ? RepeatPassword : ''}
 
-           <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
-           CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>
+           {this.props.SignFlag ? <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
+           CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>: ''}
 
            <div className="form-btns">
              <button className="button button_colored" disabled={!this.state.formValid}>Submit</button>
