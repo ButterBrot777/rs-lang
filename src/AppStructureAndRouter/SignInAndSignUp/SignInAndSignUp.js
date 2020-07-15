@@ -185,8 +185,8 @@ class SignInAndSignUp extends Component {
 
            {this.props.SignFlag ? RepeatPassword : ''}
 
-           <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
-           CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>
+           {this.props.SignFlag ? <PasswordOptions  Length={this.state.MinPasswordLength} UppercaseLetter={this.state.MinPresenceOneUppercaseLetter} 
+           CapitalLetter={this.state.MinPresenceOneCapitalLetter} Digit={this.state.MinPresenceOneDigit} SpecialCharacter={this.state.MinOneSpecialCharacter}/>: ''}
 
            <div className="form-btns">
              <button className="button button_colored" disabled={!this.state.formValid}>Submit</button>

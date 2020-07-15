@@ -1,0 +1,41 @@
+:root {
+  --text-color: rgb(251, 201, 126);
+}
+.unauthorized-page{
+  background-image: url(./background3.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: calc(100vh - 8rem);
+}
+.unauthorized-page-inner{
+  text-align: center;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.unauthorized-page h3{
+  font-size: 40px;
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+}
+
+.unauthorized-page-btns button{
+  padding: 20px 40px;
+  margin: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 10px;
+  border:solid 2px var(--text-color);
+  outline: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor:pointer;
+}
+
+.unauthorized-page-btns button:hover
+{
+  background-color: var(--text-color);
+  color: black;
+}
