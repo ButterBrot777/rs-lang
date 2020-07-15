@@ -167,27 +167,27 @@ class HomePage extends Component {
 							<ul className="mini-games">
 								<li>
 									<Link to="/Game1" className="button button_bordered button-game">
-										Game1
+										SPEACKIT
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game2" className="button button_bordered button-game">
-										Game2
+										SPRINT
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game3" className="button button_bordered button-game">
-										Game3
+										AUDIO CALL
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game4" className="button button_bordered button-game">
-										Game4
+										ENGLISH PUZZLE
 									</Link>
 								</li>
 								<li>
 									<Link to="/Game5" className="button button_bordered button-game">
-										Game5
+										SAWANNAH
 									</Link>
 								</li>
 							</ul>
