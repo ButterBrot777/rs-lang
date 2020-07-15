@@ -86,10 +86,13 @@ a:link {
 .button_promo {
   margin: auto;
   display: block;
-  margin-top: 7rem;
+  margin-top: 1rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+.button_promo-top {
+  margin-top: 7rem;
 }
 
 .button_details {

@@ -184,12 +184,9 @@ class Statistic extends Component {
 class Card extends React.Component {
     render() {
         const { id, audio, transcription, word, wordTranslate } = this.props.wordObj;
-        // const card = "card";
         const card1 = "results__card"
-        // const card2 = "card-active"
         return (
             <div data-id={id} className={card1}>
-                {/* <img onClick={() => this.props.playSound(audio)} className="card__icon" alt="soundIcon"></img> */}
                 <span className="bold results__text">{word}</span>
                 <span className="results__text">{transcription}</span>
                 <span className="results__text">{wordTranslate}</span>
