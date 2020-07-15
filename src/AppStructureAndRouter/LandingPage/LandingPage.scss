@@ -216,6 +216,9 @@
   align-items: center;
   padding: 1rem;
 }
+.employee > * {
+  display: block;
+}
 .employee__photo {
   margin-right: 2rem;
   background-repeat: no-repeat;
@@ -256,7 +259,7 @@
 }
 .employee__name {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-style: normal;
   font-weight: bold;
   line-height: 2.6rem;
@@ -275,6 +278,19 @@
   line-height: 1.4rem;
   color: #1943EF;
   text-decoration: none;
+}
+article.employee > *:last-child {
+  display: block;
+}
+.employee__work {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 3rem 1rem 3rem;
+  text-align: left;
+
+  li {
+    font-size: 1.5rem;
+  }
 }
 
 /* =================================== */
