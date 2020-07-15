@@ -19,7 +19,6 @@ const getRefreshToken = async () => {
     },
   });
   if (rawResponse.status === 200) {
-
     const content = await rawResponse.json();
     let date = +new Date();
     const timeRefresh = 14400000
@@ -28,17 +27,14 @@ const getRefreshToken = async () => {
     localStorage.setItem('RefreshTime', date);
     localStorage.setItem('token', content.token)
     localStorage.setItem('refreshToken', content.refreshToken)
-    // console.log(localStorage.getItem('token'), 'sdfsdfcxvcxvxcvxv13123123123131')
     return localStorage.getItem('token')
   } else {
     localStorage.setItem('RefreshTime', '')
     localStorage.setItem('userId', '');
     localStorage.setItem('refreshToken', '')
     localStorage.setItem('token', '')
-
   }
 }
-
 
 async function signInRequest(userData) {
   const rawResponse = await fetch(`${baseUrl}/signin`, {
@@ -105,7 +101,6 @@ const startStatisticsUser = async () => {
   console.log(content)
   return content;
 }
-
 
 const startSettingsUser = async () => {
   const token = await getToken();
@@ -331,26 +326,6 @@ async function getNewWordsWithExtraParams(page, group, wordsPerPage) {
   return content;
 }
 
-// const getRefreshToken = async () => {
-//   const rawResponse = await fetch(`${baseUrl}/users/${userId}/tokens`, {
-//     method: 'GET',
-//     headers: {
-//       'Authorization': `Bearer ${refreshToken}`,
-//       'accept': 'application/json',
-//     },
-//   });
-//   if (rawResponse.status === 200) {
-//     const content = await rawResponse.json();
-//     localStorage.setItem('token', content.token)
-//     localStorage.setItem('refreshToken', content.refreshToken)
-//     return content;
-//   } else if (rawResponse.status === 403) {
-//     document.location.reload();
-//   } else {
-//     throw new Error(rawResponse.status);
-//   }
-// }
-
 const getWordById = async (wordId) => {
   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
   const rawResponse = await fetch(url);
@@ -364,11 +339,5 @@ const filterUserWords = async () => {
   console.log(wordsForGame)
   return wordsForGame;
 }
-// const getWordById = async (wordId) => {
-//   const url = `${baseUrl}/words/${wordId}?noAssets=true`;
-//   const rawResponse = await fetch(url);
-//   const content = await rawResponse.json();
-//   return content;
-// }
 
 export { getWordData, getAllUserWords, signInRequest, signUpRequest, startSettingsUser, addSettingsUser, getSettingsUser, updateStatisticsUser, getStatisticsUser, getNewWords, getUserWord, createUserWord, updateUserWord, filterUserWords, getWordById, startStatisticsUser, getNewWordsWithExtraParams }

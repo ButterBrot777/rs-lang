@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import WordsAll  from '../../AllWords/AllWords' 
 import Buttons from './Buttons'
-// import Statistic from '../../StatisticPage/Statistic'
 import Statistic from '../../SmallStatistic/SmallStatistic'
 
 class Game extends Component{
@@ -23,11 +22,9 @@ class Game extends Component{
     this.nextWord = this.nextWord.bind(this)
     this.arrayRandElement = this.arrayRandElement.bind(this)
   }
-
   componentDidMount(){
     this.timerRaund()
   }
-
   nextWord(word){
     this.timer = this.props.difficulty
     if(word === this.state.wordsToLearn[this.state.word].wordTranslate){
@@ -76,7 +73,7 @@ class Game extends Component{
   render(){
     if(this.state.statistic){
       return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} homePageGame={this.props.resetGame} newPage={Number(localStorage.getItem('page'))} newLevel={Number(localStorage.getItem('level'))} totalGame={false}/>
-
+      
       // return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} resetGame={this.props.resetGame} />
     }else{
       return(

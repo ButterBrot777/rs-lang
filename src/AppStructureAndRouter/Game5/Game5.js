@@ -40,7 +40,6 @@ class Game5 extends Component{
 
   async addNewWords(userWords, pageTransition, levelTransition){
     if(userWords.length >= 20){
-
       return userWords.slice(0,20)
     }else{
       if(levelTransition<29){
@@ -52,13 +51,11 @@ class Game5 extends Component{
         pageTransition = 0
         levelTransition = 0 
       }
-      console.log(levelTransition, pageTransition)
-     
       localStorage.setItem('page',pageTransition)
       localStorage.setItem('level',levelTransition)
+
       let addWords = await getNewWords(levelTransition, pageTransition)
       let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
-      // console.log(newWordsFilter)
       userWords = userWords.concat(newWordsFilter)
       return this.addNewWords(userWords, pageTransition, levelTransition)
     }
@@ -94,18 +91,14 @@ class Game5 extends Component{
  async requestWords(){
   filterUserWords()
   .then(wordsId=>{
-      console.log(wordsId)
       return Promise.all(wordsId.map((wordId)=>getWordById(wordId.wordId)))})
   .then(userWords=>{
     getSettingsUser()
     .then(res=>{
-      console.log(userWords)
-      console.log(res)
       let pageTransition = res.optional.level
       let levelTransition = res.optional.page
       console.log(levelTransition, pageTransition)
       this.addNewWords(userWords, pageTransition, levelTransition).then(res=> {
-        console.log(res)
         this.setState({
           words: res,
         })
@@ -147,4 +140,3 @@ class Game5 extends Component{
   }
 }
 export default Game5
-

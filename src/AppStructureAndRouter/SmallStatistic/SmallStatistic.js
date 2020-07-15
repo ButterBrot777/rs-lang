@@ -174,7 +174,7 @@ class Statistic extends Component {
                     </div>
                     <div className="results__btns">
                         <Link to='/HomePage'><button>HomePage</button></Link>
-                        <button onClick={this.props.homePageGame}>New adasdGame</button>
+                        <button onClick={this.props.homePageGame}>New Game</button>
                     </div>
                 </div>
             </div>
