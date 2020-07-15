@@ -29,9 +29,43 @@
   cursor:pointer;
 }
 .game-difficulty{
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
   padding-top: 20px;
   width: 320px;
 }
+.savannah-start-btn p{
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+.result-response{
+  z-index: 10;
+  position: absolute;
+  left: 50%;
+  top:60%;
+  font-size: 30vw;
+  font-weight: 700;
+  transform: translate(-50%, -50%);
+  animation-name: result-response;
+  -webkit-animation-name: result-response; 
+  animation-duration: 1s;
+  opacity: 0;
+}
+
+@keyframes result-response{
+  0% {
+    opacity: 0;
+    }      
+  30% {
+    opacity: 1;
+    } 
+  100% {
+    opacity: 0;
+    }    
+}
+
 .game-difficulty label {
   padding: 10px 10px 10px 5px;
   font-size: 25px;
@@ -42,7 +76,6 @@
 .game-difficulty input {
   cursor: pointer;
 }
-
 .savannah-start-btn button{
   padding: 15px 40px;
   font-size: 40px;
@@ -204,10 +237,10 @@
   .savannah-game_content{
     height: 70vh;
   }
-  /* .savannah-game_control-btns{
+  .savannah-game_control-btns{
     width: 550px;
     display: inline-block;
-  } */
+  }
 }
 @media (min-width: 320px) and (max-width: 550px) {
   .savannah-game_control-btns{
@@ -216,8 +249,8 @@
   .savannah-game_content{
     height: 50vh;
   }
-  /* .savannah-game_control-btns{
+  .savannah-game_control-btns{
     width: 320px;
     display: inline-block;
-  } */
+  }
 }

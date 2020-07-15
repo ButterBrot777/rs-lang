@@ -132,7 +132,7 @@ class Game5 extends Component{
           <video id="background-video" loop autoPlay>
             <source src={video} type='video/mp4' />
           </video>
-          {!this.state.words || this.state.loadingWindow ? <LoadingWindow background={'#657587'}/> : ''}
+          {!this.state.words || this.state.loadingWindow ? <LoadingWindow background={'#161c2a'}/> : ''}
           <HomePage handleLoading={this.handleLoading} handleDifficulty ={this.handleDifficultyGameSavannah} difficulty={this.state.difficultyGameSavannah} handleLoadingWindow={this.handleLoadingWindow}/>
         </div>
       )

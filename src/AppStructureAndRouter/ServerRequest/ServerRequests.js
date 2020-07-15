@@ -137,10 +137,7 @@ const startSettingsUser = async () => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await startSettingsUser();
-  } else {
+  }else {
     throw new Error(rawResponse.status);
   }
 }
@@ -160,10 +157,7 @@ const addSettingsUser = async (settingsData) => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await addSettingsUser();
-  } else {
+  }else {
     throw new Error(rawResponse.status);
   }
 }
@@ -196,10 +190,7 @@ const updateStatisticsUser = async (statisticsData) => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await updateStatisticsUser();
-  } else {
+  }else {
     throw new Error(rawResponse.status);
   }
 }
@@ -247,10 +238,7 @@ const getUserWord = async (wordId) => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await getUserWord(wordId);
-  } else if (rawResponse.status === 404) {
+  }else if (rawResponse.status === 404) {
     return false;
   } else {
     throw new Error(rawResponse.status);
@@ -289,10 +277,7 @@ const updateUserWord = async (wordId, wordData) => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 401) {
-    await getRefreshToken();
-    await updateUserWord();
-  } else {
+  }else {
     throw new Error(rawResponse.status);
   }
 };
@@ -311,11 +296,6 @@ const getAllUserWords = async () => {
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content;
-  } else if (rawResponse.status === 402) {
-    await getRefreshToken();
-    await getAllUserWords();
-  } else {
-    throw new Error(rawResponse.status);
   }
 };
 
