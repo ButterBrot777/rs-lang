@@ -24,7 +24,7 @@ export default class Word extends React.Component{
 
     render() {
         return (
-            <div key={this.props.index} >
+            <div className={'game__word__container'} >
             {
                 <p  onClick={() => this.choseRight()} className={(this.props.index === this.props.state.focusIndex) ?'word__focused':'common__word'} >
                     {`${this.props.index + 1} ${this.props.word}`}

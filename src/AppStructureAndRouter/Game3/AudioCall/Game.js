@@ -4,7 +4,7 @@ import GameWordCompleted from "./GameWordCompleted";
 import Loading from "./Loading";
 import Statistic from "./Statistic";
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import { getSettingsUser} from '../../ServerRequest/ServerRequests';
+import { getSettingsUser,getWordById,getNewWords,} from '../../ServerRequest/ServerRequests';
 
 import style from '../../../style.css'
 import StartedPage from "./StartedPage";
@@ -70,30 +70,16 @@ class AudioCall extends React.Component{
 
 
     };
-     getNewWords = async (page, group) => {
-        const url = `${this.baseUrl}/words?page=${page}&group=${group}`;
-        const rawResponse = await fetch(url);
-        const content = await rawResponse.json();
-        return content;
-    }
+
 
     startGame = () => {
         this.setState({startedPage:false,})
     };
 
-    getUserWordById = async (userId, wordId ) =>{
-        const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/words/${wordId}?noAssets=true`, {
-            method: 'GET',
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${this.token}`,
-                'Accept': 'application/json',
-            }
-        });
 
-        const content = await rawResponse.json();
-        return content
-    };
+
+
+
 
     getUserWord = async ( userId) => {
         const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/`, {
@@ -106,22 +92,27 @@ class AudioCall extends React.Component{
         });
 
         let content = await rawResponse.json();
-        content = this.filterUserWords(content)
-
-        console.log(content)
-        const promises = content.slice(100).map(async (e) => {
-            let wordData =  await this.getWordById(e.wordId);
-            return wordData
-        });
-        let statistic = await getSettingsUser();
-        let data = await Promise.all(promises);
-
-        if (data.length < 20) {
-            data = await this.addNewWords(data, statistic.page, statistic.level)
-        }
-        console.log(data)
+        // console.log('content',content)
+        // content = this.filterUserWords(content)
+        //
+        // console.log('после фильтра',content)
+        // let promises = content.map(async (e) => {
+        //     let wordData =  await getWordById(e.wordId);
+        //     return wordData
+        // });
+        // let statistic = await getSettingsUser();
+        // promises = promises.slice(100);
+        // console.log('вся дата',promises)
+        // let data = await Promise.all(promises.slice);
+        //
+        // if (data.length < 20) {
+        //     data = await this.addNewWords(data, statistic.page, statistic.level)
+        // }
+        // console.log(data)
+        // let currentData = data[0];
+        // console.log(currentData)
+        let data = await getNewWords(1,1)
         let currentData = data[0];
-        console.log(currentData)
         this.generateArray(currentData.wordTranslate);
         this.setState({
             obj: currentData,
@@ -135,6 +126,7 @@ class AudioCall extends React.Component{
 
 
     componentDidMount() {
+        console.log('я сработал')
         document.addEventListener('keydown',this.onKeyDown);
         this.getUserWord(this.userId)
     }
@@ -195,7 +187,7 @@ class AudioCall extends React.Component{
                 levelTransition = 0;
             }
 
-            let addWords = await this.getNewWords(levelTransition, pageTransition)
+            let addWords = await getNewWords(levelTransition, pageTransition)
             let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
             userWords = userWords.concat(newWordsFilter)
             return this.addNewWords(userWords, pageTransition, levelTransition)
@@ -209,7 +201,6 @@ class AudioCall extends React.Component{
       let arr = [word];
       return  this.getSamewords(word).then(
             data => {
-                console.log(data)
                 this.setState({
                     array:this.shuffle(this.parseData(data,word).concat(arr)),
                     loading:true});
@@ -219,12 +210,7 @@ class AudioCall extends React.Component{
             }
         )
     };
-     getWordById = async (wordId) => {
-        const url = `${this.baseUrl}/words/${wordId}?noAssets=true`;
-        const rawResponse = await fetch(url);
-        const content = await rawResponse.json();
-        return content;
-    }
+
 
     //функцияя которая получает данные из апи и находит похожеее
     parseData = (array,word) => {
@@ -302,35 +288,39 @@ class AudioCall extends React.Component{
         }else{
             return(
                 <div className='Main__container'  onKeyDown={(e)=>console.log(e.keyCode)}>
-                    <Link to="/">
-                      <button>Закрыть</button>
-                    </Link>
-                    <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
-                    <div className="word__container" onKeyDownCapture={() => console.log(123)}>
-                        {this.state.array.map((e,i) =>
-                            (this.state.completed === false) ?
-                            <GameWord state = {this.state}
-                                      key = {i}
-                                      index = {i}
-                                      word = {e}
-                                      completed = {this.completed}
-                                      choseWordWithEnter = {this.onKeyDown}
+                    <div className={'close__button__container'}>
+                        <Link to="/">
+                            <button className={'button button_bordered close__button'}>close</button>
+                        </Link>
+                    </div>
+                    <div className={'content__container'}>
+                        <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
+                        <div className="word__container" >
+                            {this.state.array.map((e,i) =>
+                                (this.state.completed === false) ?
+                                    <GameWord state = {this.state}
+                                              key = {i}
+                                              index = {i}
+                                              word = {e}
+                                              completed = {this.completed}
+                                              choseWordWithEnter = {this.onKeyDown}
 
-                                      />
-                                      :
-                                <GameWordCompleted state = {this.state}
-                                          key = {i}
-                                          index = {i}
-                                          word = {e}
-                                          rightWord = {this.state.obj.wordTranslate}
-                                          completed = {this.completed}
-                                          clicked = {this.state.indexOfClick}
-                                          answer = {this.state.right}
-                                          id = {this.state.obj.id}
-                                />
-                        )}
-                    </div> 
-                    <button onClick={() => this.nextPage()}>{(this.state.completed === false) ? 'Не знаю':'Готово'}</button>
+                                    />
+                                    :
+                                    <GameWordCompleted state = {this.state}
+                                                       key = {i}
+                                                       index = {i}
+                                                       word = {e}
+                                                       rightWord = {this.state.obj.wordTranslate}
+                                                       completed = {this.completed}
+                                                       clicked = {this.state.indexOfClick}
+                                                       answer = {this.state.right}
+                                                       id = {this.state.obj.id}
+                                    />
+                            )}
+                        </div>
+                        <button className={'button button_colored'} onClick={() => this.nextPage()}>{(this.state.completed === false) ? 'I dont know':'Done'}</button>
+                    </div>
                 </div>
             )
         }
@@ -342,11 +332,13 @@ class Image extends React.Component{
         return(
             <div >
                 {(this.props.state.completed) ?
-                    <div >
-                        <img  className = "image" src={`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.path}`}/>
+                    <div className='item__container'>
+                        <img  className = "image"  src={`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.path}`}/>
                         <div className='item__container'>
-                            <div className="sound__small" onClick={() => this.props.sound()}/>
-                            <p> {this.props.word}</p>
+                            <div className="btn__container">
+                                <div className="sound__small" onClick={() => this.props.sound()}/>
+                                <p className={'hint__text'}> {this.props.word}</p>
+                            </div>
                         </div>
                     </div> :
                     <div className='item__container'>
