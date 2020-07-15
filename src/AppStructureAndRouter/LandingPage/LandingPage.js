@@ -3,7 +3,6 @@ import './normalize.css';
 import './LandingPage.scss';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-
 export default class Landing extends React.Component {
   render() {
     return [
@@ -137,9 +136,7 @@ class Details extends React.Component {
                 </p>
               </article>
             </div>
-            <Link to="/Registration">
-              <button className="button button_colored button_details">GET STARTED</button>
-            </Link>
+            { localStorage.getItem('token') === '' ? <Link to="/Registration"><span className="button button_colored button_promo">GET STARTED</span></Link> : ''}
           </section>
         </div>
       </div>
@@ -148,84 +145,169 @@ class Details extends React.Component {
 }
 
 class About extends React.Component {
-  render() {
-    return (
-      <div className="wrapper wrapper__about-us_colored">
-        <div className="about-us__wrapper wrapper__inner">
-          <section id="about-us" className="about-us">
-            <h2 className="title about-us__title">Who we are</h2>
-            <div className="layout-3-column">
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Yuliya Kogol</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:kogol.julia@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/22-22"><div className="employee__photo employee-1"></div></a>
-              </article>
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Kirill Vorobeychik</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:vorob.edu@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/vorobeychik"><div className="employee__photo employee-2"></div></a>
-              </article>
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Ilya Shihutin</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:kathyr@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/ilyashihutin"><div className="employee__photo employee-3"></div></a>
-              </article>
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Nastya Koval</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:anasteziyam@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/nastiakoval"><div className="employee__photo employee-4"></div></a>
-              </article>
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Andrey Sapranovich</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:sapranovich.andrey@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/sapranovich"><div className="employee__photo employee-5"></div></a>
-              </article>
-              <article className="employee block-shadowed">
-                <div className="employee__content">
-                  <h5 className="employee__name">Pavel Karenda</h5>
-                  <p className="employee__title">Absolvent RSSchool</p>
-                  <a className="employee__contact" href="mailto:korendos@gmail.com">mail me</a>
-                </div>
-                <a href="https://github.com/butterbrot777"><div className="employee__photo employee-6"></div></a>
-              </article>
+	render() {
+		return (
+			<div className="wrapper wrapper__about-us_colored">
+				<div className="about-us__wrapper wrapper__inner">
+					<section id="about-us" className="about-us">
+						<h2 className="title about-us__title">Who we are</h2>
+						<div className="layout-3-column">
 
+							<div className="employee__wrapper block-shadowed">
+								<article className="employee">
+									<div className="employee__content">
+										<h5 className="employee__name">Yuliya Kogol</h5>
+										<p className="employee__title">Top Gage Developer</p>
+										<a className="employee__contact" href="mailto:kogol.julia@gmail.com">
+											mail me
+										</a>
+									</div>
+									<a href="https://github.com/22-22">
+										<div className="employee__photo employee-1"></div>
+									</a>
+								</article>
+								<div className="employee__work">
+									<ul>
+										<li>- implement basic training functionality</li>
+										<li>- test starting knowledge of the language</li>
+										<li>- game Speak It</li>
+										<li>- develop spaced repetition rules</li>
+									</ul>
+								</div>
+							</div>
+
+							<div className="employee__wrapper block-shadowed">
+								<article className="employee block-shadowed">
+									<div className="employee__content">
+										<h5 className="employee__name">Kirill Vorobeychik</h5>
+										<p className="employee__title">Games Developer</p>
+										<a className="employee__contact" href="mailto:vorob.edu@gmail.com">
+											mail me
+										</a>
+									</div>
+									<a href="https://github.com/vorobeychik">
+										<div className="employee__photo employee-2"></div>
+									</a>
+								</article>
+								<div className="employee__work">
+									<ul>
+										<li>- support react app functionality</li>
+										<li>- game Audio-Call</li>
+										<li>- game English-Puzzle</li>
+									</ul>
+								</div>
+							</div>
+
+							<div className="employee__wrapper block-shadowed">
+								<article className="employee block-shadowed">
+									<div className="employee__content">
+										<h5 className="employee__name">Ilya Shihutin</h5>
+										<p className="employee__title">Games Developer</p>
+										<a className="employee__contact" href="mailto:kathyr@gmail.com">
+											mail me
+										</a>
+									</div>
+									<a href="https://github.com/ilyashihutin">
+										<div className="employee__photo employee-3"></div>
+									</a>
+								</article>
+								<div className="employee__work">
+									<ul>
+										<li>- implements basic statistic for each game</li>
+										<li>- sending statistics to the server</li>
+										<li>- game Sprint</li>
+									</ul>
+								</div>
+							</div>
+
+							<div className="employee__wrapper block-shadowed">
+								<article className="employee block-shadowed">
+									<div className="employee__content">
+										<h5 className="employee__name">Nastya Koval</h5>
+										<p className="employee__title">Backend Developer</p>
+										<a className="employee__contact" href="mailto:anasteziyam@gmail.com">
+											mail me
+										</a>
+									</div>
+									<a href="https://github.com/nastiakoval">
+										<div className="employee__photo employee-4"></div>
+									</a>
+								</article>
+								<div className="employee__work">
+									<ul>
+										<li>- implements backend logic of interaction with the server for mini-games.</li>
+										<li>- dictionary with words classification</li>
+										<li>- adds user statistic</li>
+										<li>- draws chart</li>
+									</ul>
+								</div>
+							</div>
+
+							<div className="employee__wrapper block-shadowed">
+								<article className="employee block-shadowed">
+									<div className="employee__content">
+										<h5 className="employee__name">Andrey Sapranovich</h5>
+										<p className="employee__title">Games Developer</p>
+										<a className="employee__contact" href="mailto:sapranovich.andrey@gmail.com">
+											mail me
+										</a>
+									</div>
+									<a href="https://github.com/sapranovich">
+										<div className="employee__photo employee-5"></div>
+									</a>
+								</article>
+								<div className="employee__work">
+									<ul>
+										<li>- implements basic app structure</li>
+										<li>- authorisation and registration</li>
+										<li>- handles refresh token</li>
+										<li>- game Savannah</li>
+									</ul>
+								</div>
+							</div>
+
+						<div className="employee__wrapper block-shadowed">
+							<article className="employee block-shadowed">
+								<div className="employee__content">
+									<h5 className="employee__name">Pavel Karenda</h5>
+									<p className="employee__title">Team Leader</p>
+									<a className="employee__contact" href="mailto:korendos@gmail.com">
+										mail me
+									</a>
+								</div>
+								<a href="https://github.com/butterbrot777">
+									<div className="employee__photo employee-6"></div>
+								</a>
+							</article>
+							<div className="employee__work">
+								<ul>
+									<li>- coordinates teamwork, leads calls, writes work logs</li>
+									<li>- supports team by work with git</li>
+									<li>- implements basic app design</li>
+									<li>- manages trello work flow</li>
+								</ul>
+							</div>
+						</div>
             </div>
-          </section>
-        </div>
-      </div>
-    )
-  }
+					</section>
+				</div>
+			</div>
+		);
+	}
 }
 
 class Footer extends React.Component {
-  render() {
-    return (
-      <div className="wrapper wrapper__footer_colored">
-        <div className="footer__wrapper wrapper__inner">
-          <section id="footer" className="footer">
-            <div className="footer__copywriter">
-              <p>
-                © Copyright 2020
-              </p>
-            </div>
-          </section>
-        </div>
-      </div>
-    )
-  }
+	render() {
+		return (
+			<div className="wrapper wrapper__footer_colored">
+				<div className="footer__wrapper wrapper__inner">
+					<section id="footer" className="footer">
+						<div className="footer__copywriter">
+							<p>© Copyright 2020</p>
+						</div>
+					</section>
+				</div>
+			</div>
+		);
+	}
 }
