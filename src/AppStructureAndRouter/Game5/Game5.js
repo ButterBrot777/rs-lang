@@ -53,6 +53,9 @@ class Game5 extends Component{
         levelTransition = 0 
       }
       console.log(levelTransition, pageTransition)
+     
+      localStorage.setItem('page',pageTransition)
+      localStorage.setItem('level',levelTransition)
       let addWords = await getNewWords(levelTransition, pageTransition)
       let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
       // console.log(newWordsFilter)

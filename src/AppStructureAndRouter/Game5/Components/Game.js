@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 
 import WordsAll  from '../../AllWords/AllWords' 
 import Buttons from './Buttons'
-// import Statistic from './Statistic'
-import Statistic from '../../StatisticPage/Statistic'
+// import Statistic from '../../StatisticPage/Statistic'
+import Statistic from '../../SmallStatistic/SmallStatistic'
 
 class Game extends Component{
   timer = this.props.difficulty
@@ -72,9 +72,12 @@ class Game extends Component{
     }
     return array
   }
+
   render(){
     if(this.state.statistic){
-      return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} resetGame ={this.props.resetGame}/>
+      return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} homePageGame={this.props.resetGame} newPage={Number(localStorage.getItem('page'))} newLevel={Number(localStorage.getItem('level'))} totalGame={false}/>
+
+      // return <Statistic  true={this.trueAnswer} false={this.falseAnswer} nameGame={'savannah'} resetGame={this.props.resetGame} />
     }else{
       return(
         <div className='savannah-game'>
