@@ -152,7 +152,7 @@
   justify-content: space-around;
 }
 .layout-3-column > * {
-  flex-basis: 25%;
+  flex-basis: 29%;
 }
 .detail {
   display: flex;
@@ -170,7 +170,6 @@
   background-size: contain;
   width: 12rem;
   height: 12rem;
-  margin-bottom: 3rem;
 }
 .detail__image.col-1 {
   background-image: url('./images/detais-icon-003.png');
@@ -183,8 +182,7 @@
 }
 
 .detail__text {
-  font-size: 3rem;
-  height: 5rem;
+  font-size: 2rem;
   text-overflow: ellipsis;
   font-weight: 200;
   text-align: justify;
@@ -295,6 +293,11 @@
   color: #666d89;
   font-size: 1.6rem;
   font-weight: 400;
+}
+
+.spaced-repetition__title {
+  text-transform: uppercase;
+  font-size: 3rem;
 }
 
 /* ================ MEDIA =================== */

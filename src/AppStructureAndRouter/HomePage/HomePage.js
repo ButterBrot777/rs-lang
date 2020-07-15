@@ -132,8 +132,8 @@ class HomePage extends Component {
 				{this.state.isModalWindow && (
 					<div className="game-end">
 						<button className="btn" onClick={this.closeModal}>Close</button>
-						<h1 className="info-big">Hurrah, that's it for today!</h1>
-						<div>You have more new cards but you exceeded the limit for
+						<h2 className="game-end__title">Hurrah, that's it for today!</h2>
+						<div className="game-end__text">You have more new cards but you exceeded the limit for
 						today. You can continue your training but please keep in mind you will have more words to repeat.</div>
 						<Link className="btn" to="/BasicGame">Play More</Link>
 					</div>

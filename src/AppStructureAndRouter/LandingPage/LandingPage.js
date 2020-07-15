@@ -18,7 +18,7 @@ export default class Landing extends React.Component {
 
 class Promo extends React.Component {
   render() {
-    return(
+    return (
       <div className="wrapper wrapper__promo_colored">
         <div className="promo__wrapper wrapper__inner">
           <section id="promo" className="promo">
@@ -30,9 +30,9 @@ class Promo extends React.Component {
                 Train a foreign language every day and you will succeed
               </p>
             </div>
-              <Link to="/Registration">
-                <span className="button button_colored button_promo">GET STARTED</span>
-              </Link>
+            <Link to="/Registration">
+              <span className="button button_colored button_promo">GET STARTED</span>
+            </Link>
           </section>
         </div>
       </div>
@@ -42,7 +42,7 @@ class Promo extends React.Component {
 
 class Intro extends React.Component {
   render() {
-    return(
+    return (
       <div className="wrapper wrapper__intro_colored">
         <div className="intro__wrapper wrapper__inner">
           <section id="intro" className="intro">
@@ -56,7 +56,7 @@ class Intro extends React.Component {
                   smart
                 </h3>
                 <p className="text feature__text">
-                RS-lang allows you to learn words of the exact complexity that you choose yourself.</p>
+                  RS-lang allows you to learn words of the exact complexity that you choose yourself.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-2"></div>
@@ -64,7 +64,7 @@ class Intro extends React.Component {
                   dynamic
                 </h3>
                 <p className="text feature__text">
-                RS-lang monitors your progress, check your mistakes and on the basis of this draws up an individual training program for each user.</p>
+                  RS-lang monitors your progress, check your mistakes and on the basis of this draws up an individual training program for each user.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-3"></div>
@@ -72,7 +72,7 @@ class Intro extends React.Component {
                   personalized
                 </h3>
                 <p className="text feature__text">
-                RS-lang allows you to learn exactly the words that you want to learn. Choose the type of your training based on your current language skills.</p>
+                  RS-lang allows you to learn exactly the words that you want to learn. Choose the type of your training based on your current language skills.</p>
               </article>
               <article className="feature">
                 <div className="feature__image col-4"></div>
@@ -80,7 +80,7 @@ class Intro extends React.Component {
                   universal
                 </h3>
                 <p className="text feature__text">
-                Wherever you are, in any free minute, open RS-lang and start your training! We are available on the Web.</p>
+                  Wherever you are, in any free minute, open RS-lang and start your training! We are available on the Web.</p>
               </article>
             </div>
           </section>
@@ -92,7 +92,7 @@ class Intro extends React.Component {
 
 class Details extends React.Component {
   render() {
-    return(
+    return (
       <div className="wrapper wrapper__details_colored">
         <div className="details__wrapper wrapper__inner">
           <section id="details" className="details">
@@ -106,7 +106,10 @@ class Details extends React.Component {
                 </h3>
                 <div className="detail__image col-1"></div>
                 <p className="text detail__text">
-                  Register
+                  RS-lang is based on a great learning technique called <strong>spaced repetition</strong>.
+              You have an option to choose the difficulty of each word: for example, if the word seems easy,
+              you can press <strong>Easy</strong> button. Firstly, this word will be repeated in 3 days
+              and then the interval will grow with the number of repetitions. An initial interval for words marked as <strong>Good</strong> is 2 days and 1 day if you choose <strong>Hard</strong>.
                 </p>
               </article>
               <article className="detail">
@@ -115,7 +118,12 @@ class Details extends React.Component {
                 </h3>
                 <div className="detail__image col-2"></div>
                 <p className="text detail__text">
-                  Start learning words
+                  Besides, you can remove words from your main training pressing <strong>Delete</strong> or <strong>Hard Words</strong> button
+              – they will appear on respective pages of the Dictionary.
+              If <strong>Choose Difficulty</strong> mode is off,
+              correctly guessed words are considered as Good and incorrect guesses as Hard
+              but we recommend to turn this mode on so that you can choose difficulty yourself.
+              Please note if you make a mistake during the training or press <strong>Again</strong>, the word will appear in the end of the training.
                 </p>
               </article>
               <article className="detail">
@@ -124,13 +132,16 @@ class Details extends React.Component {
                 </h3>
                 <div className="detail__image col-3"></div>
                 <p className="text detail__text">
-                  Play mini games
+                  <strong>Mini games</strong> also influence your basic training updating the number of repetitions and therefore the intervals
+              and sending the words you make mistakes in to the next training.
+              Please keep in mind you can choose a maximum number of words and the number of new words you would like to learn per day.
+              The use of a spaced repetition technique has been shown to greatly increase the rate of learning!
                 </p>
               </article>
             </div>
-          <Link to="/Registration">
-            <button className="button button_colored button_details">GET STARTED</button>
-          </Link>
+            <Link to="/Registration">
+              <button className="button button_colored button_details">GET STARTED</button>
+            </Link>
           </section>
         </div>
       </div>
@@ -140,7 +151,7 @@ class Details extends React.Component {
 
 class About extends React.Component {
   render() {
-    return(
+    return (
       <div className="wrapper wrapper__about-us_colored">
         <div className="about-us__wrapper wrapper__inner">
           <section id="about-us" className="about-us">
@@ -205,7 +216,7 @@ class About extends React.Component {
 
 class Footer extends React.Component {
   render() {
-    return(
+    return (
       <div className="wrapper wrapper__footer_colored">
         <div className="footer__wrapper wrapper__inner">
           <section id="footer" className="footer">

@@ -325,7 +325,7 @@ class Game1 extends Component {
   }
 
   onShowAnswer = () => {
-    if (!this.state.isGuessed && !this.state.isDifficultyChoice) {
+    if (!this.state.isGuessed && !this.state.isDifficultyChoice && !this.state.isSkipped) {
       this.setState({
         inputValue: ''
       })
@@ -659,9 +659,9 @@ class Game1 extends Component {
     let correctGuessesPercent = Math.round(this.state.correctGuesses / this.state.fullData.length * 100);
     return (
       <Fade bottom opposite>
-        <div className={this.state.isImageLoaded || !this.state.imageHint ? "game-container" : "loading"}>
+        <div className={((this.state.hints.imageHint && this.state.isImageLoaded) || !this.state.hints.imageHint) ? "game-container" : "loading"}>
           {this.state.isStats && (
-            <div className="game-end">
+            <div className="game-end game-end__stat">
               <div>Words completed: {this.state.wordsPerGame}</div>
               <div>Correct answers: {correctGuessesPercent}%</div>
               <div>New words: {Math.min(this.state.wordsPerDay, this.state.maxWordsPerDay)}</div>
@@ -743,7 +743,7 @@ class Game1 extends Component {
             </div>
             <div className="btns-container">
               {this.state.buttons.showAnswer &&
-                <button className={(this.state.isGuessed || this.state.isDifficultyChoice) ? "btn opaque" : "btn"}
+                <button className={(this.state.isGuessed || this.state.isDifficultyChoice || this.state.isSkipped) ? "btn opaque" : "btn"}
                   onClick={this.onShowAnswer}>Show Answer</button>}
               {this.state.buttons.addToDeleted &&
                 <button className={(this.state.isGuessed || this.state.isSkipped) ? "btn opaque" : "btn"}
