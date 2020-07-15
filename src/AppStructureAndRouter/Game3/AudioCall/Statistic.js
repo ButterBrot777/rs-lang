@@ -1,12 +1,80 @@
 import React from "react";
 import { BrowserRouter as Router, Link } from 'react-router-dom';
+import {createUserWord, getUserWord, updateUserWord} from "../../ServerRequest/ServerRequests";
 
 export default class Statistic extends React.Component {
 
+     easyInterval = 3;
+     goodInterval = 2;
+     hardInterval = 1;
+
     componentDidMount() {
+
         document.removeEventListener('keydown',this.props.needToRemove  );
+        this.props.statistic.RightWords.map((e) => this.handleUserWordUpdate("good", e.id));
+        this.props.statistic.FalseWords.map((e) => this.handleUserWordUpdate("hard", e.id));
+
         this.sendStatistic()
     }
+
+     handleUserWordUpdate = async (diffLevel, wordId) =>{
+        let word = await getUserWord(wordId);
+        let lastTrain = +new Date();
+        if (!word) {
+            let interval = (diffLevel === 'good') ? this.goodInterval : this.hardInterval;
+            let nextTrain;
+            if (diffLevel === 'good') {
+                nextTrain = new Date().setDate(new Date().getDate() + interval);
+            } else {
+                nextTrain = lastTrain;
+            }
+            let newWord = {
+                "difficulty": diffLevel,
+                "optional": {
+                    "deleted": false,
+                    "hardWord": false,
+                    "repeatsStreak": 1,
+                    "repeatsTotal": 1,
+                    "addingDate": lastTrain,
+                    lastTrain,
+                    nextTrain
+                }
+            }
+
+
+            createUserWord(wordId, newWord);
+        } else {
+            let interval;
+            switch (word.difficulty) {
+                case 'hard':
+                    interval = word.optional.repeatsStreak * this.hardInterval;
+                    break;
+                case 'good':
+                    interval = word.optional.repeatsStreak * this.goodInterval;
+                    break;
+                case 'easy':
+                    interval = word.optional.repeatsStreak * this.easyInterval;
+                    break;
+                default:
+                    interval = 0;
+                    break;
+            }
+            let nextTrain;
+            if (diffLevel === 'good') {
+                nextTrain = new Date().setDate(new Date().getDate() + interval);
+            } else {
+                nextTrain = lastTrain;
+            }
+
+            let repeatsStreak = word.optional.repeatsStreak + 1;
+            let repeatsTotal = word.optional.repeatsTotal + 1;
+            let newWord = { ...word, optional: { ...word.optional, repeatsStreak, repeatsTotal, lastTrain, nextTrain } }
+            delete newWord.id;
+            delete newWord.wordId;
+            updateUserWord(wordId, newWord);
+        }
+    }
+
     userId = localStorage.getItem('userId');
     token = localStorage.getItem('token');
     baseUrl = 'https://afternoon-falls-25894.herokuapp.com';
@@ -33,7 +101,7 @@ export default class Statistic extends React.Component {
             },
         });
         const content = await rawResponse.json();
-        console.log('статистика',content)
+
         return content;
     };
 
@@ -49,24 +117,24 @@ export default class Statistic extends React.Component {
             body: JSON.stringify(statisticsData)
         });
         const content = await rawResponse.json();
-        console.log('ответ',content)
+
         return content;
     };
 
     render() {
         return (
             <div>
-                <Link to="/">
-                  <div>Закрыть</div>
-                </Link>
-                <div>
-                    <p>Правильные {this.props.statistic.RightWords.length}</p>
-                    {this.props.statistic.RightWords.map((e,i) => <StatisticString word = {e} key = {i}/>) }
+                <div className={'statistic__container'}>
+                    <div>
+                        <p className={'statistic__header'}>I know {this.props.statistic.RightWords.length}</p>
+                        {this.props.statistic.RightWords.map((e,i) => <StatisticString word = {e} key = {i}/>) }
+                    </div>
+                    <div >
+                        <p className={'statistic__header'}>I dont know {this.props.statistic.FalseWords.length}</p>
+                        {this.props.statistic.FalseWords.map((e,i) => <StatisticString word = {e} key = {i}/>) }
+                    </div>
                 </div>
-                <div >
-                    <p>Неправильые {this.props.statistic.FalseWords.length}</p>
-                    {this.props.statistic.FalseWords.map((e,i) => <StatisticString word = {e} key = {i}/>) }
-                </div>
+                <button className={'button button_colored margin__button'} onClick={() => this.props.newGame() }>New round</button>
             </div>
 
         )
@@ -80,10 +148,10 @@ class StatisticString extends React.Component {
     };
     render() {
         return (
-            <div className='Statistic__word' onClick={() => this.playSound()}>
-                <div className={'sound__small'} />
-                <p>{this.props.word.word}</p>
-                <p>{this.props.word.wordTranslate}</p>
+            <div className='statistic__word' onClick={() => this.playSound()}>
+                <button className={'button button_bordered'}>Sound</button>
+                <p className={'statistic__string'}>{this.props.word.word}</p>
+                <p className={'statistic__string'}>{this.props.word.wordTranslate}</p>
             </div>
         )
     }

@@ -12,7 +12,7 @@ import StartedPage from "./StartedPage";
 const levenshtein = require('js-levenshtein');
 
 class AudioCall extends React.Component{
-    page = 0;
+
     focusIndex = -1;
     constructor() {
         super()
@@ -27,6 +27,7 @@ class AudioCall extends React.Component{
             GameOver:false,
             right:false,
             startedPage:true,
+            page:0
 
         }
     }
@@ -37,13 +38,13 @@ class AudioCall extends React.Component{
 
     //Функцция которая переводит игру в режим выбрнного слова
     completed = (prop,index) => {
-        console.log(123123123);
+
         this.setState({
             completed:true,
             indexOfClick:index,
             right:prop
         });
-        console.log('staaaaate',this.state)
+
 
         document.removeEventListener('keydown',this.onKeyDown);
 
@@ -59,7 +60,7 @@ class AudioCall extends React.Component{
             this.setState({ focusIndex : this.focusIndex })
 
         } else {
-            console.log(event.keyCode)
+
             if( event.keyCode === 39 ) { ++this.focusIndex}
             if( event.keyCode === 37 ) { --this.focusIndex }
             if( this.focusIndex < 0 ) { this.focusIndex = 4 }
@@ -92,33 +93,45 @@ class AudioCall extends React.Component{
         });
 
         let content = await rawResponse.json();
-        // console.log('content',content)
-        // content = this.filterUserWords(content)
-        //
-        // console.log('после фильтра',content)
-        // let promises = content.map(async (e) => {
-        //     let wordData =  await getWordById(e.wordId);
-        //     return wordData
-        // });
-        // let statistic = await getSettingsUser();
-        // promises = promises.slice(100);
-        // console.log('вся дата',promises)
-        // let data = await Promise.all(promises.slice);
-        //
-        // if (data.length < 20) {
-        //     data = await this.addNewWords(data, statistic.page, statistic.level)
-        // }
-        // console.log(data)
-        // let currentData = data[0];
-        // console.log(currentData)
-        let data = await getNewWords(1,1)
+
+        content = this.filterUserWords(content)
+
+
+        let promises = content.map(async (e) => {
+            let wordData =  await getWordById(e.wordId);
+            return wordData
+        });
+        let statistic = await getSettingsUser();
+        promises = promises.slice(0,100);
+        let data = await Promise.all(promises);
+
+
+        if (data.length < 20) {
+            data = await this.addNewWords(data, statistic.page, statistic.level)
+        }
+
         let currentData = data[0];
-        this.generateArray(currentData.wordTranslate);
+
+
+
         this.setState({
             obj: currentData,
             data:data,
+            loading:false,
+            completed:false,
+
+            ShortStatistic:{
+                RightWords:[],
+                FalseWords:[]
+            },
+            GameOver:false,
+            right:false,
+            statistic:false,
+            page:0,
+
 
         });
+        this.generateArray(currentData.wordTranslate);
 
 
     };
@@ -126,19 +139,17 @@ class AudioCall extends React.Component{
 
 
     componentDidMount() {
-        console.log('я сработал')
+
         document.addEventListener('keydown',this.onKeyDown);
         this.getUserWord(this.userId)
     }
 
     componentWillUpdate() {
-        if(this.page === 19 && this.state.GameOver === false){
-            this.setState({GameOver:true})
-        }
+
         if(this.state.right === true && this.state.completed === true){
             let StatisticArray = this.state.ShortStatistic.RightWords;
             StatisticArray.push(this.state.obj);
-            console.log(1)
+
             this.setState({
                 choseWithKeys:false,
                 ShortStatistic:{
@@ -159,7 +170,7 @@ class AudioCall extends React.Component{
                 }
             })
         }
-        console.log(this.state)
+
     }
 
      filterUserWords = (userWords) => {
@@ -203,7 +214,11 @@ class AudioCall extends React.Component{
             data => {
                 this.setState({
                     array:this.shuffle(this.parseData(data,word).concat(arr)),
-                    loading:true});
+                    loading:true,
+                    GameOver:false,
+
+                });
+
                 if(this.state.completed === false && this.state.startedPage === false){
                     this.sound()
                 }
@@ -225,7 +240,7 @@ class AudioCall extends React.Component{
         })
         levenshteinResult = levenshteinResult
             .sort((a,b) => Object.values(a)[0] - Object.values(b)[0])
-            .filter((e) => Object.values(e)[0] !== 0 && Object.values(e)[0] !== 1)
+            .filter((e) => Object.values(e)[0] !== 0 && Object.values(e)[0] !== 1 && Object.values(e)[0] !== 0)
             .slice(0,4).map((e) => Object.keys(e)[0]);
         return levenshteinResult;
 
@@ -252,28 +267,40 @@ class AudioCall extends React.Component{
     };
     //Функция которая переходит к следующему слову
     nextPage = () => {
-        this.page = ++this.page;
-        this.focusIndex = -1;
-        this.setState({
-            obj:this.state.data[this.page],
-            completed:false,
-            loading:false,
-            array:this.generateArray(this.state.data[this.page].wordTranslate),
-            right:false,
-            focusIndex:undefined,
-        });
-        if(this.state.right === false && this.state.completed === false){
-            let StatisticArray = this.state.ShortStatistic.FalseWords;
-            StatisticArray.push(this.state.obj);
+        if(this.state.page === 19){
+            this.setState({GameOver:true})
+        }else {
+            let page = ++this.state.page;
+            this.focusIndex = -1;
             this.setState({
-                ShortStatistic:{
-                    ...this.state.ShortStatistic,
-                    FalseWords:StatisticArray
+                obj:this.state.data[page],
+                completed:false,
+                loading:false,
+                array:this.generateArray(this.state.data[page].wordTranslate),
+                right:false,
+                focusIndex:undefined,
+                page:page
+            });
+            if(this.state.right === false && this.state.completed === false){
+                let StatisticArray = this.state.ShortStatistic.FalseWords;
+                StatisticArray.push(this.state.obj);
+                this.setState({
+                    ShortStatistic:{
+                        ...this.state.ShortStatistic,
+                        FalseWords:StatisticArray
 
-                }
-            })
+                    }
+                })
+            }
         }
-        console.log(this.state)
+
+
+    };
+    startLoading = () => {
+        this.setState({
+            loading:true
+        })
+        this.getUserWord(this.userId)
     };
 
     render() {
@@ -283,11 +310,11 @@ class AudioCall extends React.Component{
             return  <StartedPage startGame = {this.startGame}/>
         } else if(this.state.GameOver === true){
             return (
-                <Statistic needToRemove = {this.onKeyDown} statistic = {this.state.ShortStatistic} state = {this.state}/>
+                <Statistic needToRemove = {this.onKeyDown}  statistic = {this.state.ShortStatistic} state = {this.state} newGame = {this.startLoading} />
             )
         }else{
             return(
-                <div className='Main__container'  onKeyDown={(e)=>console.log(e.keyCode)}>
+                <div className='Main__container'  >
                     <div className={'close__button__container'}>
                         <Link to="/">
                             <button className={'button button_bordered close__button'}>close</button>

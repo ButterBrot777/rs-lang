@@ -3,7 +3,7 @@ export default class Word extends React.Component{
     choseRight = () => {
         if(this.props.word === this.props.state.obj.wordTranslate){
             this.props.completed(true,this.props.index)
-            console.log('herrrrrrrrrrrrro')
+
         }else{
             this.props.completed(false,this.props.index)
         }

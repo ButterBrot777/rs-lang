@@ -45,10 +45,17 @@ h1{
   text-decoration: line-through;
   color: grey;
   font-size: 2rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
+
 }
 .right__word{
   color: green;
   font-size: 2rem;
+  display: flex;
+  align-content: center;
+  align-items: center;
 }
 .icon{
   height: 25px;
@@ -56,7 +63,7 @@ h1{
 }
 
 .word__focused{
-  color: aqua;
+  text-shadow: 3px 5px 6px #6C9, -6px -7px 6px #D9FFA7;
   font-size: 2rem;
 }
 .lds-ring {
@@ -83,8 +90,14 @@ h1{
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: black transparent transparent transparent;
 }
-.Statistic__word{
+.statistic__word{
   display: flex;
+  max-width: 30%;
+  justify-content: space-between;
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  align-content: center;
+  align-items: center;
 }
 .Main__container{
   margin: 0 auto;
@@ -150,9 +163,11 @@ h1{
 }
 .started__page__text{
   font-size: 2rem;
+  color: white;
 }
 .started__page__head{
   font-size: 3rem;
+  color: white;
 }
 .started__page__container{
   text-align: center;
@@ -177,4 +192,31 @@ h1{
   align-content: center;
   align-items: center;
   height: 80vh;
+}
+.statisric__string{
+  display: flex;
+  font-size: 1.8rem;
+  margin: 0;
+  align-items: center;
+}
+.statistic__header{
+  font-size: 2.5rem;
+  margin-left: 2rem;
+}
+.statistic__container{
+  padding: 2rem;
+}
+.margin__button{
+  margin-left: 2rem;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 840px) {
+  .word__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+  }
 }
