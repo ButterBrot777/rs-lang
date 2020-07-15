@@ -47,6 +47,11 @@
         font-size: 3vw;
         height: 400px;
     }
+    .sprint-out-btn {
+        position: absolute;
+        right: 20vw;
+        top: 47vh;
+    }
     .sprint-start-btn-default button {
         font-size: 34px;
     }
@@ -69,6 +74,12 @@
         max-height: 24px;
         max-width: 25px;
     }
+    .sprint-out-btn {
+        position: absolute;
+        right: 17vw;
+        top: 33vh;
+    }
+    
     .score-word-buttons {
         width: 50vw;
     }
@@ -109,7 +120,7 @@
         font-size: 20px;
     }
     .flex-button {
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
     .sprint-true-btn button{
         font-size: 20px;
@@ -120,14 +131,19 @@
     .sprint-start-btn button {
         font-size: 20px;
     }
-    .sprint-start-btn{
-    margin: 0px 30px 60px 0px;
-        width: 206px;
-    }
     .sprint-start-btn-default {
         width: 320px;
-        margin: 0px 5px 0px 30px;
+        margin: 0px 0px 0px 0px;
         width: 230px;
+    }
+    .sprint-start-btn {
+        margin: 0px 0px 20px 0px;
+        width: 292px;
+    }
+    .sprint-out-btn {
+        position: absolute;
+        right: 15vw;
+        top: 41vh;
     }
     .label-level{
         font-size: 3vh;
@@ -183,14 +199,19 @@
         flex-wrap: wrap;
         text-align: center;
     }
-    .sprint-start-btn{
-    margin: 0px 23px 30px 40px;
-        width: 206px;
-    }
     .sprint-start-btn-default {
         width: 320px;
-        margin: 0px 30px 0px 40px;
+        margin: 0px 0px 0px 13px;
         width: 230px;
+    }
+    .sprint-start-btn {
+        margin: 0px 0px 9px 14px;
+        width: 206px;
+    }
+    .sprint-out-btn {
+        position: absolute;
+        right: 27vw;
+        top: 39vh;
     }
     .label-level{
         font-size: 3vh;

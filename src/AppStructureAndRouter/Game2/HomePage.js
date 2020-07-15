@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-
+import {
+  BrowserRouter as Router,
+  Link
+} from "react-router-dom";
 class HomePage extends Component {
   constructor(props) {
     super(props)
@@ -28,6 +31,9 @@ class HomePage extends Component {
   render() {
     return (
       <div className="homePage-block">
+        <div className='sprint-out-btn'>
+          <Link to='/HomePage'><button>HomePage</button></Link>
+        </div>
         <div className="start-game-head" style={{ color: "#fbc97e" }}>Start game</div>
         <div className="label">
           <p className="label-level" style={{ color: "#fbc97e" }}>Level</p>

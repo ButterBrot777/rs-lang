@@ -178,12 +178,31 @@
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
   width: 50%;
   font-size: 2vw;
-  height: 450px;
+  height: 60%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 64px;
-  padding: 4vh;
+}
+.sprint-out-btn {
+  position: absolute;
+  right: 23vw;
+  top: 50vh;
+}
+.sprint-out-btn button{
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 10px;
+  border:solid 2px var(--text-color);
+  outline: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor:pointer;
+}
+.sprint-out-btn button:hover{
+  background-color: var(--text-color);
+  color: black;
 }
 .score-word-buttons {
   display: inline-block;

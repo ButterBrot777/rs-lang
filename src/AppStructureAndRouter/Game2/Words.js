@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import StrikDiv from './StrikDiv';
 import MathScore from './MathScore';
-import SmallStatistic from '../SmallStatistic/SmallStatistic'
+import Statistic from '../SmallStatistic/SmallStatistic'
 import {
   BrowserRouter as Router,
   Link
@@ -67,13 +67,14 @@ class RenderWords extends Component {
     this.initFn();
   }
   // ==========================================================
-  onKeyDown = (event) => {
+  onKeyUp = (event) => {
     if (event.keyCode === 39) this.trueWord();
     else if (event.keyCode === 37) this.falseWord();
   };
 
   // ==========================================================
   initFn() {
+
     let procentTimer;
     if (this.state.timer === 60) {
       procentTimer = 59;
@@ -88,13 +89,14 @@ class RenderWords extends Component {
         timer: 0,
         score: 0
       });
-      document.removeEventListener('keyup', this.onKeyDown);
+      document.removeEventListener('keyup', this.onKeyUp);
     } else {
       this.setState({
         finishGame: "hidden"
       });
+
       this.generateWord();
-      document.addEventListener('keyup', this.onKeyDown);
+      document.addEventListener('keyup', this.onKeyUp);
     }
   }
   // ==========================================================
@@ -140,7 +142,7 @@ class RenderWords extends Component {
     });
   }
   async setSmileTimeout() {
-    setTimeout(() => this.delaySmile(), 1500);
+    setTimeout(() => this.delaySmile(), 500);
   }
   // ==========================================================
   timer(procentTimer) {
@@ -154,7 +156,7 @@ class RenderWords extends Component {
         timer: 60,
         score: 0
       });
-      document.removeEventListener('keyup', this.onKeyDown);
+      document.removeEventListener('keyup', this.onKeyUp);
     } else {
       this.setState({
         timer: this.state.timer - 1
@@ -166,12 +168,12 @@ class RenderWords extends Component {
     }
   }
   setTimer(procentTimer) {
-    setTimeout(() => this.timer(procentTimer), 500);
+    setTimeout(() => this.timer(procentTimer), 1000);
   }
   // ==========================================================
   render() {
     if (!this.state.finishGame) {
-      return <SmallStatistic true={this.trueAnswer} false={this.falseAnswer} homePageGame={this.props.defaultLevel}
+      return <Statistic true={this.trueAnswer} false={this.falseAnswer} homePageGame={this.props.defaultLevel}
         newPage={this.props.pageSprint} newLevel={this.props.levelSprint} totalGame={this.props.chooseGame} nameGame={"sprint"} />
     } else {
       return (
