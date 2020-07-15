@@ -1,0 +1,218 @@
+@media (min-width: 1922px) and (max-width: 2560px) {
+    .sprint-start-btn-default {
+        width: 370px;
+    }
+    .settings-inputs-level {
+        margin: 63px 24px 0px 0px;
+    }
+    .settings-inputs-page {
+        margin: 63px 24px 0px 0px;
+        max-width: 66px;
+    }
+  }
+@media (min-width: 1600px) and (max-width: 1920px) {
+    .settings-inputs-level {
+        margin: 32px 24px 0px 0px;
+        max-height: 36px;
+    }
+    .sprint-start-btn-default {
+        width: 360px;
+    }
+    .settings-inputs-page {
+        margin: 32px 24px 0px 0px;
+        max-height: 36px;
+    }
+}
+@media (min-width: 1441px) and (max-width: 1599px) {
+    .settings-inputs-level {
+        margin: 56px 24px 0px 0px;
+        max-height: 36px;
+    }
+    .settings-inputs-page {
+        margin: 56px 24px 0px 0px;
+        max-height: 36px;
+    }
+    .sprint-start-btn{
+        margin: 0px 30px 0px 40px;
+            width: 360px;
+        }
+        .sprint-start-btn-default {
+            width: 320px;
+            margin: 0px 30px 0px 40px;
+            width: 360px;
+        }
+  }
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .homePage-block {
+        font-size: 3vw;
+        height: 400px;
+    }
+    .sprint-start-btn-default button {
+        font-size: 34px;
+    }
+    .sprint-start-btn button {
+        font-size: 34px;
+    }
+    .settings-inputs-level {
+        margin: 56px 24px 0px 0px;
+         max-height: 36px;
+     }
+     .settings-inputs-page {
+         margin: 56px 24px 0px 0px;
+         max-height: 36px;
+         max-width: 56px;
+     }
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .settings-inputs-level {
+        margin: 19px 24px 0px 0px;
+        max-height: 24px;
+        max-width: 25px;
+    }
+    .score-word-buttons {
+        width: 50vw;
+    }
+     .settings-inputs-page {
+         margin: 19px 24px 0px 0px;
+         max-height: 24px;
+         max-width: 37px;
+     }
+     .sprint-start-btn-default button {
+        font-size: 20px;
+    }
+    .sprint-start-btn button {
+        font-size: 20px;
+    }
+     .homePage-block {
+         height: 300px;
+     }
+     .sprint-start-btn {
+        margin: 0px 0px 0px 20px;
+        width: 200px;
+    }.sprint-start-btn-default {
+        width: 320px;
+        margin: 0px 30px 0px 40px;
+        width: 222px;
+    }
+  }
+  @media (min-width: 551px) and (max-width: 768px) {
+    .homePage-block {
+        height: 350px;
+    }
+    .flex-button {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    .sprint-false-btn button{
+        font-size: 20px;
+    }
+    .flex-button {
+        flex-wrap: nowrap;
+    }
+    .sprint-true-btn button{
+        font-size: 20px;
+    }
+    .sprint-start-btn-default button {
+        font-size: 20px;
+    }
+    .sprint-start-btn button {
+        font-size: 20px;
+    }
+    .sprint-start-btn{
+    margin: 0px 30px 60px 0px;
+        width: 206px;
+    }
+    .sprint-start-btn-default {
+        width: 320px;
+        margin: 0px 5px 0px 30px;
+        width: 230px;
+    }
+    .label-level{
+        font-size: 3vh;
+    }
+    .label-page{
+        font-size: 3vh;
+    }
+    
+    .settings-inputs-level{
+    margin: 22px 24px 0px 0px;
+        max-height: 23px;
+        max-width: 22px;
+    }
+    .settings-inputs-page{
+    margin: 22px 24px 0px 0px;
+        max-height: 23px;
+        max-width: 30px;
+    }
+  }
+  @media (min-width: 320px) and (max-width: 550px) {
+    .homePage-block {
+        width: 100%; 
+        height: 50%;
+    }
+    .sprint-true-btn button {
+        font-size: 20px;
+    }
+    .sprint-false-btn button {
+        font-size: 20px;
+    }
+    .sprint-false-btn {
+        margin: 0px 5px 0px -75px;
+    }
+    .sprint-true-btn {
+        margin: 0px -75px 0px 0px;
+    }
+    .score-word-buttons {
+        width: 100vw;
+        border-radius: 0%;
+      }
+    .start-game-head {
+        font-size: 12vw;
+    }
+    .sprint-start-btn-default button {
+        font-size: 20px;
+    }
+    .sprint-start-btn button {
+        font-size: 20px;
+    }
+    .flex-button {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+    .sprint-start-btn{
+    margin: 0px 23px 30px 40px;
+        width: 206px;
+    }
+    .sprint-start-btn-default {
+        width: 320px;
+        margin: 0px 30px 0px 40px;
+        width: 230px;
+    }
+    .label-level{
+        font-size: 3vh;
+    }
+    .label-page{
+        font-size: 3vh;
+    }
+    
+    .settings-inputs-level{
+    margin: 36px 24px 0px 0px;
+        max-height: 23px;
+        max-width: 22px;
+        font-size: 2vh;
+    }
+    .settings-inputs-page{
+    margin: 36px 24px 0px 0px;
+        max-height: 23px;
+        max-width: 30px;
+        font-size: 2vh;
+    }
+    .sprint-timer {
+        left: 40%;
+        top: -22%;
+    }
+  }
