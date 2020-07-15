@@ -26,7 +26,7 @@ export default class Word extends React.Component{
         return (
             <div key={this.props.index} >
             {
-                <p  onClick={() => this.choseRight()} className={(this.props.index === this.props.state.focusIndex) ?'word__focused':'common__word'}>
+                <p  onClick={() => this.choseRight()} className={(this.props.index === this.props.state.focusIndex) ?'word__focused':'common__word'} >
                     {`${this.props.index + 1} ${this.props.word}`}
                 </p>
             }

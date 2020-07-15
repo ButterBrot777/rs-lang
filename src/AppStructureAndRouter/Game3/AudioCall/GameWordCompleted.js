@@ -1,6 +1,6 @@
 import React from "react";
-import imgTrue from "../assets/icons8-pastel-100.png";
-import imgFalse from "../assets/icons8-color-100.png";
+import imgTrue from "./assets/icons8-pastel-100.png";
+import imgFalse from "./assets/icons8-color-100.png";
 
 export default class GameWordCompleted extends React.Component{
     commonWordClassName = 'text_inactiv';

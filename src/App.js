@@ -1,5 +1,5 @@
 import React from 'react';
-import Game from "./AudioCall/Game";
+import Game from "./AppStructureAndRouter/Game3/AudioCall/Game";
 
 
 function App() {

@@ -56,7 +56,6 @@ async function startSettingsUser(obj){
         'VoiceSentence': true,
         'PromtImage': false
        },
-       "word": ['asda', 'asdasd', 'asdas']
     })
   });
   const content = await rawResponse.json();

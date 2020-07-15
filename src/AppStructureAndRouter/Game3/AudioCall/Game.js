@@ -3,12 +3,15 @@ import GameWord from "./GameWord";
 import GameWordCompleted from "./GameWordCompleted";
 import Loading from "./Loading";
 import Statistic from "./Statistic";
+import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { getSettingsUser} from '../../ServerRequest/ServerRequests';
 
-import style from '../style.css'
+import style from '../../../style.css'
+import StartedPage from "./StartedPage";
 
 const levenshtein = require('js-levenshtein');
 
-class Game extends React.Component{
+class AudioCall extends React.Component{
     page = 0;
     focusIndex = -1;
     constructor() {
@@ -23,9 +26,15 @@ class Game extends React.Component{
             },
             GameOver:false,
             right:false,
+            startedPage:true,
 
         }
     }
+
+    userId = localStorage.getItem('userId');
+    token = localStorage.getItem('token');
+    baseUrl = 'https://afternoon-falls-25894.herokuapp.com';
+
     //Функцция которая переводит игру в режим выбрнного слова
     completed = (prop,index) => {
         console.log(123123123);
@@ -61,22 +70,73 @@ class Game extends React.Component{
 
 
     };
+     getNewWords = async (page, group) => {
+        const url = `${this.baseUrl}/words?page=${page}&group=${group}`;
+        const rawResponse = await fetch(url);
+        const content = await rawResponse.json();
+        return content;
+    }
+
+    startGame = () => {
+        this.setState({startedPage:false,})
+    };
+
+    getUserWordById = async (userId, wordId ) =>{
+        const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/words/${wordId}?noAssets=true`, {
+            method: 'GET',
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+                'Accept': 'application/json',
+            }
+        });
+
+        const content = await rawResponse.json();
+        return content
+    };
+
+    getUserWord = async ( userId) => {
+        const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/`, {
+            method: 'GET',
+            withCredentials: true,
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+                'Accept': 'application/json',
+            }
+        });
+
+        let content = await rawResponse.json();
+        content = this.filterUserWords(content)
+
+        console.log(content)
+        const promises = content.slice(100).map(async (e) => {
+            let wordData =  await this.getWordById(e.wordId);
+            return wordData
+        });
+        let statistic = await getSettingsUser();
+        let data = await Promise.all(promises);
+
+        if (data.length < 20) {
+            data = await this.addNewWords(data, statistic.page, statistic.level)
+        }
+        console.log(data)
+        let currentData = data[0];
+        console.log(currentData)
+        this.generateArray(currentData.wordTranslate);
+        this.setState({
+            obj: currentData,
+            data:data,
+
+        });
+
+
+    };
+
+
 
     componentDidMount() {
         document.addEventListener('keydown',this.onKeyDown);
-        fetch('https://afternoon-falls-25894.herokuapp.com/words?page=2&group=0')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data[0])
-
-                let currentData = data[this.page];
-                this.generateArray(currentData.wordTranslate);
-                this.setState({
-                    obj: currentData,
-                    data:data,
-
-                });
-            })
+        this.getUserWord(this.userId)
     }
 
     componentWillUpdate() {
@@ -96,7 +156,6 @@ class Game extends React.Component{
                 }
             })
         }else if(this.state.right === false && this.state.completed === true){
-            console.log(2)
             let StatisticArray = this.state.ShortStatistic.FalseWords;
             StatisticArray.push(this.state.obj);
             this.setState({
@@ -111,6 +170,38 @@ class Game extends React.Component{
         console.log(this.state)
     }
 
+     filterUserWords = (userWords) => {
+        const currentDate = new Date();
+        let wordsForGame = [];
+        userWords.filter(word => {
+            if (!word.optional.deleted && !word.optional.hardWord && word.optional.nextTrain <= +currentDate) {
+                wordsForGame.push(word);
+            }
+        });
+        return wordsForGame;
+    }
+
+    addNewWords = async (userWords, pageTransition, levelTransition) => {
+        if (userWords.length >= 20) {
+            return userWords.slice(0, 20)
+        } else {
+            if (levelTransition < 29) {
+                levelTransition += 1
+            } else if (pageTransition < 5) {
+                pageTransition += 1;
+                levelTransition = 0;
+            } else {
+                pageTransition = 0;
+                levelTransition = 0;
+            }
+
+            let addWords = await this.getNewWords(levelTransition, pageTransition)
+            let newWordsFilter = addWords.filter(itemNewWords => !userWords.some(itemUserWords => itemUserWords.id === itemNewWords.id))
+            userWords = userWords.concat(newWordsFilter)
+            return this.addNewWords(userWords, pageTransition, levelTransition)
+        }
+    }
+
 
     //Функция которая будет генерировать похожее слова
     generateArray = (word) => {
@@ -119,13 +210,21 @@ class Game extends React.Component{
       return  this.getSamewords(word).then(
             data => {
                 console.log(data)
-                this.setState({array:this.shuffle(this.parseData(data,word).concat(arr)),loading:true});
-                if(this.state.completed === false){
+                this.setState({
+                    array:this.shuffle(this.parseData(data,word).concat(arr)),
+                    loading:true});
+                if(this.state.completed === false && this.state.startedPage === false){
                     this.sound()
                 }
             }
         )
     };
+     getWordById = async (wordId) => {
+        const url = `${this.baseUrl}/words/${wordId}?noAssets=true`;
+        const rawResponse = await fetch(url);
+        const content = await rawResponse.json();
+        return content;
+    }
 
     //функцияя которая получает данные из апи и находит похожеее
     parseData = (array,word) => {
@@ -194,19 +293,24 @@ class Game extends React.Component{
     render() {
         if(this.state.loading === false){
             return <Loading/>
-        }else if(this.state.GameOver === true){
+        }else if(this.state.startedPage){
+            return  <StartedPage startGame = {this.startGame}/>
+        } else if(this.state.GameOver === true){
             return (
-                <Statistic needToRemove = {this.onKeyDown} statistic = {this.state.ShortStatistic}/>
+                <Statistic needToRemove = {this.onKeyDown} statistic = {this.state.ShortStatistic} state = {this.state}/>
             )
         }else{
             return(
                 <div className='Main__container'  onKeyDown={(e)=>console.log(e.keyCode)}>
-                    <div>Закрыть</div>
+                    <Link to="/">
+                      <button>Закрыть</button>
+                    </Link>
                     <Image sound = {this.sound} word = {this.state.obj.word} path = {this.state.obj.image} state = {this.state}/>
                     <div className="word__container" onKeyDownCapture={() => console.log(123)}>
                         {this.state.array.map((e,i) =>
                             (this.state.completed === false) ?
                             <GameWord state = {this.state}
+                                      key = {i}
                                       index = {i}
                                       word = {e}
                                       completed = {this.completed}
@@ -215,6 +319,7 @@ class Game extends React.Component{
                                       />
                                       :
                                 <GameWordCompleted state = {this.state}
+                                          key = {i}
                                           index = {i}
                                           word = {e}
                                           rightWord = {this.state.obj.wordTranslate}
@@ -237,7 +342,7 @@ class Image extends React.Component{
         return(
             <div >
                 {(this.props.state.completed) ?
-                    <div>
+                    <div >
                         <img  className = "image" src={`https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.props.path}`}/>
                         <div className='item__container'>
                             <div className="sound__small" onClick={() => this.props.sound()}/>
@@ -252,4 +357,4 @@ class Image extends React.Component{
             )
     }
 }
-export default Game
+export default AudioCall
