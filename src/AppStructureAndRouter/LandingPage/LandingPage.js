@@ -29,7 +29,7 @@ class Promo extends React.Component {
                 Train a foreign language every day and you will succeed
               </p>
             </div>
-              { localStorage.getItem('token') === '' ? <Link to="/Registration"><span className="button button_colored button_promo">GET STARTED</span></Link> : ''}
+              { localStorage.getItem('token') === '' ? <Link to="/Registration"><span className="button button_colored button_promo button_promo-top">GET STARTED</span></Link> : ''}
           </section>
         </div>
       </div>
@@ -157,7 +157,7 @@ class About extends React.Component {
 								<article className="employee">
 									<div className="employee__content">
 										<h5 className="employee__name">Yuliya Kogol</h5>
-										<p className="employee__title">Top Gage Developer</p>
+										<p className="employee__title">Top Games Developer</p>
 										<a className="employee__contact" href="mailto:kogol.julia@gmail.com">
 											mail me
 										</a>
@@ -270,7 +270,7 @@ class About extends React.Component {
 							<article className="employee block-shadowed">
 								<div className="employee__content">
 									<h5 className="employee__name">Pavel Karenda</h5>
-									<p className="employee__title">Team Leader</p>
+									<p className="employee__title">Team Lead</p>
 									<a className="employee__contact" href="mailto:korendos@gmail.com">
 										mail me
 									</a>
