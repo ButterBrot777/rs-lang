@@ -9,7 +9,7 @@ export default function StatisticString(prop) {
   return (
       <div className={'statistic__string'}>
           <button className="button button_bordered" onClick={() => playAudio()}>Sound</button>
-          <p className="puzzle-result-message">{`${prop.wordData.textExample}`}</p>
+          <p className="puzzle-result-message">{`${prop.wordData.textExample.replace('</b>', '').replace('<b>', '')}`}</p>
       </div>
   )
 }
