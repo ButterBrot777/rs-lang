@@ -1,0 +1,82 @@
+.modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 1);
+  color:white;
+  font-size: 2rem;
+  overflow: scroll;
+}
+.modal__container{
+  height: 20rem;
+  // height: 50vh;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  bottom: 20%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+  padding: 20px;
+}
+
+/* SignIn style */
+
+.form-container{
+  padding: 30px;
+  background-color: white;
+  margin-bottom: 0.8rem;
+}
+.form-container > h3 {
+  color: black;
+}
+.form-group {
+  margin-bottom: 2rem;
+}
+.form-group_red{
+  background-color: red;
+}
+.form-btns {
+  display: flex;
+  justify-content: space-around;
+}
+.form-btns > * {
+  margin-right: 1rem;
+  cursor: pointer !important;
+}
+.promt{
+  display: inline-block;
+  position: relative;
+}
+.promt__text{
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.liquid{
+  background-color: rgba(195, 50, 50, 0.8);
+}
+.solid{
+  background-color: rgba(72, 174, 71, 0.8);
+}
+
+.password_correct {
+  color: green;
+}
+.password_wrong {
+  color: red;
+}
+
+/* ================ MEDIA =================== */
+
+@media (max-width: 650px) {
+  .form-btns {
+    flex-direction: column;
+    margin: 0;
+
+    *:first-child {
+      margin-bottom: 1rem;
+    }
+  }
+}

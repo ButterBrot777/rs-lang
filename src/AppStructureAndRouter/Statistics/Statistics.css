@@ -1,0 +1,183 @@
+.stat-header-buttons {
+  box-sizing: border-box;
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  width: 100vw;
+  height: 70px;
+  border-bottom: 1px solid rgb(168, 167, 167);
+  z-index: 10;  
+}
+
+.stat-btn {
+  background-color: rgb(77, 129, 185);
+  color: white;
+  width: 200px;
+  height: 60px;
+  font-size: 24px;
+  border: none;
+  border-radius: 5px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.active {
+  background-color: rgb(19,40,59);
+}
+
+.general-stat-summary {
+  text-align: center;
+  width: 50%;
+  margin: 15px auto;
+  padding: 10px;
+  background-color: rgba(168, 167, 167, 0.8);
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.general-stat-summary p {
+  margin: 0;
+}
+
+.general-stat-canvas-desk-container {
+  position: relative;
+  width: 600px;
+  margin: 0 auto;
+}
+
+.general-stat-canvas-mob-container {
+  display: none;
+}
+
+.general-stat-tooltip {
+  background-color: rgb(19,40,59);
+  color: white;
+  width: 100px;
+  height: 40px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+}
+
+
+
+.general-stat-tooltip:before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 90%;
+  width: 0;
+  height: 0;
+  border-right: 15px solid transparent;
+  border-top: 15px solid rgba(19,40,59);
+}
+
+.general-stat-tooltip p {
+  margin: 0;
+  padding: 0;
+}
+
+.games-stat-canvas-desk-container {
+  position: relative;
+  width: 600px;
+  margin: 10px auto 0 auto;
+}
+
+.stat-game-btns-container {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.stat-game-btn {
+  width: 110px;
+  height: 30px;
+  font-size: 14px;
+  margin: 0 5px;
+}
+
+.stat-speakIt-btn {
+  margin-left: 2px;
+}
+
+.statistics-game-list {
+  margin-top: 15px;
+  border-top: 1px solid rgb(168, 167, 167);
+}
+
+.game-stat-by-date {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid rgb(168, 167, 167);
+  font-size: 24px;
+}
+
+.stat-game-date {
+  align-self: center;
+  padding-right: 20px;
+  border-right: 1px solid rgb(168, 167, 167);
+}
+
+.games-stat-canvas-mob-container {
+  display: none;
+}
+
+@media only screen and (max-width: 620px) {
+  .general-stat-summary {
+    width: 90%;
+  }
+
+  .stat-btn {
+    width: 130px;
+    font-size: 18px;
+  }
+
+  .general-stat-canvas-desk-container {
+    display: none;
+  }
+
+  .general-stat-canvas-mob-container {
+    display: block;
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .games-stat-canvas-mob-container {
+    display: block;
+    position: relative;
+    width: 300px;
+    margin: 10px auto 0 auto;
+  }
+
+  .games-stat-canvas-desk-container {
+    display: none;
+  }
+
+  .stat-game-btns-container {
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  .stat-game-btn {
+    width: 55px;
+    height: 30px;
+    font-size: 8px;
+    margin: 0 2px;
+    padding: 0;
+  }
+
+  .stat-speakIt-btn {
+    margin-left: 0px;
+  }
+
+  .game-stat-by-date {
+    display: block;
+    box-sizing: border-box;
+    font-size: 18px;
+    padding-left: 20px;
+  }
+}

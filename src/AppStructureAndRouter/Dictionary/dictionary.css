@@ -1,0 +1,255 @@
+.dictionary-header-buttons {
+    box-sizing: border-box;
+    padding: 5px 0;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    width: 100vw;
+    height: 70px;
+    border-bottom: 1px solid rgb(168, 167, 167);
+    z-index: 10;  
+}
+
+.dictionary-btn {
+    background-color: rgb(77, 129, 185);
+    color: white;
+    width: 200px;
+    height: 60px;
+    font-size: 24px;
+    border: none;
+    border-radius: 5px;
+    margin: 0 2px;
+    cursor: pointer;
+}
+
+.active {
+    background-color: rgb(19,40,59);
+}
+
+.dictionary-words-list {
+    padding-bottom: 5px;
+}
+
+.dictionary-word-container {
+    padding: 10px 40px;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(168, 167, 167); 
+}
+
+.word-info {
+    width: 80vw;
+}
+
+.word-main-info {
+    height: 220px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.word-text {
+    margin: 0;
+    width: 40vw;
+}
+
+.word-audio {
+    display: flex;
+}
+
+.dictionary-word {
+    color: rgb(19,40,59);
+    padding-bottom: 5px;
+    font-size: 20px;
+}
+
+.audio-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.audio-icon {
+    width: 20px;
+}
+
+.dictionary-transcription {
+    margin: 0;
+    color: rgb(95, 95, 95);
+    font-size: 12px;
+    padding-bottom: 10px;
+}
+
+.dictionary-translation {
+    margin: 0;
+    color: rgb(95, 95, 95);
+    padding-bottom: 10px;
+}
+
+.dictionary-meaning {
+    margin: 0;
+    color: rgb(19,40,59);
+    font-weight: 600;
+    font-size: 12px;
+    padding-bottom: 10px;
+}
+
+.dictionary-example {
+    margin: 0;
+    color: rgb(77, 129, 185);
+    font-weight: 600;
+    font-size: 12px;
+    padding-bottom: 10px; 
+}
+
+
+
+.dictionary-image {
+    height: 200px;
+    width: auto
+}
+
+.dictionary-word-canvas-container {
+    position: relative;
+}
+
+.dictionary-word-tooltip {
+    background-color: rgb(19,40,59);
+    color: white;
+    width: 300px;
+    height: 30px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+}
+  
+  
+  
+.dictionary-word-tooltip:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid rgba(19,40,59);
+}
+  
+.dictionary-word-tooltip p {
+    margin: 0;
+    padding-top: 5px;
+}
+
+
+.word-learning-info {
+    margin: 0;
+    color: rgb(19,40,59);
+    font-size: 12px;
+    margin-top: 20px;
+    display: flex;
+}
+
+.dictionary-repeats {
+    padding: 0 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-left: 1px solid rgba(168, 167, 167, 0.6);
+    border-right: 1px solid rgba(168, 167, 167, 0.6);
+}
+
+
+.put-to-learning-btn-container {
+    align-self: center;
+}
+
+.put-to-learning-btn {
+    width: 150px;
+    align-self: center;
+    margin-left: 20px;
+}
+
+.train-hard-btn-container {
+    position: relative;
+    margin: 0px auto;
+    width: 200px;
+}
+
+.train-hard-btn {
+    position: relative;
+    box-sizing: border-box;
+    width: 200px;
+    text-align: center;
+}
+
+.dictionary-arrows-container {
+    display: flex;
+    justify-content: center;
+    color: rgba(19,40,59);
+    font-size: 36px;
+}
+
+.dictionary-arrow-left {
+    margin-right: 40px;
+    cursor: pointer;
+}
+
+.dictionary-arrow-right {
+    margin-left: 40px;
+    cursor: pointer;
+}
+
+.dictionary-arrow-unable {
+    color: rgba(168, 167, 167, 0.6);
+}
+
+.invisible {
+    display: none;
+}
+
+@media only screen and (max-width: 620px) {
+    .dictionary-word-container {
+        display: block;
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .word-main-info {
+        width: 100%;
+        display: block;
+        height: auto;
+    }
+
+    .dictionary-image {
+        height: 150px;
+        width: auto
+    }
+
+    .word-text {
+        width: 100%;
+    }
+    
+
+    .word-info {
+        width: 100%;
+    }
+
+    .put-to-learning-btn-container {
+        position: relative;
+        width: 150px;
+        margin: 0 auto;
+    }
+
+    .put-to-learning-btn {
+        position: relative;
+        width: 150px;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+}
