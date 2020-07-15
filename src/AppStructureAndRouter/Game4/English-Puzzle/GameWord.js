@@ -42,19 +42,7 @@ function GameWord(prop) {
             .reduce((acc, current) => acc + current, 0)
     } else {
         let index = 0;
-        if (gameContext.gameState.currentStr.indexOf(prop.word) === gameContext.gameState.currentStr.lastIndexOf(prop.word)) {
-            index = gameContext.gameState.currentStr.indexOf(prop.word);
-        } else {
-            if (localStorage.getItem('flag') === null || localStorage.getItem('flag') === 'false') {
-                localStorage.setItem('flag', 'true')
-                index = gameContext.gameState.currentStr.lastIndexOf(prop.word);
-            } else if (localStorage.getItem('flag') === 'true') {
-                localStorage.setItem('flag', 'false')
-
-                index = gameContext.gameState.currentStr.indexOf(prop.word);
-            }
-
-        }
+        index = gameContext.gameState.currentStr.indexOf(prop.word);
         width =
             (100 / gameContext.gameState.length) * gameContext.gameState.lengthArray[gameContext.gameState.strExample.indexOf(prop.word)]
         leftVal = gameContext.gameState.lengthArrayCurrent

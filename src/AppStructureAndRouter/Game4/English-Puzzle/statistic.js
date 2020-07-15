@@ -26,14 +26,14 @@ export default function Statistic(prop) {
         <div>
             <div className="puzzle-statistic-info">
                 <div className="puzzle-knowledge-info">
-                <p className="puzzle-final-message">I dont know: {prop.state.statistic.falseWords.length}</p>
-                {prop.state.statistic.trueWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
                 <p className="puzzle-final-message">I know: {prop.state.statistic.trueWords.length}</p>
-                {prop.state.statistic.falseWords.map((e,i) => <StatisticString wordData = {e} index = {i} />  )}
+                {prop.state.statistic.trueWords.map((e,i) => <StatisticString wordData = {e} index = {i} key = {i}/>  )}
+                <p className="puzzle-final-message">I dont know: {prop.state.statistic.falseWords.length}</p>
+                {prop.state.statistic.falseWords.map((e,i) => <StatisticString wordData = {e} index = {i} key = {i} />  )}
             </div>
         </div>
         <div className="puzzle-statistic-button-container">
-            <buttton className="button button_colored" onClick = {() => newGame(prop.state.gameData.slice(10))} >Continue</buttton>
+            <button className="button button_colored" onClick = {() => newGame()} >Continue</button>
         </div>
         </div>
     )

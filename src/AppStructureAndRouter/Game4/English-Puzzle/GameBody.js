@@ -17,7 +17,7 @@ export default function GameBody(prop) {
 
     function showWord() {
         let endScreen = false;
-        if (prop.state.stringCount === 9) {
+        if (prop.state.stringCount === 10) {
             endScreen = true;
             prop.setState({
                 ...prop.state,

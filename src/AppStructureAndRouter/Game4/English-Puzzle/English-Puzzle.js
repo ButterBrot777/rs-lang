@@ -7,7 +7,7 @@ import Statistic from "./statistic";
 import Context from "./context";
 import EndScreen from "./EndScreen";
 import paintings1 from "./PathObjects/level1";
-import {getNewWords, getSettingsUser} from '../../ServerRequest/ServerRequests';
+import {getNewWords, getSettingsUser,getWordById} from '../../ServerRequest/ServerRequests';
 
 if (localStorage.getItem('translation') === null) {
     localStorage.setItem('translation', 'true')
@@ -72,11 +72,6 @@ export default function EnglishPuzzle() {
 
     });
 
-
-    useEffect(() => {
-
-    });
-
     useEffect(() => {
         getUserWord(userId)
 
@@ -130,15 +125,15 @@ export default function EnglishPuzzle() {
         let statistic = await getSettingsUser()
 
 
-
         content = filterUserWords(content)
         let promises = content.map(async (e) => {
-            let wordData = await getUserWordById(userId, e.wordId);
+            let wordData = await getWordById(e.wordId);
             return wordData
         });
 
 
-        let dataArray = await Promise.all(promises);
+        let dataArray = await Promise.all(promises.slice(0,100));
+
 
         if (dataArray.length < 20) {
             dataArray = await addNewWords(dataArray, statistic.page, statistic.level)
@@ -150,6 +145,7 @@ export default function EnglishPuzzle() {
         if (dataArray.length < 20) {
             dataArray = await addNewWords(dataArray, statistic.page, statistic.level)
         }
+
 
         let imageCount = Number(localStorage.getItem('imageCount'));
         let image = paintings1[imageCount];
@@ -203,22 +199,6 @@ export default function EnglishPuzzle() {
         return array
 
     };
-
-    async function getUserWordById( wordId) {
-        const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/words/${wordId}?noAssets=true`, {
-            method: 'GET',
-            withCredentials: true,
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-            }
-        });
-
-        const content = await rawResponse.json();
-        return content
-    };
-
-
 
     if (gameState.startedPage === true && gameState.loading === false) {
         return (<StartedPage setGameState={setGameState} state={gameState}/>)

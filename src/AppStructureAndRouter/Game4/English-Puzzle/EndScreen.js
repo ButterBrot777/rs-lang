@@ -143,13 +143,13 @@ export default function EndScreen(prop) {
 
 
     return (
-        <div className={'end__screen__main'}>
+        <div className='end__screen__main'>
             <img src={`https://raw.githubusercontent.com/jules0802/rslang_data_paintings/master/${prop.state.image.imageSrc}`} />
             <div>
                 <p className="image-name-result">{`${prop.state.image.author}-${prop.state.image.name} (${prop.state.image.year})`}</p>
             </div>
-            <div className>
-                <button className="button button_colored" onClick={() => newGame(prop.state.gameData.slice(10))}>Continue</button>
+            <div>
+                <button className="button button_colored" onClick={() => newGame()}>Continue</button>
                 <button className="button button_bordered" onClick={() => showStatistic()}>Result</button>
             </div>
         </div>

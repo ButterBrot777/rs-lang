@@ -9,6 +9,7 @@
   margin-top: 2rem;
 }
 .lds-ring {
+  margin: 0 auto;
   display: inline-block;
   position: relative;
   width: 80px;
@@ -186,6 +187,13 @@
 .puzzle-statistic-button-container {
   margin: 2rem;
   margin-left: 3.5rem;
+}
+.loading__container{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 80vh;
 }
 
 /* ================ MEDIA ============ */
