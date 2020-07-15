@@ -26,10 +26,10 @@ class Buttons extends Component{
   render(){
     return(
       <div className = 'btns-wrapper'>
-        <button id="Digit1" onClick={(word) => this.props.nextWord(this.props.words[0])}><span>1</span>{this.props.words[0]}</button>
-        <button id="Digit2" onClick={(word) => this.props.nextWord(this.props.words[1])}><span>2</span>{this.props.words[1]}</button>
-        <button id="Digit3" onClick={(word) => this.props.nextWord(this.props.words[2])}><span>3</span>{this.props.words[2]}</button>
-        <button id="Digit4" onClick={(word) => this.props.nextWord(this.props.words[3])}><span>4</span>{this.props.words[3]}</button>
+        <button id="Digit1" onClick={(word) => this.props.nextWord(this.props.words[0])}><span>(1)</span>{this.props.words[0]}</button>
+        <button id="Digit2" onClick={(word) => this.props.nextWord(this.props.words[1])}><span>(2)</span>{this.props.words[1]}</button>
+        <button id="Digit3" onClick={(word) => this.props.nextWord(this.props.words[2])}><span>(3)</span>{this.props.words[2]}</button>
+        <button id="Digit4" onClick={(word) => this.props.nextWord(this.props.words[3])}><span>(4)</span>{this.props.words[3]}</button>
       </div>
     )
   }

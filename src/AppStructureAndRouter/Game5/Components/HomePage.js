@@ -12,6 +12,9 @@ class HomePage extends Component{
         </div>
 
         <div className='savannah-start-btn'>
+          <p>Purpose of the game: have time to correctly answer the translation of the word. The choice is made
+            mouse click or keystroke 1, 2, 3, 4
+          </p>
           <button  onClick={this.props.handleLoading}>Start</button>
           <div className='game-difficulty' onChange = {(event)=>this.props.handleDifficulty(event.target.value)}>
 
