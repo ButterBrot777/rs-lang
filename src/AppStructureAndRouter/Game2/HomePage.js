@@ -35,6 +35,8 @@ class HomePage extends Component {
           <Link to='/HomePage'><button>HomePage</button></Link>
         </div>
         <div className="start-game-head" style={{ color: "#fbc97e" }}>Start game</div>
+        <p className="text-game" style={{ color: "#fbc97e" }}>Choose the right translations of the English words into Russian.
+          Use the "left" and "right" arrow buttons </p>
         <div className="label">
           <p className="label-level" style={{ color: "#fbc97e" }}>Level</p>
           <input type="text" name="level"

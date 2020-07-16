@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Link } from "react-router-dom";
+import ScoreStatistic from '../SmallStatistic/ScoreSprint'
 import {
     loginUser,
     signInRequest,
@@ -30,7 +31,7 @@ class Statistic extends Component {
         this.sendPageAndLevel = this.sendPageAndLevel.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (!this.props.totalGame) {
             this.sendStatistic();
             let diffLevel;
@@ -152,6 +153,7 @@ class Statistic extends Component {
         return (
             <div className="results">
                 <div className="results-container">
+                { this.props.tekScore ? <ScoreStatistic  tekscore={this.props.tekScore}/> : ""}
                     <p className="errors">Ошибок
             <span className="errors-number">{this.props.false.length}</span>
                     </p>

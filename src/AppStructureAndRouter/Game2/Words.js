@@ -18,7 +18,6 @@ class RenderWords extends Component {
       translateword: "",
       oneScore: 10,
       word: "",
-      timer: 60,
       trueWord: 0,
       finishGame: "hidden",
       data: this.props.dataWords,//////
@@ -31,6 +30,7 @@ class RenderWords extends Component {
   dataArray = this.props.dataWords;
   trueAnswer = [];
   falseAnswer = [];
+  timer = 60;
   radius = 42;
   circumference = 2 * Math.PI * this.radius;
   trueSmile = "5px solid green";
@@ -64,6 +64,7 @@ class RenderWords extends Component {
   }
   // ==========================================================
   componentDidMount() {
+    this.timer = 60;
     this.initFn();
   }
   // ==========================================================
@@ -71,12 +72,13 @@ class RenderWords extends Component {
     if (event.keyCode === 39) this.trueWord();
     else if (event.keyCode === 37) this.falseWord();
   };
-
+  componentWillUnmount() {
+    this.timer = 0;
+  }
   // ==========================================================
   initFn() {
-
     let procentTimer;
-    if (this.state.timer === 60) {
+    if (this.timer === 60) {
       procentTimer = 59;
       this.setState({ strokeDasharray: `${this.circumference} ${this.circumference}` });
       this.setState({ strokeDashoffset: this.circumference });
@@ -86,10 +88,10 @@ class RenderWords extends Component {
       localStorage.setItem("lastScore", this.state.score);
       this.setState({
         finishGame: "",
-        timer: 0,
         score: 0
       });
       document.removeEventListener('keyup', this.onKeyUp);
+
     } else {
       this.setState({
         finishGame: "hidden"
@@ -145,22 +147,19 @@ class RenderWords extends Component {
     setTimeout(() => this.delaySmile(), 500);
   }
   // ==========================================================
-  timer(procentTimer) {
-    if (this.state.timer < 1) {
+  timerFn(procentTimer) {
+    if (this.timer < 1) {
       localStorage.setItem("lastScore", this.state.score);
       this.dataArray.forEach(element => {
         this.falseAnswer.push(element)
       });
       this.setState({
         finishGame: "",
-        timer: 60,
         score: 0
       });
       document.removeEventListener('keyup', this.onKeyUp);
     } else {
-      this.setState({
-        timer: this.state.timer - 1
-      });
+      this.timer -= 1;
 
       this.setProgress(procentTimer)
       procentTimer -= 1;
@@ -168,13 +167,13 @@ class RenderWords extends Component {
     }
   }
   setTimer(procentTimer) {
-    setTimeout(() => this.timer(procentTimer), 1000);
+    setTimeout(() => this.timerFn(procentTimer), 1000);
   }
   // ==========================================================
   render() {
     if (!this.state.finishGame) {
       return <Statistic true={this.trueAnswer} false={this.falseAnswer} homePageGame={this.props.defaultLevel}
-        newPage={this.props.pageSprint} newLevel={this.props.levelSprint} totalGame={this.props.chooseGame} nameGame={"sprint"} />
+        newPage={this.props.pageSprint} newLevel={this.props.levelSprint} totalGame={this.props.chooseGame} nameGame={"sprint"} tekScore={localStorage.getItem("lastScore")} />
     } else {
       return (
         <div className="sprint-game" >
@@ -205,7 +204,7 @@ class RenderWords extends Component {
               </div>
               <div className="sprint-timer">
                 <svg className="progress-ring" width="120" height="120">
-                  <text style={{ color: "#fbc97e" }} x="35%" y="55%" >{this.state.timer}</text>
+                  <text style={{ backgroundColor: "#fbc97e", color: "#fbc97e" }} x="35%" y="55%" >{this.timer} </text>
                   <circle strokeDasharray={this.state.strokeDasharray} strokeDashoffset={this.state.strokeDashoffset}
                     stroke="#fbc97e" strokeWidth="4" cx="60" cy="60" r="42" fill="transparent" transformorigin="center"
                     transition="strokeDashoffset 0.3s" />

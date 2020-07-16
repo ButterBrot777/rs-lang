@@ -1,12 +1,13 @@
 :root {
   --text-color: rgb(251, 201, 126);
 }
- h1{
+
+h1 {
   color: darkcyan;
   font-size: 30px;
 }
 
-.trueSmile{
+.trueSmile {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -20,89 +21,96 @@
   margin: 0px 40px 0px 30px;
   width: 360px;
 }
+
 .sprint-start-btn-default {
   width: 320px;
-  margin: 0px 30px 0px 40px;
+  margin: 0px 0px 0px 40px;
   width: 320px;
 }
-.sprint-start-btn-default button{
+
+.sprint-start-btn-default button {
   padding: 15px 40px;
   font-size: 40px;
   font-weight: 700;
   border-radius: 20px;
-  border:solid 2px var(--text-color);
+  border: solid 2px var(--text-color);
   outline: none;
   background: transparent;
   color: var(--text-color);
-  cursor:pointer;
-
+  cursor: pointer;
 }
 
-.sprint-start-btn button{
+.sprint-start-btn button {
   padding: 15px 40px;
   font-size: 40px;
   font-weight: 700;
   border-radius: 20px;
-  border:solid 2px var(--text-color);
+  border: solid 2px var(--text-color);
   outline: none;
   background: transparent;
   color: var(--text-color);
-  cursor:pointer;
-
+  cursor: pointer;
 }
-.sprint-start-btn-default button:hover{
+
+.sprint-start-btn-default button:hover {
   background-color: var(--text-color);
   color: black;
 }
 
-.sprint-start-btn button:hover{
+.sprint-start-btn button:hover {
   background-color: var(--text-color);
   color: black;
 }
+
 /*  */
-.sprint-true-btn button{
+
+.sprint-true-btn button {
   padding: 15px 40px;
   font-size: 40px;
   font-weight: 700;
   border-radius: 20px;
-  border:solid 2px var(--text-color);
+  border: solid 2px var(--text-color);
   outline: none;
   background: transparent;
   color: var(--text-color);
-  cursor:pointer;
+  cursor: pointer;
 }
-.sprint-true-btn button:hover{
+
+.sprint-true-btn button:hover {
   background-color: var(--text-color);
   color: black;
 }
 
-.sprint-false-btn button{
+.sprint-false-btn button {
   padding: 15px 40px;
   font-size: 40px;
   font-weight: 700;
   border-radius: 20px;
-  border:solid 2px var(--text-color);
+  border: solid 2px var(--text-color);
   outline: none;
   background: transparent;
   color: var(--text-color);
-  cursor:pointer;
+  cursor: pointer;
 }
-.word-buttons{
+
+.word-buttons {
   margin: 0px 0px 20px 0px;
 }
-.sprint-false-btn button:hover{
+
+.sprint-false-btn button:hover {
   background-color: var(--text-color);
   color: black;
 }
-.sprint-true-btn{
+
+.sprint-true-btn {
   margin: 0px 143px 0px 0px;
-  }
-  .sprint-false-btn {
-    margin: 0px 20px 0px 143px;
 }
+
+.sprint-false-btn {
+  margin: 0px 20px 0px 143px;
+}
+
 /*  */
-
-
 
 #video-bg {
   position: fixed;
@@ -112,98 +120,117 @@
   left: 0;
   overflow: hidden;
   z-index: 0;
-  background:  transparent;
+  background: transparent;
   background-size: contain;
 }
 
-#video-bg > video {
+#video-bg>video {
   position: absolute;
   top: 0;
   left: 0;
-  min-width: 100%; 
+  min-width: 100%;
   min-height: 100%;
   width: auto;
-  height: auto; 
+  height: auto;
 }
 
 @supports (object-fit: cover) {
-   #video-bg > video {
-       top: 0;
-       left: 0;
-       width: 100%;
-       height: 100%;
-       object-fit: cover;
-   }
+  #video-bg>video {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
+
 .sprint-game-content {
   position: relative;
   height: 70vh;
   text-align: center;
 }
+
 .sprint-timer {
   display: inline-block;
   position: absolute;
 }
-.sprint-game{
+
+.sprint-game {
   position: absolute;
   width: 100%;
   height: 90vh;
   margin-top: 10vh;
 }
-.sprint-loading{
+
+.sprint-loading {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 170px;
   font-weight: 700;
-  color:var(--text-color);
+  color: var(--text-color);
 }
+
 .sprint-all-block {
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.position-relative{
+
+.position-relative {
   position: relative;
 }
+
 .start-game-head {
   font-size: 4vw;
   font-weight: 900;
   text-align: center;
 }
+
 .homePage-block {
   position: absolute;
   background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
   width: 50%;
   font-size: 2vw;
-  height: 60%;
+  height: 450px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 64px;
 }
+
+.text-game {
+  width: 47vw;
+  text-align: center;
+  font-size: 25px;
+  margin: 0px 0px 0px 30px;
+}
+
 .sprint-out-btn {
   position: absolute;
-  right: 23vw;
+  right: 4vw;
   top: 50vh;
 }
-.sprint-out-btn button{
+
+.sprint-out-btn button {
   padding: 10px 20px;
   font-size: 20px;
   font-weight: 700;
   border-radius: 10px;
-  border:solid 2px var(--text-color);
+  border: solid 2px var(--text-color);
   outline: none;
   background: transparent;
   color: var(--text-color);
-  cursor:pointer;
+  cursor: pointer;
 }
-.sprint-out-btn button:hover{
+
+.sprint-out-btn button:hover {
   background-color: var(--text-color);
   color: black;
 }
+
 .score-word-buttons {
   display: inline-block;
   flex-wrap: wrap;
@@ -212,42 +239,49 @@
   margin: 0px 0px -65px 0px;
   text-align: center;
 }
-  .sprint-score {
-    font-size: 5vh;
+
+.sprint-score {
+  font-size: 5vh;
 }
-  .strik-one{
-    background-color: #fbc97e;
-    border-radius: 100%;
-    width: 30px;
-    height: 30px;
-  }
-  .strik-two{
-    background-color: #c98622;
-    border-radius: 100%;
-    width: 30px;
-    height: 30px;
-  }
-  .flex-button {
-    display: flex;
-    justify-content: center;
-    text-align: center;
+
+.strik-one {
+  background-color: #fbc97e;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
 }
-  .strik-three{
-    background-color: #ff9a04;
-    border-radius: 100%;
-    width: 30px;
-    height: 30px;
-  }
-  .strik-gray{
-    background-color: gray;
-    border-radius: 100%;
-    width: 30px;
-    height: 30px;
-  }
-  .strik-circule {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+
+.strik-two {
+  background-color: #c98622;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+}
+
+.flex-button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.strik-three {
+  background-color: #ff9a04;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+}
+
+.strik-gray {
+  background-color: gray;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+}
+
+.strik-circule {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /*  */
@@ -258,11 +292,17 @@
 }
 
 /*  */
+
 @keyframes stripes {
-  0% {background-position: 0 0;}
-  100% {background-position: 50px 0;}
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 0;
+  }
 }
-text{
+
+text {
   font-size: 30px;
   font-weight: bold;
 }
@@ -273,12 +313,15 @@ text{
   justify-content: center;
   display: flex;
 }
+
 .label-page {
   margin-right: 20px;
 }
+
 .label-level {
   margin-right: 20px;
 }
+
 .settings-inputs-level {
   max-width: 32px;
   max-height: 44px;
@@ -292,13 +335,15 @@ text{
   margin: 40px 5px;
   margin-right: 20px;
 }
-.strik-full{
+
+.strik-full {
   display: flex;
   flex-wrap: wrap;
 }
-.strik{
+
+.strik {
   background-color: gold;
   border-radius: 100%;
-    width: 30px;
-    height: 30px;
-}  
+  width: 30px;
+  height: 30px;
+}
