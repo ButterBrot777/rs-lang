@@ -21,8 +21,12 @@ class GamesStat extends React.Component {
         const gamesStatArray = [];
         for (let key in content.optional) {
             if (key !== 'dateOfReg') {
-                delete key['neverPlayed'];
-                gamesStatArray.push({name: key, stat: content.optional[key]});
+                let gameStatObj = {};
+                gameStatObj.name = key;
+                let gameStat = content.optional[key];
+                delete gameStat.neverPlayed;
+                gameStatObj.stat = gameStat;
+                gamesStatArray.push(gameStatObj);
             }
         }
         this.setState({gamesStat: gamesStatArray, isLoading: false,});
