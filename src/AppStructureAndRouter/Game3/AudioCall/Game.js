@@ -4,7 +4,7 @@ import GameWordCompleted from "./GameWordCompleted";
 import Loading from "./Loading";
 import Statistic from "./Statistic";
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import { getSettingsUser,getWordById,getNewWords,} from '../../ServerRequest/ServerRequests';
+import { getSettingsUser,getWordById,getAllUserWords,getNewWords} from '../../ServerRequest/ServerRequests';
 
 import style from '../../../style.css'
 import StartedPage from "./StartedPage";
@@ -94,7 +94,9 @@ class AudioCall extends React.Component{
 
         let content = await rawResponse.json();
 
+
         content = this.filterUserWords(content)
+
 
 
         let promises = content.map(async (e) => {
@@ -103,6 +105,7 @@ class AudioCall extends React.Component{
         });
         let statistic = await getSettingsUser();
         promises = promises.slice(0,100);
+
         let data = await Promise.all(promises);
 
 
@@ -146,30 +149,8 @@ class AudioCall extends React.Component{
 
     componentWillUpdate() {
 
-        if(this.state.right === true && this.state.completed === true){
-            let StatisticArray = this.state.ShortStatistic.RightWords;
-            StatisticArray.push(this.state.obj);
 
-            this.setState({
-                choseWithKeys:false,
-                ShortStatistic:{
-                    ...this.state.ShortStatistic,
-                    RightWords:StatisticArray
 
-                }
-            })
-        }else if(this.state.right === false && this.state.completed === true){
-            let StatisticArray = this.state.ShortStatistic.FalseWords;
-            StatisticArray.push(this.state.obj);
-            this.setState({
-                ShortStatistic:{
-                    choseWithKeys:false,
-                    ...this.state.ShortStatistic,
-                    FalseWords:StatisticArray
-
-                }
-            })
-        }
 
     }
 
@@ -267,6 +248,30 @@ class AudioCall extends React.Component{
     };
     //Функция которая переходит к следующему слову
     nextPage = () => {
+        if(this.state.right === true && this.state.completed === true){
+            let StatisticArray = this.state.ShortStatistic.RightWords;
+            StatisticArray.push(this.state.obj);
+
+            this.setState({
+                choseWithKeys:false,
+                ShortStatistic:{
+                    ...this.state.ShortStatistic,
+                    RightWords:StatisticArray
+
+                }
+            })
+        }else if(this.state.right === false && this.state.completed === true){
+            let StatisticArray = this.state.ShortStatistic.FalseWords;
+            StatisticArray.push(this.state.obj);
+            this.setState({
+                ShortStatistic:{
+                    choseWithKeys:false,
+                    ...this.state.ShortStatistic,
+                    FalseWords:StatisticArray
+
+                }
+            })
+        }
         if(this.state.page === 19){
             this.setState({GameOver:true})
         }else {
