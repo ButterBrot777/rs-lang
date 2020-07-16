@@ -54,6 +54,7 @@ class Game2 extends Component {
       chooseGame: false
     })
   }
+
   writeData = async () => {
     const userWords = await getAllUserWords();
     const currentDate = new Date();
