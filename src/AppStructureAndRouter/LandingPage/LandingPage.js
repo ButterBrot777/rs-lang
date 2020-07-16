@@ -168,10 +168,10 @@ class About extends React.Component {
 								</article>
 								<div className="employee__work">
 									<ul>
-										<li>- implement basic training functionality</li>
-										<li>- test starting knowledge of the language</li>
+										<li>- implements basic training functionality</li>
+										<li>- tests starting knowledge of the language</li>
 										<li>- game Speak It</li>
-										<li>- develop spaced repetition rules</li>
+										<li>- develops spaced repetition rules</li>
 									</ul>
 								</div>
 							</div>
@@ -191,7 +191,7 @@ class About extends React.Component {
 								</article>
 								<div className="employee__work">
 									<ul>
-										<li>- support react app functionality</li>
+										<li>- supports react app functionality</li>
 										<li>- game Audio-Call</li>
 										<li>- game English-Puzzle</li>
 									</ul>
@@ -304,6 +304,7 @@ class Footer extends React.Component {
 					<section id="footer" className="footer">
 						<div className="footer__copywriter">
 							<p>© Copyright 2020</p>
+              <a href="https://github.com/butterbrot777/rs-lang" target="_blank">Link to REPO</a>
 						</div>
 					</section>
 				</div>
