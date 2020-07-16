@@ -9,7 +9,7 @@ body {
   height: 300px;
   margin: 130px 0;
   -webkit-perspective: 780px;
-          perspective: 780px;
+  perspective: 780px;
 }
 
 .cssload-inner {
@@ -27,6 +27,7 @@ body {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
 }
+
 .cssload-inner.cssload-one {
   left: 0%;
   top: 0%;
@@ -37,6 +38,7 @@ body {
   -moz-animation: cssload-rotate-one 1.15s linear infinite;
   border-bottom: 7px solid #ee790c;
 }
+
 .cssload-inner.cssload-two {
   right: 0%;
   top: 0%;
@@ -47,6 +49,7 @@ body {
   -moz-animation: cssload-rotate-two 1.15s linear infinite;
   border-right: 7px solid rgba(39, 12, 146, 0.99);
 }
+
 .cssload-inner.cssload-three {
   right: 0%;
   bottom: 0%;
@@ -61,13 +64,14 @@ body {
 @keyframes cssload-rotate-one {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
-            transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
   }
   100% {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
-            transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-one {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
@@ -76,16 +80,18 @@ body {
     -webkit-transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
   }
 }
+
 @keyframes cssload-rotate-two {
   0% {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
-            transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
   }
   100% {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
-            transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-two {
   0% {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
@@ -94,16 +100,18 @@ body {
     -webkit-transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
   }
 }
+
 @keyframes cssload-rotate-three {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
-            transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
   }
   100% {
     -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
-            transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
 }
+
 @-webkit-keyframes cssload-rotate-three {
   0% {
     -webkit-transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);

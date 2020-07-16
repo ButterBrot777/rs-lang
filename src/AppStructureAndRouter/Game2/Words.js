@@ -30,7 +30,7 @@ class RenderWords extends Component {
   dataArray = this.props.dataWords;
   trueAnswer = [];
   falseAnswer = [];
-  timer=60;
+  timer = 60;
   radius = 42;
   circumference = 2 * Math.PI * this.radius;
   trueSmile = "5px solid green";
@@ -64,7 +64,7 @@ class RenderWords extends Component {
   }
   // ==========================================================
   componentDidMount() {
-    this.timer=60;
+    this.timer = 60;
     this.initFn();
   }
   // ==========================================================
@@ -72,8 +72,8 @@ class RenderWords extends Component {
     if (event.keyCode === 39) this.trueWord();
     else if (event.keyCode === 37) this.falseWord();
   };
-  componentWillUnmount(){
-    this.timer=0;
+  componentWillUnmount() {
+    this.timer = 0;
   }
   // ==========================================================
   initFn() {
@@ -91,7 +91,7 @@ class RenderWords extends Component {
         score: 0
       });
       document.removeEventListener('keyup', this.onKeyUp);
-      
+
     } else {
       this.setState({
         finishGame: "hidden"
@@ -204,7 +204,7 @@ class RenderWords extends Component {
               </div>
               <div className="sprint-timer">
                 <svg className="progress-ring" width="120" height="120">
-                  <text style={{ color: "#fbc97e" }} x="35%" y="55%" >{this.timer}</text>
+                  <text style={{ backgroundColor: "#fbc97e", color: "#fbc97e" }} x="35%" y="55%" >{this.timer} </text>
                   <circle strokeDasharray={this.state.strokeDasharray} strokeDashoffset={this.state.strokeDashoffset}
                     stroke="#fbc97e" strokeWidth="4" cx="60" cy="60" r="42" fill="transparent" transformorigin="center"
                     transition="strokeDashoffset 0.3s" />
