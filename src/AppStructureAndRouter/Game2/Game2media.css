@@ -1,6 +1,6 @@
 @media (min-width: 1922px) and (max-width: 2560px) {
     .sprint-start-btn-default {
-        width: 370px;
+        width: 360px;
     }
     .settings-inputs-level {
         margin: 63px 24px 0px 0px;
@@ -9,11 +9,29 @@
         margin: 63px 24px 0px 0px;
         max-width: 66px;
     }
-  }
-@media (min-width: 1600px) and (max-width: 1920px) {
+    .text-game {
+        width: 47vw;
+    }
+    .homePage-block {
+        height: 650px;
+    }
+    .sprint-out-btn button {
+        font-size: 40px;
+    }
+    .sprint-out-btn {
+        position: absolute;
+        right: 21vw;
+        top: 40vh;
+    }
+}
+
+@media (min-width: 1600px) and (max-width: 1921px) {
     .settings-inputs-level {
         margin: 32px 24px 0px 0px;
         max-height: 36px;
+    }
+    .homePage-block {
+        height: 530px;
     }
     .sprint-start-btn-default {
         width: 360px;
@@ -22,35 +40,56 @@
         margin: 32px 24px 0px 0px;
         max-height: 36px;
     }
+    .sprint-out-btn {
+        position: absolute;
+        right: 22vw;
+        top: 48vh;
+    }
 }
+
 @media (min-width: 1441px) and (max-width: 1599px) {
     .settings-inputs-level {
         margin: 56px 24px 0px 0px;
         max-height: 36px;
     }
+    .homePage-block {
+        height: 500px;
+    }
+    .sprint-start-btn-default button {
+        padding: 15px 15px;
+    }
+    .sprint-start-btn button {
+        padding: 15px 15px;
+    }
+    .sprint-out-btn {
+        position: absolute;
+        right: 22vw;
+        top: 55vh;
+    }
     .settings-inputs-page {
         margin: 56px 24px 0px 0px;
         max-height: 36px;
     }
-    .sprint-start-btn{
+    .sprint-start-btn {
         margin: 0px 30px 0px 40px;
-            width: 360px;
-        }
-        .sprint-start-btn-default {
-            width: 320px;
-            margin: 0px 30px 0px 40px;
-            width: 360px;
-        }
-  }
-@media (min-width: 1025px) and (max-width: 1440px) {
+        width: 360px;
+    }
+    .sprint-start-btn-default {
+        width: 320px;
+        margin: 0px 30px 0px 40px;
+        width: 360px;
+    }
+}
+
+@media (min-width: 1260px) and (max-width: 1440px) {
     .homePage-block {
         font-size: 3vw;
-        height: 400px;
+        height: 500px;
     }
     .sprint-out-btn {
         position: absolute;
         right: 20vw;
-        top: 47vh;
+        top: 55vh;
     }
     .sprint-start-btn-default button {
         font-size: 34px;
@@ -60,15 +99,27 @@
     }
     .settings-inputs-level {
         margin: 56px 24px 0px 0px;
-         max-height: 36px;
-     }
-     .settings-inputs-page {
-         margin: 56px 24px 0px 0px;
-         max-height: 36px;
-         max-width: 56px;
-     }
-  }
-  @media (min-width: 769px) and (max-width: 1024px) {
+        max-height: 36px;
+    }
+    .settings-inputs-page {
+        margin: 56px 24px 0px 0px;
+        max-height: 36px;
+        max-width: 56px;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1259px) {
+    .sprint-start-btn-default button {
+        padding: 15px 15px;
+        font-size: 30px;
+    }
+    .sprint-start-btn button {
+        padding: 15px 15px;
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
     .settings-inputs-level {
         margin: 19px 24px 0px 0px;
         max-height: 24px;
@@ -79,51 +130,13 @@
         right: 17vw;
         top: 33vh;
     }
-    
     .score-word-buttons {
         width: 50vw;
     }
-     .settings-inputs-page {
-         margin: 19px 24px 0px 0px;
-         max-height: 24px;
-         max-width: 37px;
-     }
-     .sprint-start-btn-default button {
-        font-size: 20px;
-    }
-    .sprint-start-btn button {
-        font-size: 20px;
-    }
-     .homePage-block {
-         height: 300px;
-     }
-     .sprint-start-btn {
-        margin: 0px 0px 0px 20px;
-        width: 200px;
-    }.sprint-start-btn-default {
-        width: 320px;
-        margin: 0px 30px 0px 40px;
-        width: 222px;
-    }
-  }
-  @media (min-width: 551px) and (max-width: 768px) {
-    .homePage-block {
-        height: 350px;
-    }
-    .flex-button {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        text-align: center;
-    }
-    .sprint-false-btn button{
-        font-size: 20px;
-    }
-    .flex-button {
-        flex-wrap: wrap;
-    }
-    .sprint-true-btn button{
-        font-size: 20px;
+    .settings-inputs-page {
+        margin: 19px 24px 0px 0px;
+        max-height: 24px;
+        max-width: 37px;
     }
     .sprint-start-btn-default button {
         font-size: 20px;
@@ -131,45 +144,97 @@
     .sprint-start-btn button {
         font-size: 20px;
     }
+    .homePage-block {
+        height: 300px;
+    }
+    .sprint-start-btn {
+        margin: 0px 0px 0px 20px;
+        width: 200px;
+    }
+    .sprint-start-btn-default {
+        width: 320px;
+        margin: 0px 30px 0px 40px;
+        width: 222px;
+    }
+    .text-game {
+        text-align: center;
+        margin: 0px 0px 0px 20px;
+        font-size: 17px;
+    }
+    .start-game-head {
+        font-size: 3vw;
+    }
+}
+
+@media (min-width: 651px) and (max-width: 768px) {
+    .homePage-block {
+        height: 400px;
+    }
+    .flex-button {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        text-align: center;
+    }
+    .text-game {
+        width: 319px;
+    }
+    .sprint-false-btn button {
+        font-size: 20px;
+    }
+    .sprint-true-btn button {
+        font-size: 20px;
+    }
+    .sprint-start-btn-default button {
+        font-size: 20px;
+        padding: 15px 15px;
+    }
+    .sprint-start-btn button {
+        font-size: 20px;
+        padding: 15px 15px;
+    }
     .sprint-start-btn-default {
         width: 320px;
         margin: 0px 0px 0px 0px;
-        width: 230px;
+        width: 310px;
     }
     .sprint-start-btn {
-        margin: 0px 0px 20px 0px;
+        margin: 0px -39px 20px 0px;
         width: 292px;
     }
     .sprint-out-btn {
         position: absolute;
         right: 15vw;
-        top: 41vh;
+        top: 48vh;
     }
-    .label-level{
+    .label-level {
         font-size: 3vh;
     }
-    .label-page{
+    .label-page {
         font-size: 3vh;
     }
-    
-    .settings-inputs-level{
-    margin: 22px 24px 0px 0px;
+    .settings-inputs-level {
+        margin: 22px 24px 0px 0px;
         max-height: 23px;
         max-width: 22px;
     }
-    .settings-inputs-page{
-    margin: 22px 24px 0px 0px;
+    .settings-inputs-page {
+        margin: 22px 24px 0px 0px;
         max-height: 23px;
         max-width: 30px;
     }
-  }
-  @media (min-width: 320px) and (max-width: 550px) {
+}
+
+@media (min-width: 320px) and (max-width: 650px) {
     .homePage-block {
-        width: 100%; 
-        height: 50%;
+        width: 100%;
+        height: 100%;
     }
     .sprint-true-btn button {
         font-size: 20px;
+    }
+    .text-game {
+        width: 246px;
     }
     .sprint-false-btn button {
         font-size: 20px;
@@ -183,9 +248,10 @@
     .score-word-buttons {
         width: 100vw;
         border-radius: 0%;
-      }
+    }
     .start-game-head {
         font-size: 12vw;
+        margin-top: 107px;
     }
     .sprint-start-btn-default button {
         font-size: 20px;
@@ -210,24 +276,23 @@
     }
     .sprint-out-btn {
         position: absolute;
-        right: 27vw;
-        top: 39vh;
+        right: 24vw;
+        top: 85vh;
     }
-    .label-level{
+    .label-level {
         font-size: 3vh;
     }
-    .label-page{
+    .label-page {
         font-size: 3vh;
     }
-    
-    .settings-inputs-level{
-    margin: 36px 24px 0px 0px;
+    .settings-inputs-level {
+        margin: 22px 24px 0px 0px;
         max-height: 23px;
         max-width: 22px;
         font-size: 2vh;
     }
-    .settings-inputs-page{
-    margin: 36px 24px 0px 0px;
+    .settings-inputs-page {
+        margin: 22px 24px 0px 0px;
         max-height: 23px;
         max-width: 30px;
         font-size: 2vh;
@@ -236,4 +301,4 @@
         left: 40%;
         top: -22%;
     }
-  }
+}

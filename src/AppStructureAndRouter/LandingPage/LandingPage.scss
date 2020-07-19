@@ -44,7 +44,7 @@
 
 .logo {
   text-transform: uppercase;
-  color: red;
+  color: rgb(163, 159, 159);
 }
 
 .header__buttons > * {
@@ -306,9 +306,17 @@ article.employee > *:last-child {
 }
 
 .footer__copywriter {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
   color: #666d89;
   font-size: 1.6rem;
   font-weight: 400;
+  & > * {
+    color: #666d89;
+
+    padding: 0 2rem;
+  }
 }
 
 .spaced-repetition__title {

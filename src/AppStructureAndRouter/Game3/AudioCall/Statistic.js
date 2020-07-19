@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Link } from 'react-router-dom';
-import {createUserWord, getUserWord, updateUserWord} from "../../ServerRequest/ServerRequests";
+import {createUserWord, getUserWord, updateUserWord,getAllUserWords} from "../../ServerRequest/ServerRequests";
 
 export default class Statistic extends React.Component {
 
@@ -18,6 +18,7 @@ export default class Statistic extends React.Component {
     }
 
      handleUserWordUpdate = async (diffLevel, wordId) =>{
+
         let word = await getUserWord(wordId);
         let lastTrain = +new Date();
         if (!word) {
