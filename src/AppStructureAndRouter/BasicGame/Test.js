@@ -55,6 +55,9 @@ class Test extends Component {
         let correctGuessesPercent = this.state.correctGuessesPercent;
         let newLevel = (correctGuessesPercent < 33) ? 0
             : (correctGuessesPercent > 33 && correctGuessesPercent < 67) ? 1 : 2;
+        this.setState({
+            level: newLevel
+        })
         let newSettings = {
             "wordsPerDay": wordsPerDay,
             "optional": {
@@ -175,14 +178,15 @@ class Test extends Component {
     render() {
         let progressValue = Math.round(this.state.wordsPerGame / this.state.fullData.length * 100);
         let imageSrc = `https://raw.githubusercontent.com/22-22/rslang/rslang-data/data/${this.state.currentData.image}`;
+        let userLevel = this.state.level + 1;
         return (
             <div className={this.state.isImageLoaded ? "test__game-container" : "test__game-container hidden"}>
-                {(this.state.isImageLoaded && this.state.wordsPerGame === this.state.fullData.length) ? (
+                {(this.state.isImageLoaded && this.state.wordsPerGame === this.state.fullData.length && this.state.level >= 0) ? (
                     <div className="game-end">
                         <h1>Thank you for taking the test!</h1>
                         <div className="test__info">It will help us find the most suitable words for you!</div>
                         <div className="test__info">Correct answers: {this.state.correctGuessesPercent}%</div>
-                        <div className="test__info">We recommend to start from level: {this.state.level}</div>
+                        <div className="test__info">We recommend to start from level: {userLevel}</div>
                     </div>
                 ) : ''}
                 <div className="test__word-card">

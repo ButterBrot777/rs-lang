@@ -22,7 +22,7 @@ class LettersInput extends React.Component {
     render() {
         return (
             <div className="input-container">
-                <div className={(this.props.isGuessCheck) ? "word-current opaque" : "word-current opaque hidden"}>
+                <div className={(this.props.isGuessCheck || this.props.isSkipped) ? "word-current opaque" : "word-current opaque hidden"}>
                     {
                         this.addCorrectWord()
                     }
