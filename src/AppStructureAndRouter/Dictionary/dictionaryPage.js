@@ -87,7 +87,8 @@ class Dictionary extends React.Component {
 
     updateAllData = (wordObj) => {
         const newAllData = this.state.allData.map(word => word.wordId === wordObj.wordId ? wordObj : word);
-        this.setState({ allData: newAllData, isLoading: false, })
+        this.setState({ allData: newAllData, isLoading: false, });
+        this.getWordsByType();
         this.state.words === "hard" ? this.getHard() : this.getDeleted();
     }
 
